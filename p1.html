@@ -3,136 +3,1250 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Codenest Gold</title>
-
-  <!-- FAVICON -->
-  <link rel="icon" type="image/png" href="img1.PNG">
-
+  <link rel="icon" href="img1.PNG">
   <style>
-    body{margin:0;font-family:Tajawal,Arial;background:#0f172a;color:#fff}
-    .topbar{display:flex;align-items:center;gap:10px;padding:14px;background:#1e293b}
-    .logo{width:42px;height:42px;border-radius:10px;object-fit:cover}
-    .title{font-size:22px;font-weight:800}
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
+
+    :root{
+      --bg1:#0f172a;
+      --bg2:#1e3a8a;
+      --card:rgba(255,255,255,.10);
+      --card2:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.14);
+      --text:#fff;
+      --muted:rgba(255,255,255,.75);
+      --accent:#fbbf24;
+      --accent2:#f59e0b;
+      --danger:#f87171;
+      --success:#34d399;
+      --shadow:0 18px 42px rgba(0,0,0,.25);
+    }
+
+    *{ box-sizing:border-box; font-family:'Tajawal',sans-serif; }
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at top right, rgba(251,191,36,.18), transparent 20%),
+        radial-gradient(circle at bottom left, rgba(34,211,238,.16), transparent 25%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      color:var(--text);
+    }
+
+    .wrap{
+      width:min(1260px, calc(100vw - 24px));
+      margin:0 auto;
+      padding:16px 0 28px;
+    }
+
+    .topbar{
+      position:sticky;
+      top:10px;
+      z-index:20;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background: var(--card);
+      border:1px solid var(--line);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      border-radius:22px;
+      padding:14px 16px;
+      margin-bottom:16px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .logo{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      overflow:hidden;
+      flex:0 0 auto;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
+      display:grid;
+      place-items:center;
+    }
+
+    .logo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:22px;
+      font-weight:800;
+      line-height:1.1;
+    }
+
+    .brand p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      white-space:nowrap;
+      font-weight:700;
+    }
+
+    .pill strong{ color:#fff; }
+
+    .btn{
+      border:none;
+      cursor:pointer;
+      padding:11px 14px;
+      border-radius:14px;
+      font-size:15px;
+      font-weight:800;
+      transition:.22s ease;
+      color:#111827;
+      background: linear-gradient(135deg, var(--accent), #fde68a);
+    }
+
+    .btn:hover{
+      transform: translateY(-1px);
+      filter:saturate(1.05);
+    }
+
+    .btn.secondary{
+      color:#fff;
+      background: rgba(255,255,255,.11);
+      border:1px solid rgba(255,255,255,.16);
+    }
+
+    .btn.secondary:hover{
+      background: rgba(255,255,255,.16);
+    }
+
+    .btn.success{
+      color:#052e16;
+      background: linear-gradient(135deg, var(--success), #a7f3d0);
+    }
+
+    .btn.danger{
+      color:#fff;
+      background: linear-gradient(135deg, var(--danger), #fda4af);
+    }
+
+    .btn.block{ width:100%; }
+    .btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:16px;
+      align-items:start;
+    }
+
+    .panel, .card, .catalog-card, .purchase-item, .loading-box, .modal-box{
+      background: var(--card);
+      border:1px solid var(--line);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      border-radius:22px;
+    }
+
+    .panel{
+      padding:16px;
+      position:sticky;
+      top:88px;
+      display:none;
+    }
+
+    .panel.show{ display:block; }
+
+    .panel h2{
+      margin:0 0 8px;
+      font-size:20px;
+      font-weight:800;
+    }
+
+    .panel .muted{
+      color:var(--muted);
+      line-height:1.8;
+      font-size:14px;
+      margin-bottom:12px;
+    }
+
+    .hidden{ display:none !important; }
 
     .grid{
       display:grid;
-      grid-template-columns:repeat(2,1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap:16px;
-      padding:16px;
     }
 
-    .card{
-      background:#1e293b;
-      border-radius:16px;
+    .catalog-card{
       overflow:hidden;
-      border:1px solid #334155;
     }
 
-    .card img{
+    .thumb{
+      position:relative;
       width:100%;
-      height:180px;
-      object-fit:cover;
+      aspect-ratio: 16 / 10;
+      overflow:hidden;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
       cursor:pointer;
     }
 
-    .content{padding:12px}
-    .btn{padding:10px;border:none;border-radius:10px;font-weight:700;cursor:pointer}
-    .buy{background:#22c55e;color:#052e16;width:100%}
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
 
-    /* MODAL */
-    .modal{
-      position:fixed;inset:0;background:rgba(0,0,0,.7);
-      display:none;align-items:center;justify-content:center;
-      padding:20px;z-index:999;
+    .badge{
+      position:absolute;
+      top:12px;
+      right:12px;
+      background: rgba(17,24,39,.82);
+      border:1px solid rgba(255,255,255,.15);
+      color:#fff;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
     }
+
+    .content{ padding:16px; }
+
+    .title{
+      margin:0 0 8px;
+      font-size:19px;
+      font-weight:800;
+    }
+
+    .desc{
+      margin:0 0 14px;
+      color:var(--muted);
+      line-height:1.9;
+      font-size:14px;
+      min-height:84px;
+    }
+
+    .meta-line{
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      align-items:center;
+      margin:10px 0 14px;
+      flex-wrap:wrap;
+    }
+
+    .price{
+      font-size:15px;
+      font-weight:800;
+      color:#fff;
+    }
+
+    .price span{
+      color:var(--accent);
+      font-size:18px;
+    }
+
+    .download-link, .mini-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      padding:11px 14px;
+      border-radius:14px;
+      font-weight:800;
+      border:1px solid rgba(255,255,255,.14);
+      width:100%;
+      transition:.2s ease;
+    }
+
+    .download-link{
+      background: linear-gradient(135deg, var(--success), #86efac);
+      color:#052e16;
+    }
+
+    .download-link:hover{
+      filter:saturate(1.05);
+      transform: translateY(-1px);
+    }
+
+    .mini-link{
+      background: rgba(255,255,255,.10);
+      color:#fff;
+    }
+
+    .mini-link:hover{
+      background: rgba(255,255,255,.15);
+    }
+
+    .form-grid{
+      display:grid;
+      gap:12px;
+    }
+
+    .input-box{
+      width:100%;
+    }
+
+    .input-box label{
+      display:block;
+      font-size:13px;
+      margin:0 0 6px;
+      color:rgba(255,255,255,.78);
+    }
+
+    .input-box input, .input-box select, .input-box textarea{
+      width:100%;
+      padding:13px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.20);
+      outline:none;
+      background: rgba(255,255,255,.10);
+      color:#fff;
+      font-size:15px;
+      transition:.22s ease;
+    }
+
+    .input-box textarea{
+      min-height:94px;
+      resize:vertical;
+    }
+
+    .input-box input::placeholder, .input-box textarea::placeholder{
+      color:rgba(255,255,255,.60);
+    }
+
+    .input-box input:focus, .input-box select:focus, .input-box textarea:focus{
+      border-color: rgba(255,255,255,.45);
+      background: rgba(255,255,255,.16);
+    }
+
+    .muted-box{
+      background: rgba(255,255,255,.08);
+      border:1px dashed rgba(255,255,255,.16);
+      border-radius:16px;
+      padding:12px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.9;
+    }
+
+    .status{
+      display:none;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      line-height:1.8;
+      white-space:pre-wrap;
+      border:1px solid transparent;
+    }
+
+    .status.show{ display:block; }
+    .status.success{
+      display:block;
+      background: rgba(52,211,153,.12);
+      border-color: rgba(52,211,153,.35);
+    }
+    .status.error{
+      display:block;
+      background: rgba(248,113,113,.12);
+      border-color: rgba(248,113,113,.35);
+    }
+
+    .section-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin:18px 0 12px;
+      flex-wrap:wrap;
+    }
+
+    .section-title h2{
+      margin:0;
+      font-size:20px;
+      font-weight:800;
+    }
+
+    .section-title .small{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .purchase-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .purchase-item{
+      padding:14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .purchase-item .left{ min-width:0; }
+
+    .purchase-item .name{
+      font-size:16px;
+      font-weight:800;
+      margin-bottom:4px;
+    }
+
+    .purchase-item .info{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.7;
+    }
+
+    .top-note{
+      margin-bottom:14px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:18px;
+      padding:14px;
+      line-height:1.9;
+      color:rgba(255,255,255,.92);
+    }
+
+    .loading-overlay{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      z-index:999;
+      padding:16px;
+    }
+
+    .loading-box{
+      width:min(460px, 100%);
+      padding:22px;
+      text-align:center;
+    }
+
+    .spinner{
+      width:46px;
+      height:46px;
+      margin:0 auto 14px;
+      border-radius:50%;
+      border:4px solid rgba(255,255,255,.18);
+      border-top-color: var(--accent);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.74);
+      z-index:1000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+    }
+
+    .modal-overlay.show{ display:flex; }
+
     .modal-box{
-      background:#0f172a;border-radius:16px;
-      max-width:700px;width:100%;padding:20px;
-      border:1px solid #334155;
+      width:min(980px, 100%);
+      max-height:90vh;
+      overflow:auto;
+      padding:18px;
+      position:relative;
+      background:rgba(15,23,42,.96);
     }
-    .modal img{width:100%;border-radius:10px;margin-bottom:10px}
-    .close{background:#ef4444;color:#fff;margin-top:10px}
+
+    .modal-close{
+      position:absolute;
+      top:14px;
+      left:14px;
+      width:38px;
+      height:38px;
+      border:none;
+      border-radius:12px;
+      cursor:pointer;
+      background:rgba(248,113,113,.95);
+      color:#fff;
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .modal-grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:start;
+      margin-top:10px;
+    }
+
+    .modal-main-img{
+      width:100%;
+      aspect-ratio: 16/10;
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+    }
+
+    .modal-main-img img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .modal-thumbs{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .modal-thumbs img{
+      width:100%;
+      aspect-ratio: 1/1;
+      object-fit:cover;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      cursor:pointer;
+      opacity:.86;
+      transition:.2s ease;
+    }
+
+    .modal-thumbs img:hover{
+      opacity:1;
+      transform: translateY(-1px);
+    }
+
+    .modal-title{
+      margin:0 0 8px;
+      font-size:24px;
+      font-weight:800;
+    }
+
+    .modal-price{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:8px 12px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .modal-desc{
+      margin:0;
+      color:rgba(255,255,255,.8);
+      line-height:2;
+      font-size:15px;
+      white-space:pre-wrap;
+    }
+
+    @media (max-width: 960px){
+      .layout{ grid-template-columns:1fr; }
+      .panel{
+        position:relative;
+        top:auto;
+      }
+      .grid{
+        grid-template-columns:1fr;
+      }
+      .modal-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 640px){
+      .topbar{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .top-actions{
+        justify-content:stretch;
+      }
+      .top-actions .btn, .top-actions .pill{
+        width:100%;
+        justify-content:center;
+      }
+      .brand{
+        justify-content:center;
+        text-align:center;
+      }
+      .brand p{ text-align:center; }
+      .modal-thumbs{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
   </style>
 </head>
 <body>
-
-  <div class="topbar">
-    <img src="img1.PNG" class="logo">
-    <div class="title">Codenest Gold</div>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <h2 style="margin:0 0 8px;">جاري التحقق من الحساب</h2>
+      <div style="color:rgba(255,255,255,.75); line-height:1.9;">
+        إذا لم يكن هناك تسجيل دخول، سيتم تحويلك إلى صفحة التسجيل.
+      </div>
+    </div>
   </div>
 
-  <div class="grid" id="grid"></div>
-
-  <!-- MODAL DETAILS -->
-  <div class="modal" id="modal">
+  <div class="modal-overlay" id="detailsModal">
     <div class="modal-box">
-      <div id="modalImages"></div>
-      <div id="modalDesc" style="line-height:1.8;margin-top:10px"></div>
-      <button class="btn close" onclick="closeModal()">إغلاق</button>
+      <button class="modal-close" id="closeModalBtn">×</button>
+      <div class="modal-grid">
+        <div>
+          <div class="modal-main-img">
+            <img id="modalMainImage" src="" alt="تفاصيل المنتج">
+          </div>
+          <div class="modal-thumbs" id="modalThumbs"></div>
+        </div>
+        <div>
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <div class="modal-price" id="modalPrice"></div>
+          <p class="modal-desc" id="modalDesc"></p>
+        </div>
+      </div>
     </div>
   </div>
 
-<script>
-const products = [
-  {
-    id:"p1",
-    name:"ملف البداية الذهبية",
-    price:120,
-    desc:"وصف كامل ومفصل للملف الأول يشرح كل مميزاته وطريقة استخدامه.",
-    image:"PUT_IMAGE_1",
-    images:["PUT_IMAGE_1","PUT_IMAGE_1_2","PUT_IMAGE_1_3"],
-    download:"PUT_DOWNLOAD_1"
-  },
-  {
-    id:"p2",
-    name:"صفحة المراجعة السريعة",
-    price:180,
-    desc:"تفاصيل كاملة عن الصفحة الثانية ومميزاتها واستخداماتها.",
-    image:"PUT_IMAGE_2",
-    images:["PUT_IMAGE_2","PUT_IMAGE_2_2"],
-    download:"PUT_DOWNLOAD_2"
-  }
-];
+  <div class="wrap hidden" id="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">
+          <img src="img1.PNG" alt="Codenest Logo">
+        </div>
+        <div>
+          <h1>Codenest Gold</h1>
+          <p>متجر الكوينز والملفات داخل المنصة</p>
+        </div>
+      </div>
 
-const grid=document.getElementById("grid");
-
-products.forEach(p=>{
-  grid.innerHTML+=`
-  <div class="card">
-    <img src="${p.image}" onclick="openModal('${p.id}')">
-    <div class="content">
-      <h3>${p.name}</h3>
-      <p>${p.price} كوينز</p>
-      <button class="btn buy" onclick="buy('${p.download}')">شراء</button>
+      <div class="top-actions">
+        <div class="pill">الكوينز: <strong id="topCoins">0</strong></div>
+        <div class="pill">ID: <strong id="topUserId">-----</strong></div>
+        <button class="btn secondary" id="btnToggleSettings">الإعدادات</button>
+        <button class="btn secondary" id="btnWhatsApp">تواصل واتساب</button>
+        <button class="btn danger" id="btnLogout">خروج</button>
+      </div>
     </div>
-  </div>`;
-});
 
-function openModal(id){
-  const p=products.find(x=>x.id===id);
-  const modal=document.getElementById("modal");
-  const images=document.getElementById("modalImages");
-  const desc=document.getElementById("modalDesc");
+    <div class="top-note">
+      من هنا تشوف رصيدك، وتشتري الملفات بالكوينز.
+      الإعدادات مخفية افتراضيًا، وتظهر فقط عند الضغط على زر الإعدادات.
+      بعد الشراء يظهر لك رابط تجربة داخل البطاقة وتتحفظ المشتريات داخل حسابك.
+    </div>
 
-  images.innerHTML="";
-  p.images.forEach(i=>{
-    images.innerHTML+=`<img src="${i}">`;
-  });
+    <div class="layout">
+      <main>
+        <div class="section-title">
+          <h2>الملفات المتاحة للشراء</h2>
+          <div class="small">اضغط على الصورة لعرض التفاصيل والصور الأخرى</div>
+        </div>
 
-  desc.innerText=p.desc;
-  modal.style.display="flex";
-}
+        <div class="grid" id="catalogGrid"></div>
+        <div class="status" id="catalogStatus"></div>
+      </main>
 
-function closeModal(){
-  document.getElementById("modal").style.display="none";
-}
+      <aside class="panel" id="settingsPanel">
+        <h2>البيانات الشخصية</h2>
+        <div class="muted">يمكنك تعديل الاسم والعمر ومصدر التسجيل. البريد لا يتغير من هنا.</div>
 
-function buy(link){
-  alert("بعد الربط بالكوينز، هنا هيتخصم الرصيد ويظهر اللينك");
-  window.open(link,"_blank");
-}
-</script>
+        <div class="form-grid">
+          <div class="input-box">
+            <label>الاسم</label>
+            <input type="text" id="profileName" placeholder="اسمك">
+          </div>
 
+          <div class="input-box">
+            <label>البريد الإلكتروني</label>
+            <input type="email" id="profileEmail" disabled>
+          </div>
+
+          <div class="input-box">
+            <label>المعرّف</label>
+            <input type="text" id="profileUserId" disabled>
+          </div>
+
+          <div class="input-box">
+            <label>العمر</label>
+            <input type="number" id="profileAge" placeholder="العمر">
+          </div>
+
+          <div class="input-box">
+            <label>مصدر التسجيل</label>
+            <select id="profileSource">
+              <option value="youtube">يوتيوب</option>
+              <option value="facebook">فيسبوك</option>
+              <option value="other">مكان آخر</option>
+            </select>
+          </div>
+
+          <div class="input-box">
+            <label>الرصيد الحالي</label>
+            <input type="text" id="profileCoins" disabled>
+          </div>
+
+          <button class="btn success block" id="btnSaveProfile">حفظ التعديلات</button>
+        </div>
+
+        <div class="section-title" style="margin-top:16px;">
+          <h2 style="font-size:18px;">مشترياتي</h2>
+          <div class="small" id="purchasesCount">0 ملف</div>
+        </div>
+
+        <div class="purchase-list" id="purchasesList">
+          <div class="muted-box">لا توجد مشتريات بعد.</div>
+        </div>
+
+        <div class="status" id="profileStatus"></div>
+      </aside>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      runTransaction,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA4b_rffJQNdPtoLT7-BOzOVsNqiS26-zw",
+      authDomain: "codenest-1d057.firebaseapp.com",
+      projectId: "codenest-1d057",
+      storageBucket: "codenest-1d057.firebasestorage.app",
+      messagingSenderId: "608781618480",
+      appId: "1:608781618480:web:1095eb411684c51ef7ccf5",
+      measurementId: "G-WHTV2R74T7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const INDEX_PAGE = "index.html";
+    const WHATSAPP_NUMBER = "201124680211";
+
+    const $ = (id) => document.getElementById(id);
+
+    const loadingOverlay = $("loadingOverlay");
+    const appRoot = $("app");
+
+    const topCoins = $("topCoins");
+    const topUserId = $("topUserId");
+
+    const settingsPanel = $("settingsPanel");
+    const profileName = $("profileName");
+    const profileEmail = $("profileEmail");
+    const profileUserId = $("profileUserId");
+    const profileAge = $("profileAge");
+    const profileSource = $("profileSource");
+    const profileCoins = $("profileCoins");
+
+    const profileStatus = $("profileStatus");
+    const catalogStatus = $("catalogStatus");
+    const catalogGrid = $("catalogGrid");
+
+    const purchasesList = $("purchasesList");
+    const purchasesCount = $("purchasesCount");
+
+    const btnToggleSettings = $("btnToggleSettings");
+    const btnWhatsApp = $("btnWhatsApp");
+    const btnLogout = $("btnLogout");
+    const btnSaveProfile = $("btnSaveProfile");
+
+    const detailsModal = $("detailsModal");
+    const closeModalBtn = $("closeModalBtn");
+    const modalMainImage = $("modalMainImage");
+    const modalThumbs = $("modalThumbs");
+    const modalTitle = $("modalTitle");
+    const modalPrice = $("modalPrice");
+    const modalDesc = $("modalDesc");
+
+    let currentUser = null;
+    let currentProfile = null;
+    let currentModalProduct = null;
+
+    const products = [
+      {
+        id: "p1",
+        name: "ملف البداية الذهبية",
+        price: 120,
+        description: "ملف تمهيدي ممتاز للمبتدئين يحتوي على شرح مختصر ومنظم مع تصميم بسيط وسريع التحميل. هذا الوصف يظهر كامل داخل نافذة التفاصيل حتى يقرأه المستخدم قبل الشراء.",
+        images: [
+          "https://via.placeholder.com/1200x750?text=ملف+البداية+الذهبية+1",
+          "https://via.placeholder.com/1200x750?text=ملف+البداية+الذهبية+2",
+          "https://via.placeholder.com/1200x750?text=ملف+البداية+الذهبية+3"
+        ],
+        downloadUrl: "https://example.com/?product=p1"
+      },
+      {
+        id: "p2",
+        name: "صفحة المراجعة السريعة",
+        price: 180,
+        description: "صفحة مراجعة عملية تناسب المستخدم الذي يريد الوصول السريع للمحتوى مع واجهة واضحة ومريحة. التفاصيل تعرض كامل النص مع صور إضافية للتجربة.",
+        images: [
+          "https://via.placeholder.com/1200x750?text=صفحة+المراجعة+السريعة+1",
+          "https://via.placeholder.com/1200x750?text=صفحة+المراجعة+السريعة+2",
+          "https://via.placeholder.com/1200x750?text=صفحة+المراجعة+السريعة+3"
+        ],
+        downloadUrl: "https://example.com/?product=p2"
+      },
+      {
+        id: "p3",
+        name: "حزمة التميز",
+        price: 250,
+        description: "حزمة متقدمة فيها ملف مرتب بعناية، مناسبة للمحتوى الاحترافي وتدعم الاستخدام الطويل. بعد الشراء يظهر رابط تجربة فقط داخل الحساب.",
+        images: [
+          "https://via.placeholder.com/1200x750?text=حزمة+التميز+1",
+          "https://via.placeholder.com/1200x750?text=حزمة+التميز+2",
+          "https://via.placeholder.com/1200x750?text=حزمة+التميز+3"
+        ],
+        downloadUrl: "https://example.com/?product=p3"
+      },
+      {
+        id: "p4",
+        name: "مذكرة النخبة",
+        price: 320,
+        description: "مذكرة غنية بالتفاصيل وتنسيق احترافي، مناسبة لمن يريد ملفًا أكثر عمقًا وتنظيمًا مع أكثر من صورة داخل نافذة العرض.",
+        images: [
+          "https://via.placeholder.com/1200x750?text=مذكرة+النخبة+1",
+          "https://via.placeholder.com/1200x750?text=مذكرة+النخبة+2",
+          "https://via.placeholder.com/1200x750?text=مذكرة+النخبة+3"
+        ],
+        downloadUrl: "https://example.com/?product=p4"
+      },
+      {
+        id: "p5",
+        name: "ملف الاحتراف الكامل",
+        price: 500,
+        description: "الملف الأعلى قيمة، مخصص للمحتوى الكامل مع شكل فاخر ورابط تجربة يظهر بعد الشراء فقط. مناسب كنسخة عرض وتجربة داخل الموقع.",
+        images: [
+          "https://via.placeholder.com/1200x750?text=ملف+الاحتراف+الكامل+1",
+          "https://via.placeholder.com/1200x750?text=ملف+الاحتراف+الكامل+2",
+          "https://via.placeholder.com/1200x750?text=ملف+الاحتراف+الكامل+3"
+        ],
+        downloadUrl: "https://example.com/?product=p5"
+      }
+    ];
+
+    function showStatus(node, message, type = "success") {
+      node.textContent = message;
+      node.className = `status show ${type}`;
+    }
+
+    function clearStatus(node) {
+      node.textContent = "";
+      node.className = "status";
+    }
+
+    function money(n) {
+      return new Intl.NumberFormat("ar-EG").format(Number(n || 0));
+    }
+
+    function redirectToIndex() {
+      window.location.replace(INDEX_PAGE);
+    }
+
+    function getPurchasedMap(profile) {
+      const map = new Map();
+      const arr = Array.isArray(profile?.purchases) ? profile.purchases : [];
+      for (const item of arr) {
+        if (item?.id) map.set(item.id, item);
+      }
+      return map;
+    }
+
+    function escapeXml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+    }
+
+    function placeholderImage(title, priceText) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#fbbf24"/>
+              <stop offset="100%" stop-color="#1e3a8a"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="750" fill="url(#g)"/>
+          <circle cx="980" cy="160" r="210" fill="rgba(255,255,255,.14)"/>
+          <circle cx="220" cy="610" r="250" fill="rgba(255,255,255,.10)"/>
+          <rect x="75" y="85" width="1050" height="580" rx="42" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
+          <text x="600" y="310" text-anchor="middle" font-size="72" font-family="Tajawal, Arial" fill="#ffffff" font-weight="800">${escapeXml(title)}</text>
+          <text x="600" y="400" text-anchor="middle" font-size="42" font-family="Tajawal, Arial" fill="#ffffff" font-weight="700">${escapeXml(priceText)}</text>
+          <text x="600" y="500" text-anchor="middle" font-size="30" font-family="Tajawal, Arial" fill="rgba(255,255,255,.92)">Codenest Gold</text>
+        </svg>
+      `.trim();
+      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+    }
+
+    function productMainImage(item) {
+      if (item.imageUrl) return item.imageUrl;
+      return placeholderImage(item.name, `${item.price} كوينز`);
+    }
+
+    function productGallery(item) {
+      const list = Array.isArray(item.images) && item.images.length ? item.images.slice() : [];
+      while (list.length < 3) {
+        list.push(placeholderImage(`${item.name} ${list.length + 1}`, `${item.price} كوينز`));
+      }
+      return list.slice(0, 6);
+    }
+
+    function openDetails(item) {
+      currentModalProduct = item;
+      modalTitle.textContent = item.name;
+      modalPrice.textContent = `السعر: ${money(item.price)} كوينز`;
+      modalDesc.textContent = item.description || "";
+
+      const images = productGallery(item);
+      modalMainImage.src = images[0];
+      modalMainImage.alt = item.name;
+
+      modalThumbs.innerHTML = "";
+      images.forEach((src, index) => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = `${item.name} ${index + 1}`;
+        img.addEventListener("click", () => {
+          modalMainImage.src = src;
+        });
+        modalThumbs.appendChild(img);
+      });
+
+      detailsModal.classList.add("show");
+    }
+
+    function closeDetails() {
+      detailsModal.classList.remove("show");
+      currentModalProduct = null;
+    }
+
+    function renderCatalog(profile) {
+      const purchasedMap = getPurchasedMap(profile);
+      catalogGrid.innerHTML = "";
+
+      for (const item of products) {
+        const purchased = purchasedMap.get(item.id);
+        const enough = Number(profile?.coins || 0) >= item.price;
+
+        const card = document.createElement("article");
+        card.className = "catalog-card";
+
+        card.innerHTML = `
+          <div class="thumb">
+            <img src="${productMainImage(item)}" alt="${item.name}">
+            <div class="badge">${purchased ? "تم الشراء" : `${item.price} كوينز`}</div>
+          </div>
+          <div class="content">
+            <h3 class="title">${item.name}</h3>
+            <p class="desc">${item.description}</p>
+            <div class="meta-line">
+              <div class="price">السعر: <span>${item.price}</span> كوينز</div>
+              <div style="color:rgba(255,255,255,.75);font-size:13px;">الرصيد: ${money(profile?.coins || 0)}</div>
+            </div>
+            <div class="actions"></div>
+          </div>
+        `;
+
+        const imageEl = card.querySelector(".thumb img");
+        imageEl.addEventListener("click", () => openDetails(item));
+
+        const actions = card.querySelector(".actions");
+
+        if (purchased) {
+          const link = document.createElement("a");
+          link.className = "download-link";
+          link.href = purchased.downloadUrl || item.downloadUrl || "https://example.com";
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = "فتح رابط التجربة";
+          actions.appendChild(link);
+        } else if (enough) {
+          const btn = document.createElement("button");
+          btn.className = "btn success block";
+          btn.textContent = "شراء الآن";
+          btn.addEventListener("click", () => purchaseItem(item, btn));
+          actions.appendChild(btn);
+        } else {
+          const btn = document.createElement("button");
+          btn.className = "btn secondary block";
+          btn.disabled = true;
+          btn.textContent = `تحتاج ${money(item.price - (profile?.coins || 0))} كوينز`;
+          actions.appendChild(btn);
+        }
+
+        catalogGrid.appendChild(card);
+      }
+    }
+
+    function renderPurchases(profile) {
+      const purchases = Array.isArray(profile?.purchases) ? profile.purchases : [];
+      purchasesCount.textContent = `${purchases.length} ملف${purchases.length === 1 ? "" : "ات"}`;
+
+      if (!purchases.length) {
+        purchasesList.innerHTML = `<div class="muted-box">لا توجد مشتريات بعد.</div>`;
+        return;
+      }
+
+      purchasesList.innerHTML = "";
+      for (const item of purchases) {
+        const row = document.createElement("div");
+        row.className = "purchase-item";
+
+        row.innerHTML = `
+          <div class="left">
+            <div class="name">${item.name || item.id}</div>
+            <div class="info">
+              تم الشراء مقابل ${money(item.price)} كوينز
+              ${item.purchasedAt ? "<br>تمت الإضافة إلى الحساب" : ""}
+            </div>
+          </div>
+        `;
+
+        const a = document.createElement("a");
+        a.className = "mini-link";
+        a.href = item.downloadUrl || "https://example.com";
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = "فتح الرابط";
+        row.appendChild(a);
+
+        purchasesList.appendChild(row);
+      }
+    }
+
+    function fillProfileForm(profile) {
+      profileName.value = profile?.name || "";
+      profileEmail.value = profile?.email || "";
+      profileUserId.value = profile?.userId || "";
+      profileAge.value = profile?.age || "";
+      profileSource.value = profile?.source || "other";
+      profileCoins.value = money(profile?.coins || 0);
+      topCoins.textContent = money(profile?.coins || 0);
+      topUserId.textContent = profile?.userId || "-----";
+    }
+
+    async function loadProfile(uid) {
+      const snap = await getDoc(doc(db, "users", uid));
+      return snap.exists() ? snap.data() : null;
+    }
+
+    async function refreshAll() {
+      if (!currentUser) return;
+      currentProfile = await loadProfile(currentUser.uid);
+      if (!currentProfile) {
+        redirectToIndex();
+        return;
+      }
+
+      fillProfileForm(currentProfile);
+      renderCatalog(currentProfile);
+      renderPurchases(currentProfile);
+    }
+
+    async function purchaseItem(item, buttonEl) {
+      clearStatus(catalogStatus);
+      if (!currentUser || !currentProfile) {
+        showStatus(catalogStatus, "جلسة الدخول غير صالحة.", "error");
+        return;
+      }
+
+      try {
+        if (buttonEl) {
+          buttonEl.disabled = true;
+          buttonEl.textContent = "جاري الشراء...";
+        }
+
+        const userRef = doc(db, "users", currentUser.uid);
+        const boughtAt = new Date().toISOString();
+
+        await runTransaction(db, async (tx) => {
+          const snap = await tx.get(userRef);
+          if (!snap.exists()) throw new Error("الملف الشخصي غير موجود.");
+
+          const data = snap.data();
+          const purchases = Array.isArray(data.purchases) ? data.purchases : [];
+
+          if (purchases.some(p => p.id === item.id)) {
+            throw new Error("هذا الملف موجود بالفعل ضمن مشترياتك.");
+          }
+
+          const coins = Number(data.coins || 0);
+          if (coins < item.price) {
+            throw new Error("رصيدك غير كافٍ.");
+          }
+
+          const newPurchase = {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            downloadUrl: item.downloadUrl || "https://example.com",
+            purchasedAt: boughtAt
+          };
+
+          tx.update(userRef, {
+            coins: coins - item.price,
+            purchases: [...purchases, newPurchase],
+            updatedAt: serverTimestamp()
+          });
+        });
+
+        currentProfile = await loadProfile(currentUser.uid);
+        fillProfileForm(currentProfile);
+        renderCatalog(currentProfile);
+        renderPurchases(currentProfile);
+        showStatus(catalogStatus, `تم شراء "${item.name}" بنجاح وتم خصم ${item.price} كوينز.`, "success");
+      } catch (err) {
+        showStatus(catalogStatus, err?.message || "حدث خطأ أثناء الشراء.", "error");
+      } finally {
+        if (buttonEl && document.body.contains(buttonEl)) {
+          buttonEl.disabled = false;
+          buttonEl.textContent = "شراء الآن";
+        }
+      }
+    }
+
+    async function saveProfile() {
+      clearStatus(profileStatus);
+      if (!currentUser) return;
+
+      const name = profileName.value.trim();
+      const age = profileAge.value.trim();
+      const source = profileSource.value;
+
+      if (!name || !age) {
+        showStatus(profileStatus, "اكتب الاسم والعمر أولًا.", "error");
+        return;
+      }
+
+      try {
+        const userRef = doc(db, "users", currentUser.uid);
+        await updateDoc(userRef, {
+          name,
+          age: Number(age),
+          source,
+          updatedAt: serverTimestamp()
+        });
+
+        currentProfile = await loadProfile(currentUser.uid);
+        fillProfileForm(currentProfile);
+        renderCatalog(currentProfile);
+        renderPurchases(currentProfile);
+        showStatus(profileStatus, "تم حفظ التعديلات بنجاح.", "success");
+      } catch (err) {
+        showStatus(profileStatus, "تعذر حفظ البيانات. تأكد من اتصال Firestore.", "error");
+      }
+    }
+
+    function setLoading(isLoading) {
+      loadingOverlay.style.display = isLoading ? "flex" : "none";
+      appRoot.classList.toggle("hidden", isLoading);
+    }
+
+    btnToggleSettings.addEventListener("click", () => {
+      settingsPanel.classList.toggle("show");
+    });
+
+    btnWhatsApp.addEventListener("click", () => {
+      const msg = encodeURIComponent("أريد شراء كوينز من Codenest Gold");
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank", "noopener,noreferrer");
+    });
+
+    btnLogout.addEventListener("click", async () => {
+      await signOut(auth);
+      redirectToIndex();
+    });
+
+    btnSaveProfile.addEventListener("click", saveProfile);
+
+    closeModalBtn.addEventListener("click", closeDetails);
+    detailsModal.addEventListener("click", (e) => {
+      if (e.target === detailsModal) closeDetails();
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      setLoading(true);
+
+      try {
+        if (!user) {
+          redirectToIndex();
+          return;
+        }
+
+        currentUser = user;
+        const profile = await loadProfile(user.uid);
+
+        if (!profile) {
+          redirectToIndex();
+          return;
+        }
+
+        currentProfile = profile;
+        fillProfileForm(profile);
+        renderCatalog(profile);
+        renderPurchases(profile);
+        setLoading(false);
+      } catch (err) {
+        redirectToIndex();
+      }
+    });
+  </script>
 </body>
 </html>
