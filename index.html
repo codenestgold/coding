@@ -1,200 +1,919 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة الدخول</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
-        
-        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        
-        body {
-            margin: 0; padding: 0; min-height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            background: linear-gradient(45deg, #1e3c72, #2a5298); /* خلفية متدرجة فخمة */
-            overflow: hidden;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بوابة الدخول</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
 
-        .container {
-            position: relative; width: 380px; min-height: 500px;
-            background: rgba(255, 255, 255, 0.1); /* تأثير زجاجي */
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            padding: 40px; overflow: hidden; transition: 0.5s;
-        }
+    :root{
+      --bg1:#1e3c72;
+      --bg2:#2a5298;
+      --card:rgba(255,255,255,.12);
+      --card2:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.18);
+      --text:#fff;
+      --muted:rgba(255,255,255,.78);
+      --accent:#00d2ff;
+      --accent2:#3a7bd5;
+      --danger:#ff6b6b;
+      --success:#2ecc71;
+      --dark:#111827;
+    }
 
-        .form-box { transition: 0.5s ease-in-out; }
-        .hidden { display: none; opacity: 0; }
-        .visible { display: block; opacity: 1; animation: fadeIn 0.5s ease; }
+    *{ box-sizing:border-box; font-family:'Tajawal',sans-serif; }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(45deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+      color:var(--text);
+    }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    .circle{
+      position:fixed;
+      border-radius:50%;
+      background: linear-gradient(45deg, var(--accent), var(--accent2));
+      filter: blur(.2px);
+      opacity:.85;
+      z-index:-1;
+    }
+    .circle1{ width:220px;height:220px; top:-60px; left:-60px; }
+    .circle2{ width:180px;height:180px; bottom:-60px; right:-60px; }
 
-        h2 { color: #fff; text-align: center; margin-bottom: 30px; font-weight: 700; letter-spacing: 1px; }
+    .shell{
+      width:min(980px, calc(100vw - 24px));
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:18px;
+      align-items:start;
+    }
 
-        .input-box { position: relative; width: 100%; margin-bottom: 20px; }
-        .input-box input, .input-box select {
-            width: 100%; padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.2); border: none;
-            outline: none; border-radius: 8px; color: #fff; font-size: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: 0.3s;
-        }
-        .input-box input::placeholder { color: rgba(255, 255, 255, 0.7); }
-        .input-box input:focus { background: rgba(255, 255, 255, 0.3); border-color: #fff; }
-        .input-box select { color: #333; background: #fff; }
+    .container, .panel{
+      background: var(--card);
+      border:1px solid var(--line);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 18px 40px rgba(0,0,0,.22);
+      border-radius:24px;
+      overflow:hidden;
+    }
 
-        .btn {
-            width: 100%; padding: 12px; background: #00d2ff;
-            color: #111; border: none; border-radius: 8px;
-            cursor: pointer; font-size: 16px; font-weight: 700;
-            transition: 0.3s; margin-top: 10px;
-        }
-        .btn:hover { background: #3a7bd5; color: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    .container{
+      width:min(420px, 100%);
+      margin:auto;
+      padding:28px;
+    }
 
-        .switch-link {
-            text-align: center; margin-top: 20px; color: #fff; font-size: 14px;
-        }
-        .switch-link span { color: #00d2ff; cursor: pointer; font-weight: bold; text-decoration: underline; }
-        .switch-link span:hover { color: #fff; }
+    .panel{
+      padding:24px;
+      display:none;
+    }
 
-        /* دائرة تجميلية في الخلفية */
-        .circle { position: absolute; border-radius: 50%; background: linear-gradient(45deg, #00d2ff, #3a7bd5); z-index: -1; }
-        .circle1 { width: 200px; height: 200px; top: -50px; left: -50px; }
-        .circle2 { width: 150px; height: 150px; bottom: -50px; right: -50px; }
-    </style>
+    .panel.show{ display:block; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap:16px;
+    }
+
+    .card{
+      background: var(--card2);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+    }
+
+    h1,h2,h3{ margin:0 0 14px 0; }
+    h2{
+      text-align:center;
+      font-size:28px;
+      font-weight:800;
+      letter-spacing:.5px;
+    }
+    h3{
+      font-size:20px;
+      font-weight:800;
+      color: #fff;
+    }
+
+    .sub{
+      color:var(--muted);
+      font-size:14px;
+      margin-top:-6px;
+      margin-bottom:16px;
+      text-align:center;
+      line-height:1.8;
+    }
+
+    .input-box{
+      position:relative;
+      width:100%;
+      margin-bottom:14px;
+    }
+
+    .input-box input, .input-box select, .input-box textarea{
+      width:100%;
+      padding:13px 14px;
+      background: rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.28);
+      outline:none;
+      border-radius:12px;
+      color:#fff;
+      font-size:15px;
+      transition:.25s;
+    }
+
+    .input-box input::placeholder, .input-box textarea::placeholder{
+      color:rgba(255,255,255,.72);
+    }
+
+    .input-box input:focus, .input-box select:focus, .input-box textarea:focus{
+      background: rgba(255,255,255,.26);
+      border-color:#fff;
+    }
+
+    .input-box select{
+      background:#fff;
+      color:#1f2937;
+    }
+
+    .btn{
+      width:100%;
+      padding:12px 14px;
+      border:none;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:16px;
+      font-weight:800;
+      background: linear-gradient(45deg, var(--accent), #6ee7ff);
+      color:#07111f;
+      transition:.25s;
+      margin-top:6px;
+    }
+
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.22);
+      background: linear-gradient(45deg, #45dbff, #8cefff);
+    }
+
+    .btn.secondary{
+      background: rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.2);
+    }
+
+    .btn.secondary:hover{
+      background: rgba(255,255,255,.2);
+    }
+
+    .btn.danger{
+      background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+      color:#fff;
+    }
+
+    .btn.success{
+      background: linear-gradient(45deg, #2ecc71, #66e6a2);
+      color:#05210f;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .switch-link{
+      text-align:center;
+      margin-top:18px;
+      color:#fff;
+      font-size:14px;
+      line-height:1.8;
+    }
+
+    .switch-link span, .link{
+      color:var(--accent);
+      cursor:pointer;
+      font-weight:800;
+      text-decoration:underline;
+    }
+
+    .meta{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .meta .item{
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      padding:14px;
+    }
+
+    .label{
+      color:rgba(255,255,255,.7);
+      font-size:13px;
+      margin-bottom:6px;
+    }
+
+    .value{
+      font-size:18px;
+      font-weight:800;
+      word-break:break-word;
+    }
+
+    .notice{
+      border-right:4px solid var(--accent);
+      background: rgba(255,255,255,.09);
+      border-radius:14px;
+      padding:12px 14px;
+      margin-bottom:14px;
+      line-height:1.8;
+      color:rgba(255,255,255,.95);
+      font-size:14px;
+    }
+
+    .status{
+      min-height:44px;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:12px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      color:#fff;
+      line-height:1.8;
+      display:none;
+      white-space:pre-wrap;
+    }
+
+    .status.show{ display:block; }
+    .status.error{ border-color: rgba(255,107,107,.45); background: rgba(255,107,107,.12); }
+    .status.success{ border-color: rgba(46,204,113,.45); background: rgba(46,204,113,.12); }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .toolbar .btn{
+      width:auto;
+      flex:1;
+      min-width:160px;
+      margin-top:0;
+    }
+
+    .hidden{ display:none !important; }
+
+    @media (max-width: 760px){
+      .container{ padding:22px; }
+      .row{ grid-template-columns:1fr; }
+      .toolbar .btn{ min-width:100%; }
+    }
+  </style>
 </head>
 <body>
+  <div class="circle circle1"></div>
+  <div class="circle circle2"></div>
 
-    <div class="circle circle1"></div>
-    <div class="circle circle2"></div>
+  <div class="shell">
+    <!-- شاشة الدخول / التسجيل -->
+    <div class="container" id="auth-shell">
+      <div id="login-form" class="form-box visible">
+        <h2>تسجيل الدخول</h2>
+        <div class="sub">ادخل بحسابك أو اطلب إعادة تعيين كلمة المرور من نفس البريد.</div>
 
-    <div class="container">
-        
-        <!-- فورم تسجيل الدخول -->
-        <div id="login-form" class="form-box visible">
-            <h2>تسجيل الدخول</h2>
-            <div class="input-box">
-                <input type="email" id="login-email" placeholder="البريد الإلكتروني" required>
-            </div>
-            <div class="input-box">
-                <input type="password" id="login-password" placeholder="كلمة المرور" required>
-            </div>
-            <button class="btn" id="btn-login">دخول</button>
-            <div class="switch-link">
-                ليس لديك حساب؟ <span onclick="switchForm('signup-form')">إنشاء حساب جديد</span>
-            </div>
+        <div class="input-box">
+          <input type="email" id="login-email" placeholder="البريد الإلكتروني" required>
         </div>
 
-        <!-- فورم إنشاء الحساب -->
-        <div id="signup-form" class="form-box hidden">
-            <h2>إنشاء حساب</h2>
-            <div class="input-box"><input type="text" id="signup-name" placeholder="الاسم كامل" required></div>
-            <div class="input-box"><input type="email" id="signup-email" placeholder="البريد الإلكتروني" required></div>
-            <div class="input-box"><input type="password" id="signup-password" placeholder="كلمة المرور" required></div>
-            <div class="input-box"><input type="number" id="signup-age" placeholder="العمر" required></div>
-            <div class="input-box">
-                <select id="signup-source">
-                    <option value="youtube">جئت من: يوتيوب (مكافأة 100 كوينز)</option>
-                    <option value="facebook">جئت من: فيسبوك (مكافأة 100 كوينز)</option>
-                    <option value="other">جئت من: مكان آخر (مكافأة 100 كوينز)</option>
-                </select>
-            </div>
-            <button class="btn" id="btn-signup">تسجيل الآن</button>
-            <div class="switch-link">
-                لديك حساب بالفعل؟ <span onclick="switchForm('login-form')">تسجيل الدخول</span>
-            </div>
+        <div class="input-box">
+          <input type="password" id="login-password" placeholder="كلمة المرور" required>
         </div>
 
+        <button class="btn" id="btn-login">دخول</button>
+        <button class="btn secondary" id="btn-forgot">نسيت كلمة المرور</button>
+
+        <div class="switch-link">
+          ليس لديك حساب؟ <span onclick="switchForm('signup-form')">إنشاء حساب جديد</span>
+        </div>
+      </div>
+
+      <div id="signup-form" class="form-box hidden">
+        <h2>إنشاء حساب</h2>
+        <div class="sub">سيتم إنشاء معرّف تلقائي مكوّن من 5 أرقام، وحفظ 100 كوينز كبداية.</div>
+
+        <div class="input-box">
+          <input type="text" id="signup-name" placeholder="الاسم كامل" required>
+        </div>
+
+        <div class="input-box">
+          <input type="email" id="signup-email" placeholder="البريد الإلكتروني" required>
+        </div>
+
+        <div class="input-box">
+          <input type="password" id="signup-password" placeholder="كلمة المرور" required>
+        </div>
+
+        <div class="input-box">
+          <input type="number" id="signup-age" placeholder="العمر" required>
+        </div>
+
+        <div class="input-box">
+          <select id="signup-source">
+            <option value="youtube">جئت من: يوتيوب (مكافأة 100 كوينز)</option>
+            <option value="facebook">جئت من: فيسبوك (مكافأة 100 كوينز)</option>
+            <option value="other">جئت من: مكان آخر (مكافأة 100 كوينز)</option>
+          </select>
+        </div>
+
+        <button class="btn" id="btn-signup">تسجيل الآن</button>
+
+        <div class="switch-link">
+          لديك حساب بالفعل؟ <span onclick="switchForm('login-form')">تسجيل الدخول</span>
+        </div>
+      </div>
     </div>
 
-    <!-- كود الجافا سكريبت للتبديل والفايربيز -->
-    <script type="module">
-        // التبديل بين الفورمز
-        window.switchForm = function(formId) {
-            document.getElementById('login-form').classList.replace('visible', 'hidden');
-            document.getElementById('signup-form').classList.replace('visible', 'hidden');
-            
-            setTimeout(() => {
-                document.getElementById(formId).classList.replace('hidden', 'visible');
-            }, 100);
+    <!-- لوحة المستخدم -->
+    <div class="panel" id="dashboard-panel">
+      <div class="toolbar">
+        <button class="btn secondary" id="btn-logout">تسجيل الخروج</button>
+      </div>
+
+      <div class="notice">
+        هذا الحساب تم ربطه بقاعدة البيانات. رقم المعرّف هو المفتاح الأساسي للتعامل مع الكوينز داخل النظام.
+      </div>
+
+      <div class="meta">
+        <div class="item">
+          <div class="label">الاسم</div>
+          <div class="value" id="profile-name">-</div>
+        </div>
+        <div class="item">
+          <div class="label">البريد الإلكتروني</div>
+          <div class="value" id="profile-email">-</div>
+        </div>
+        <div class="item">
+          <div class="label">المعرّف</div>
+          <div class="value" id="profile-id">-</div>
+        </div>
+        <div class="item">
+          <div class="label">الرصيد</div>
+          <div class="value" id="profile-coins">0</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>بيانات الحساب</h3>
+          <div class="input-box">
+            <input type="password" id="current-new-password" placeholder="كلمة مرور جديدة لحسابك">
+          </div>
+          <button class="btn success" id="btn-change-own-password">تغيير كلمة المرور للحساب الحالي</button>
+          <div class="status" id="user-status"></div>
+        </div>
+
+        <div class="card">
+          <h3>استعادة كلمة المرور</h3>
+          <div class="input-box">
+            <input type="email" id="reset-email-self" placeholder="اكتب بريدك الإلكتروني">
+          </div>
+          <button class="btn secondary" id="btn-send-reset-self">إرسال رابط الاستعادة</button>
+          <div class="status" id="reset-status"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- لوحة الأدمن -->
+    <div class="panel" id="admin-panel">
+      <div class="toolbar">
+        <button class="btn secondary" id="btn-admin-logout">تسجيل الخروج</button>
+      </div>
+
+      <div class="notice">
+        لوحة الإدارة مفعلة فقط للحساب <strong>1@gmail.com</strong>.  
+        إدارة الكوينز تعمل مباشرة من Firestore.  
+        أمّا تغيير كلمة مرور حساب آخر مباشرة في Firebase Auth فيحتاج Admin SDK على سيرفر/Cloud Function آمنة.
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>البحث عن مستخدم بالـ ID</h3>
+          <div class="input-box">
+            <input type="text" id="search-userid" placeholder="أدخل المعرّف المكوّن من 5 أرقام">
+          </div>
+          <button class="btn secondary" id="btn-search-user">بحث</button>
+          <div class="status" id="search-status"></div>
+        </div>
+
+        <div class="card">
+          <h3>إضافة / سحب كوينز</h3>
+          <div class="input-box">
+            <input type="text" id="admin-userid" placeholder="معرّف المستخدم">
+          </div>
+          <div class="row">
+            <div class="input-box">
+              <input type="number" id="admin-amount" placeholder="الكمية">
+            </div>
+            <div class="input-box">
+              <select id="admin-action">
+                <option value="add">إضافة</option>
+                <option value="subtract">سحب</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn success" id="btn-admin-coins">تنفيذ</button>
+          <div class="status" id="coins-status"></div>
+        </div>
+
+        <div class="card">
+          <h3>إرسال رابط استعادة كلمة المرور</h3>
+          <div class="input-box">
+            <input type="text" id="admin-reset-userid" placeholder="معرّف المستخدم">
+          </div>
+          <button class="btn secondary" id="btn-admin-reset">إرسال الرابط</button>
+          <div class="status" id="admin-reset-status"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      updatePassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc,
+      runTransaction,
+      increment,
+      updateDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA4b_rffJQNdPtoLT7-BOzOVsNqiS26-zw",
+      authDomain: "codenest-1d057.firebaseapp.com",
+      projectId: "codenest-1d057",
+      storageBucket: "codenest-1d057.firebasestorage.app",
+      messagingSenderId: "608781618480",
+      appId: "1:608781618480:web:1095eb411684c51ef7ccf5",
+      measurementId: "G-WHTV2R74T7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const ADMIN_EMAIL = "1@gmail.com";
+
+    const el = (id) => document.getElementById(id);
+
+    const loginForm = el('login-form');
+    const signupForm = el('signup-form');
+    const dashboardPanel = el('dashboard-panel');
+    const adminPanel = el('admin-panel');
+
+    const profileName = el('profile-name');
+    const profileEmail = el('profile-email');
+    const profileId = el('profile-id');
+    const profileCoins = el('profile-coins');
+
+    function showStatus(node, message, type = 'success') {
+      node.textContent = message;
+      node.className = `status show ${type}`;
+    }
+
+    function clearStatus(node) {
+      node.textContent = '';
+      node.className = 'status';
+    }
+
+    function switchView(view) {
+      dashboardPanel.classList.remove('show');
+      adminPanel.classList.remove('show');
+      document.getElementById('auth-shell').style.display = 'block';
+
+      if (view === 'login') {
+        loginForm.classList.remove('hidden');
+        loginForm.classList.add('visible');
+        signupForm.classList.add('hidden');
+        signupForm.classList.remove('visible');
+      } else if (view === 'signup') {
+        loginForm.classList.add('hidden');
+        loginForm.classList.remove('visible');
+        signupForm.classList.remove('hidden');
+        signupForm.classList.add('visible');
+      } else if (view === 'dashboard') {
+        document.getElementById('auth-shell').style.display = 'none';
+        dashboardPanel.classList.add('show');
+      } else if (view === 'admin') {
+        document.getElementById('auth-shell').style.display = 'none';
+        dashboardPanel.classList.add('show');
+        adminPanel.classList.add('show');
+      }
+    }
+
+    window.switchForm = function(formId) {
+      switchView(formId === 'signup-form' ? 'signup' : 'login');
+    };
+
+    function random5Digit() {
+      return String(Math.floor(10000 + Math.random() * 90000));
+    }
+
+    async function generateUniqueUserId(uid, email, name) {
+      for (let attempt = 0; attempt < 30; attempt++) {
+        const candidate = random5Digit();
+        const idRef = doc(db, 'publicIds', candidate);
+
+        try {
+          await runTransaction(db, async (tx) => {
+            const snap = await tx.get(idRef);
+            if (snap.exists()) {
+              throw new Error('ID_TAKEN');
+            }
+            tx.set(idRef, {
+              uid,
+              email,
+              name,
+              createdAt: serverTimestamp()
+            });
+          });
+          return candidate;
+        } catch (err) {
+          if (String(err.message || err).includes('ID_TAKEN')) {
+            continue;
+          }
+          throw err;
+        }
+      }
+      throw new Error('تعذر توليد معرّف فريد، حاول مرة أخرى.');
+    }
+
+    async function createProfile({ uid, email, name, age, source }) {
+      const userId = await generateUniqueUserId(uid, email, name);
+
+      await setDoc(doc(db, 'users', uid), {
+        uid,
+        userId,
+        name,
+        email,
+        age: Number(age),
+        source,
+        coins: 100,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      return userId;
+    }
+
+    async function loadProfile(uid) {
+      const snap = await getDoc(doc(db, 'users', uid));
+      if (!snap.exists()) throw new Error('ملف المستخدم غير موجود في قاعدة البيانات.');
+      return snap.data();
+    }
+
+    async function findUserById(userId) {
+      const idSnap = await getDoc(doc(db, 'publicIds', userId));
+      if (!idSnap.exists()) return null;
+
+      const { uid } = idSnap.data();
+      const userSnap = await getDoc(doc(db, 'users', uid));
+      if (!userSnap.exists()) return null;
+
+      return { uid, ...userSnap.data() };
+    }
+
+    async function changeCoinsByUserId(userId, amount, mode = 'add') {
+      const user = await findUserById(userId);
+      if (!user) throw new Error('المستخدم غير موجود.');
+
+      const delta = Number(amount);
+      if (!Number.isFinite(delta) || delta <= 0) throw new Error('اكتب كمية صحيحة أكبر من صفر.');
+
+      const userRef = doc(db, 'users', user.uid);
+
+      await runTransaction(db, async (tx) => {
+        const snap = await tx.get(userRef);
+        if (!snap.exists()) throw new Error('المستخدم غير موجود.');
+
+        const currentCoins = Number(snap.data().coins || 0);
+        const newCoins = mode === 'add' ? currentCoins + delta : currentCoins - delta;
+
+        if (newCoins < 0) {
+          throw new Error('الرصيد لا يمكن أن يصبح أقل من صفر.');
         }
 
-        // استدعاء مكتبات الفايربيز
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        tx.update(userRef, {
+          coins: newCoins,
+          updatedAt: serverTimestamp()
+        });
+      });
 
-        // بيانات الربط بمشروعك
-        const firebaseConfig = {
-            apiKey: "AIzaSyA4b_rffJQNdPtoLT7-BOzOVsNqiS26-zw",
-            authDomain: "codenest-1d057.firebaseapp.com",
-            projectId: "codenest-1d057",
-            storageBucket: "codenest-1d057.firebasestorage.app",
-            messagingSenderId: "608781618480",
-            appId: "1:608781618480:web:1095eb411684c51ef7ccf5",
-            measurementId: "G-WHTV2R74T7"
-        };
+      const updated = await getDoc(userRef);
+      return updated.data()?.coins ?? 0;
+    }
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    async function sendPasswordResetByUserId(userId) {
+      const user = await findUserById(userId);
+      if (!user) throw new Error('المستخدم غير موجود.');
+      await sendPasswordResetEmail(auth, user.email, {
+        url: window.location.origin + window.location.pathname
+      });
+      return user.email;
+    }
 
-        // مراقب حالة الدخول
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                window.location.href = "p1.html"; // التحويل التلقائي
-            }
+    async function showCurrentUserProfile(user) {
+      const profile = await loadProfile(user.uid);
+      profileName.textContent = profile.name || '-';
+      profileEmail.textContent = profile.email || user.email || '-';
+      profileId.textContent = profile.userId || '-';
+      profileCoins.textContent = String(profile.coins ?? 0);
+
+      el('reset-email-self').value = profile.email || user.email || '';
+      el('admin-userid').value = profile.userId || '';
+      el('search-userid').value = profile.userId || '';
+      el('admin-reset-userid').value = profile.userId || '';
+    }
+
+    async function refreshLoggedInUI(user) {
+      await showCurrentUserProfile(user);
+      const profile = await loadProfile(user.uid);
+
+      if (user.email === ADMIN_EMAIL) {
+        switchView('admin');
+      } else {
+        switchView('dashboard');
+      }
+
+      if (user.email === ADMIN_EMAIL) {
+        adminPanel.classList.add('show');
+      } else {
+        adminPanel.classList.remove('show');
+      }
+
+      // show current info anyway
+      profileName.textContent = profile.name || '-';
+      profileEmail.textContent = profile.email || user.email || '-';
+      profileId.textContent = profile.userId || '-';
+      profileCoins.textContent = String(profile.coins ?? 0);
+    }
+
+    // Auth observer
+    onAuthStateChanged(auth, async (user) => {
+      clearStatus(el('user-status'));
+      clearStatus(el('reset-status'));
+      clearStatus(el('search-status'));
+      clearStatus(el('coins-status'));
+      clearStatus(el('admin-reset-status'));
+
+      if (!user) {
+        document.getElementById('auth-shell').style.display = 'block';
+        dashboardPanel.classList.remove('show');
+        adminPanel.classList.remove('show');
+        switchView('login');
+        return;
+      }
+
+      try {
+        await refreshLoggedInUI(user);
+      } catch (err) {
+        showStatus(el('user-status'), 'تم تسجيل الدخول، لكن لم يتم العثور على الملف في Firestore. تأكد من إنشاء الحساب مرة أخرى.', 'error');
+        switchView('dashboard');
+      }
+    });
+
+    // Signup
+    el('btn-signup').addEventListener('click', async () => {
+      const name = el('signup-name').value.trim();
+      const email = el('signup-email').value.trim();
+      const password = el('signup-password').value;
+      const age = el('signup-age').value;
+      const source = el('signup-source').value;
+      const btn = el('btn-signup');
+
+      if (!name || !email || !password || !age) {
+        alert('رجاءً إكمال جميع البيانات!');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'جاري التسجيل...';
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        const userId = await createProfile({
+          uid: user.uid,
+          email,
+          name,
+          age,
+          source
         });
 
-        // إنشاء حساب
-        document.getElementById('btn-signup').addEventListener('click', async () => {
-            const name = document.getElementById('signup-name').value;
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            const age = document.getElementById('signup-age').value;
-            const source = document.getElementById('signup-source').value;
-            const btn = document.getElementById('btn-signup');
+        profileName.textContent = name;
+        profileEmail.textContent = email;
+        profileId.textContent = userId;
+        profileCoins.textContent = '100';
 
-            if(!name || !email || !password || !age) { alert("رجاءً إكمال جميع البيانات!"); return; }
+        switchView(email === ADMIN_EMAIL ? 'admin' : 'dashboard');
+        alert(`تم إنشاء الحساب بنجاح.\nالمعرّف الخاص بك: ${userId}`);
+      } catch (error) {
+        alert('خطأ: ' + (error?.message || 'حدث خطأ غير معروف'));
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'تسجيل الآن';
+      }
+    });
 
-            btn.innerText = "جاري التسجيل...";
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+    // Login
+    el('btn-login').addEventListener('click', async () => {
+      const email = el('login-email').value.trim();
+      const password = el('login-password').value;
+      const btn = el('btn-login');
 
-                // حفظ البيانات وإعطاء الـ 100 كوينز
-                await setDoc(doc(db, "users", user.uid), {
-                    name: name,
-                    email: email,
-                    age: age,
-                    source: source,
-                    coins: 100 
-                });
+      if (!email || !password) {
+        alert('أدخل الإيميل وكلمة المرور!');
+        return;
+      }
 
-            } catch (error) {
-                alert("خطأ: " + error.message);
-                btn.innerText = "تسجيل الآن";
-            }
+      btn.disabled = true;
+      btn.textContent = 'جاري الدخول...';
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        alert('بيانات الدخول غير صحيحة!');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'دخول';
+      }
+    });
+
+    // Forgot password
+    el('btn-forgot').addEventListener('click', async () => {
+      const email = el('login-email').value.trim();
+      const box = el('reset-status');
+
+      if (!email) {
+        alert('اكتب البريد الإلكتروني أولًا.');
+        return;
+      }
+
+      clearStatus(box);
+      try {
+        await sendPasswordResetEmail(auth, email, {
+          url: window.location.origin + window.location.pathname
         });
+        showStatus(box, 'تم إرسال رابط إعادة تعيين كلمة المرور إلى البريد.', 'success');
+      } catch (error) {
+        showStatus(box, 'تعذر إرسال رابط الاستعادة. تأكد من البريد أو إعدادات Firebase Auth.', 'error');
+      }
+    });
 
-        // تسجيل الدخول
-        document.getElementById('btn-login').addEventListener('click', async () => {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            const btn = document.getElementById('btn-login');
+    // Logout
+    el('btn-logout').addEventListener('click', async () => {
+      await signOut(auth);
+    });
+    el('btn-admin-logout').addEventListener('click', async () => {
+      await signOut(auth);
+    });
 
-            if(!email || !password) { alert("أدخل الإيميل وكلمة المرور!"); return; }
+    // Reset self password email
+    el('btn-send-reset-self').addEventListener('click', async () => {
+      const email = el('reset-email-self').value.trim();
+      const box = el('reset-status');
 
-            btn.innerText = "جاري الدخول...";
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (error) {
-                alert("بيانات الدخول غير صحيحة!");
-                btn.innerText = "دخول";
-            }
+      if (!email) {
+        showStatus(box, 'اكتب البريد أولًا.', 'error');
+        return;
+      }
+
+      clearStatus(box);
+      try {
+        await sendPasswordResetEmail(auth, email, {
+          url: window.location.origin + window.location.pathname
         });
-    </script>
+        showStatus(box, 'تم إرسال رابط الاستعادة إلى البريد.', 'success');
+      } catch (error) {
+        showStatus(box, 'فشل إرسال الرابط. راجع البريد أو إعدادات Auth.', 'error');
+      }
+    });
+
+    // Change own password (current session only)
+    el('btn-change-own-password').addEventListener('click', async () => {
+      const newPassword = el('current-new-password').value;
+      const box = el('user-status');
+
+      if (!newPassword || newPassword.length < 6) {
+        showStatus(box, 'اكتب كلمة مرور جديدة لا تقل عن 6 أحرف.', 'error');
+        return;
+      }
+
+      try {
+        if (!auth.currentUser) throw new Error('لا يوجد مستخدم حالي.');
+        await updatePassword(auth.currentUser, newPassword);
+        showStatus(box, 'تم تغيير كلمة المرور للحساب الحالي بنجاح.', 'success');
+        el('current-new-password').value = '';
+      } catch (error) {
+        showStatus(box, 'تعذر تغيير كلمة المرور. قد تحتاج لإعادة تسجيل الدخول أولًا.', 'error');
+      }
+    });
+
+    // Admin search
+    el('btn-search-user').addEventListener('click', async () => {
+      const userId = el('search-userid').value.trim();
+      const box = el('search-status');
+      clearStatus(box);
+
+      if (!userId) {
+        showStatus(box, 'اكتب المعرّف أولًا.', 'error');
+        return;
+      }
+
+      try {
+        const user = await findUserById(userId);
+        if (!user) {
+          showStatus(box, 'لم يتم العثور على المستخدم.', 'error');
+          return;
+        }
+        showStatus(box,
+          `تم العثور على المستخدم:\nالاسم: ${user.name || '-'}\nالبريد: ${user.email || '-'}\nID: ${user.userId || '-'}\nCoins: ${user.coins ?? 0}`,
+          'success'
+        );
+      } catch (error) {
+        showStatus(box, 'حدث خطأ أثناء البحث.', 'error');
+      }
+    });
+
+    // Admin coins
+    el('btn-admin-coins').addEventListener('click', async () => {
+      const userId = el('admin-userid').value.trim();
+      const amount = Number(el('admin-amount').value);
+      const action = el('admin-action').value;
+      const box = el('coins-status');
+
+      clearStatus(box);
+
+      if (!userId || !amount) {
+        showStatus(box, 'أدخل المعرّف والكمية.', 'error');
+        return;
+      }
+
+      try {
+        const newCoins = await changeCoinsByUserId(userId, amount, action);
+        showStatus(box, `تم ${action === 'add' ? 'إضافة' : 'سحب'} الكمية بنجاح.\nالرصيد الجديد: ${newCoins}`, 'success');
+        await refreshLoggedInUI(auth.currentUser);
+      } catch (error) {
+        showStatus(box, error?.message || 'فشل تنفيذ العملية.', 'error');
+      }
+    });
+
+    // Admin reset password via email
+    el('btn-admin-reset').addEventListener('click', async () => {
+      const userId = el('admin-reset-userid').value.trim();
+      const box = el('admin-reset-status');
+
+      clearStatus(box);
+
+      if (!userId) {
+        showStatus(box, 'أدخل المعرّف أولًا.', 'error');
+        return;
+      }
+
+      try {
+        const email = await sendPasswordResetByUserId(userId);
+        showStatus(box, `تم إرسال رابط استعادة كلمة المرور إلى:\n${email}`, 'success');
+      } catch (error) {
+        showStatus(box, error?.message || 'فشل إرسال الرابط.', 'error');
+      }
+    });
+
+    // Start default
+    switchView('login');
+  </script>
 </body>
 </html>
