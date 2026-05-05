@@ -256,7 +256,37 @@
       color:var(--muted);
       line-height:1.9;
       font-size:14px;
-      min-height:84px;
+      min-height:0;
+    }
+
+    .desc-row{
+      display:flex;
+      align-items:flex-end;
+      gap:6px;
+      flex-wrap:wrap;
+      margin:0 0 14px;
+    }
+
+    .desc-short{
+      display:inline;
+      color:var(--muted);
+      line-height:1.9;
+      font-size:14px;
+    }
+
+    .more-link{
+      border:none;
+      background:transparent;
+      color:var(--accent);
+      font-weight:800;
+      font-size:14px;
+      padding:0;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+
+    .more-link:hover{
+      text-decoration:underline;
     }
 
     .meta-line{
@@ -867,6 +897,12 @@
       return new Intl.NumberFormat("ar-EG").format(Number(n || 0));
     }
 
+    function truncateText(value, limit = 120) {
+      const str = String(value || "").trim();
+      if (str.length <= limit) return { text: str, more: false };
+      return { text: str.slice(0, limit).trimEnd() + "...", more: true };
+    }
+
     function redirectToIndex() {
       window.location.replace(INDEX_PAGE);
     }
@@ -970,7 +1006,10 @@
           </div>
           <div class="content">
             <h3 class="title">${item.name}</h3>
-            <p class="desc">${item.description}</p>
+            <div class="desc-row">
+              <p class="desc-short">${escapeXml(truncateText(item.description, 120).text)}</p>
+              ${truncateText(item.description, 120).more ? '<button class="more-link" type="button">عرض المزيد</button>' : ''}
+            </div>
             <div class="meta-line">
               <div class="price">السعر: <span>${item.price}</span> كوينز</div>
               <div style="color:rgba(255,255,255,.75);font-size:13px;">الرصيد: ${money(profile?.coins || 0)}</div>
@@ -981,6 +1020,15 @@
 
         const imageEl = card.querySelector(".thumb img");
         imageEl.addEventListener("click", () => openDetails(item));
+
+        const moreBtn = card.querySelector(".more-link");
+        if (moreBtn) {
+          moreBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openDetails(item);
+          });
+        }
 
         const actions = card.querySelector(".actions");
 
