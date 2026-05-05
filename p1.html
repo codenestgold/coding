@@ -17,13 +17,13 @@
       --muted:rgba(255,255,255,.75);
       --accent:#fbbf24;
       --accent2:#f59e0b;
-      --accent3:#22d3ee;
       --danger:#f87171;
       --success:#34d399;
       --shadow:0 18px 42px rgba(0,0,0,.25);
     }
 
     *{ box-sizing:border-box; font-family:'Tajawal',sans-serif; }
+
     body{
       margin:0;
       min-height:100vh;
@@ -35,7 +35,7 @@
     }
 
     .wrap{
-      width:min(1240px, calc(100vw - 24px));
+      width:min(1260px, calc(100vw - 24px));
       margin:0 auto;
       padding:16px 0 28px;
     }
@@ -126,24 +126,35 @@
       background: linear-gradient(135deg, var(--accent), #fde68a);
     }
 
-    .btn:hover{ transform: translateY(-1px); filter:saturate(1.05); }
+    .btn:hover{
+      transform: translateY(-1px);
+      filter:saturate(1.05);
+    }
+
     .btn.secondary{
       color:#fff;
       background: rgba(255,255,255,.11);
       border:1px solid rgba(255,255,255,.16);
     }
-    .btn.secondary:hover{ background: rgba(255,255,255,.16); }
+
+    .btn.secondary:hover{
+      background: rgba(255,255,255,.16);
+    }
+
     .btn.success{
       color:#052e16;
       background: linear-gradient(135deg, var(--success), #a7f3d0);
     }
+
     .btn.danger{
       color:#fff;
       background: linear-gradient(135deg, var(--danger), #fda4af);
     }
+
     .btn.block{
       width:100%;
     }
+
     .btn:disabled{
       opacity:.55;
       cursor:not-allowed;
@@ -152,7 +163,7 @@
 
     .layout{
       display:grid;
-      grid-template-columns: 320px 1fr;
+      grid-template-columns: 1fr 360px;
       gap:16px;
       align-items:start;
     }
@@ -170,6 +181,11 @@
       padding:16px;
       position:sticky;
       top:88px;
+      display:none;
+    }
+
+    .panel.show{
+      display:block;
     }
 
     .panel h2{
@@ -189,7 +205,7 @@
 
     .grid{
       display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap:16px;
     }
 
@@ -294,10 +310,6 @@
 
     .mini-link:hover{
       background: rgba(255,255,255,.15);
-    }
-
-    .profile-toggle{
-      margin-top:10px;
     }
 
     .form-grid{
@@ -473,6 +485,9 @@
         position:relative;
         top:auto;
       }
+      .grid{
+        grid-template-columns:1fr;
+      }
     }
 
     @media (max-width: 640px){
@@ -508,7 +523,7 @@
     </div>
   </div>
 
-  <div class="wrap" id="app" class="hidden">
+  <div class="wrap hidden" id="app">
     <div class="topbar">
       <div class="brand">
         <div class="logo">C</div>
@@ -521,19 +536,31 @@
       <div class="top-actions">
         <div class="pill">الكوينز: <strong id="topCoins">0</strong></div>
         <div class="pill">ID: <strong id="topUserId">-----</strong></div>
-        <button class="btn secondary" id="btnToggleProfile">البيانات الشخصية</button>
+        <button class="btn secondary" id="btnToggleSettings">الإعدادات</button>
         <button class="btn secondary" id="btnWhatsApp">تواصل واتساب</button>
         <button class="btn danger" id="btnLogout">خروج</button>
       </div>
     </div>
 
     <div class="top-note">
-      من هنا تشوف رصيدك، تعدل بياناتك الشخصية، وتشتري الملفات بالكوينز.  
+      من هنا تشوف رصيدك، وتشتري الملفات بالكوينز.  
+      الإعدادات مخفية افتراضيًا، وتظهر فقط عند الضغط على زر الإعدادات.  
       بعد الشراء يظهر لك رابط التحميل داخل البطاقة وتتحفظ المشتريات داخل حسابك.
     </div>
 
     <div class="layout">
-      <aside class="panel" id="profilePanel">
+      <main>
+        <div class="section-title">
+          <h2>الملفات المتاحة للشراء</h2>
+          <div class="small">الصفحة مرتبة على صفين في الشاشات الكبيرة</div>
+        </div>
+
+        <div class="grid" id="catalogGrid"></div>
+
+        <div class="status" id="catalogStatus"></div>
+      </main>
+
+      <aside class="panel" id="settingsPanel">
         <h2>البيانات الشخصية</h2>
         <div class="muted">يمكنك تعديل الاسم والعمر ومصدر التسجيل. البريد لا يتغير من هنا.</div>
 
@@ -586,17 +613,6 @@
 
         <div class="status" id="profileStatus"></div>
       </aside>
-
-      <main>
-        <div class="section-title">
-          <h2>الملفات المتاحة للشراء</h2>
-          <div class="small">اضغط شراء وسيتم خصم الكوينز وإضافة الملف إلى حسابك</div>
-        </div>
-
-        <div class="grid" id="catalogGrid"></div>
-
-        <div class="status" id="catalogStatus"></div>
-      </main>
     </div>
   </div>
 
@@ -613,7 +629,6 @@
       getDoc,
       updateDoc,
       runTransaction,
-      arrayUnion,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -642,7 +657,7 @@
     const topCoins = $("topCoins");
     const topUserId = $("topUserId");
 
-    const profilePanel = $("profilePanel");
+    const settingsPanel = $("settingsPanel");
     const profileName = $("profileName");
     const profileEmail = $("profileEmail");
     const profileUserId = $("profileUserId");
@@ -657,7 +672,7 @@
     const purchasesList = $("purchasesList");
     const purchasesCount = $("purchasesCount");
 
-    const btnToggleProfile = $("btnToggleProfile");
+    const btnToggleSettings = $("btnToggleSettings");
     const btnWhatsApp = $("btnWhatsApp");
     const btnLogout = $("btnLogout");
     const btnSaveProfile = $("btnSaveProfile");
@@ -665,87 +680,48 @@
     let currentUser = null;
     let currentProfile = null;
 
-    const downloadsBase = {
-      p1: "PUT_YOUR_LINK_1_HERE",
-      p2: "PUT_YOUR_LINK_2_HERE",
-      p3: "PUT_YOUR_LINK_3_HERE",
-      p4: "PUT_YOUR_LINK_4_HERE",
-      p5: "PUT_YOUR_LINK_5_HERE"
-    };
-
     const products = [
       {
         id: "p1",
         name: "ملف البداية الذهبية",
         price: 120,
         description: "ملف تمهيدي ممتاز للمبتدئين يحتوي على شرح مختصر ومنظم مع تصميم بسيط وسريع التحميل.",
-        image: svgData("ملف البداية الذهبية", "120 كوينز", "#fbbf24", "#1e3a8a"),
-        downloadUrl: downloadsBase.p1
+        imageUrl: "PUT_IMAGE_URL_1_HERE",
+        downloadUrl: "PUT_DOWNLOAD_URL_1_HERE"
       },
       {
         id: "p2",
         name: "صفحة المراجعة السريعة",
         price: 180,
         description: "صفحة مراجعة عملية تناسب المستخدم الذي يريد الوصول السريع للمحتوى مع واجهة واضحة ومريحة.",
-        image: svgData("المراجعة السريعة", "180 كوينز", "#22d3ee", "#0f172a"),
-        downloadUrl: downloadsBase.p2
+        imageUrl: "PUT_IMAGE_URL_2_HERE",
+        downloadUrl: "PUT_DOWNLOAD_URL_2_HERE"
       },
       {
         id: "p3",
         name: "حزمة التميز",
         price: 250,
         description: "حزمة متقدمة فيها ملف مرتب بعناية، مناسبة للمحتوى الاحترافي وتدعم الاستخدام الطويل.",
-        image: svgData("حزمة التميز", "250 كوينز", "#34d399", "#0f172a"),
-        downloadUrl: downloadsBase.p3
+        imageUrl: "PUT_IMAGE_URL_3_HERE",
+        downloadUrl: "PUT_DOWNLOAD_URL_3_HERE"
       },
       {
         id: "p4",
         name: "مذكرة النخبة",
         price: 320,
         description: "مذكرة غنية بالتفاصيل وتنسيق احترافي، مناسبة لمن يريد ملفًا أكثر عمقًا وتنظيمًا.",
-        image: svgData("مذكرة النخبة", "320 كوينز", "#f472b6", "#111827"),
-        downloadUrl: downloadsBase.p4
+        imageUrl: "PUT_IMAGE_URL_4_HERE",
+        downloadUrl: "PUT_DOWNLOAD_URL_4_HERE"
       },
       {
         id: "p5",
         name: "ملف الاحتراف الكامل",
         price: 500,
         description: "الملف الأعلى قيمة، مخصص للمحتوى الكامل مع شكل فاخر وروابط التحميل تظهر بعد الشراء فقط.",
-        image: svgData("الاحتراف الكامل", "500 كوينز", "#a78bfa", "#0f172a"),
-        downloadUrl: downloadsBase.p5
+        imageUrl: "PUT_IMAGE_URL_5_HERE",
+        downloadUrl: "PUT_DOWNLOAD_URL_5_HERE"
       }
     ];
-
-    function svgData(title, priceText, c1, c2) {
-      const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
-          <defs>
-            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stop-color="${c1}"/>
-              <stop offset="100%" stop-color="${c2}"/>
-            </linearGradient>
-          </defs>
-          <rect width="1200" height="750" fill="url(#g)"/>
-          <circle cx="980" cy="160" r="210" fill="rgba(255,255,255,.14)"/>
-          <circle cx="220" cy="610" r="250" fill="rgba(255,255,255,.10)"/>
-          <rect x="75" y="85" width="1050" height="580" rx="42" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
-          <text x="600" y="310" text-anchor="middle" font-size="72" font-family="Tajawal, Arial" fill="#ffffff" font-weight="800">${escapeXml(title)}</text>
-          <text x="600" y="400" text-anchor="middle" font-size="42" font-family="Tajawal, Arial" fill="#ffffff" font-weight="700">${escapeXml(priceText)}</text>
-          <text x="600" y="500" text-anchor="middle" font-size="30" font-family="Tajawal, Arial" fill="rgba(255,255,255,.92)">Codenest Gold</text>
-        </svg>
-      `.trim();
-
-      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
-    }
-
-    function escapeXml(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&apos;");
-    }
 
     function showStatus(node, message, type = "success") {
       node.textContent = message;
@@ -765,8 +741,8 @@
       window.location.replace(INDEX_PAGE);
     }
 
-    function toggleProfilePanel() {
-      profilePanel.classList.toggle("hidden");
+    function toggleSettings() {
+      settingsPanel.classList.toggle("show");
     }
 
     function getPurchasedMap(profile) {
@@ -776,6 +752,41 @@
         if (item?.id) map.set(item.id, item);
       }
       return map;
+    }
+
+    function productImage(item) {
+      if (item.imageUrl && !String(item.imageUrl).startsWith("PUT_IMAGE_URL")) return item.imageUrl;
+      return defaultImage(item.name, item.price);
+    }
+
+    function defaultImage(title, priceText) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#fbbf24"/>
+              <stop offset="100%" stop-color="#1e3a8a"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="750" fill="url(#g)"/>
+          <circle cx="980" cy="160" r="210" fill="rgba(255,255,255,.14)"/>
+          <circle cx="220" cy="610" r="250" fill="rgba(255,255,255,.10)"/>
+          <rect x="75" y="85" width="1050" height="580" rx="42" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
+          <text x="600" y="310" text-anchor="middle" font-size="72" font-family="Tajawal, Arial" fill="#ffffff" font-weight="800">${escapeXml(title)}</text>
+          <text x="600" y="400" text-anchor="middle" font-size="42" font-family="Tajawal, Arial" fill="#ffffff" font-weight="700">${escapeXml(priceText)}</text>
+          <text x="600" y="500" text-anchor="middle" font-size="30" font-family="Tajawal, Arial" fill="rgba(255,255,255,.92)">Codenest Gold</text>
+        </svg>
+      `.trim();
+      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+    }
+
+    function escapeXml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
     }
 
     function renderCatalog(profile) {
@@ -791,7 +802,7 @@
 
         card.innerHTML = `
           <div class="thumb">
-            <img src="${item.image}" alt="${item.name}">
+            <img src="${productImage(item)}" alt="${item.name}">
             <div class="badge">${purchased ? "تم الشراء" : `${item.price} كوينز`}</div>
           </div>
           <div class="content">
@@ -819,7 +830,7 @@
           const btn = document.createElement("button");
           btn.className = "btn success block";
           btn.textContent = "شراء الآن";
-          btn.addEventListener("click", () => purchaseItem(item));
+          btn.addEventListener("click", () => purchaseItem(item, btn));
           actions.appendChild(btn);
         } else {
           const btn = document.createElement("button");
@@ -898,14 +909,24 @@
       renderPurchases(currentProfile);
     }
 
-    async function purchaseItem(item) {
+    async function purchaseItem(item, buttonEl) {
       clearStatus(catalogStatus);
       if (!currentUser || !currentProfile) {
         showStatus(catalogStatus, "جلسة الدخول غير صالحة.", "error");
         return;
       }
 
+      if (!item.downloadUrl || String(item.downloadUrl).startsWith("PUT_DOWNLOAD_URL")) {
+        showStatus(catalogStatus, "ضع رابط التحميل الحقيقي داخل downloadUrl لهذا المنتج.", "error");
+        return;
+      }
+
       try {
+        if (buttonEl) {
+          buttonEl.disabled = true;
+          buttonEl.textContent = "جاري الشراء...";
+        }
+
         const userRef = doc(db, "users", currentUser.uid);
 
         await runTransaction(db, async (tx) => {
@@ -924,15 +945,18 @@
             throw new Error("رصيدك غير كافٍ.");
           }
 
+          const newPurchase = {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            imageUrl: item.imageUrl,
+            downloadUrl: item.downloadUrl,
+            purchasedAt: new Date().toISOString()
+          };
+
           tx.update(userRef, {
             coins: coins - item.price,
-            purchases: arrayUnion({
-              id: item.id,
-              name: item.name,
-              price: item.price,
-              downloadUrl: item.downloadUrl,
-              purchasedAt: serverTimestamp()
-            }),
+            purchases: [...purchases, newPurchase],
             updatedAt: serverTimestamp()
           });
         });
@@ -944,6 +968,11 @@
         showStatus(catalogStatus, `تم شراء "${item.name}" بنجاح وتم إضافته إلى حسابك.`, "success");
       } catch (err) {
         showStatus(catalogStatus, err?.message || "حدث خطأ أثناء الشراء.", "error");
+      } finally {
+        if (buttonEl && document.body.contains(buttonEl)) {
+          buttonEl.disabled = false;
+          buttonEl.textContent = "شراء الآن";
+        }
       }
     }
 
@@ -984,7 +1013,7 @@
       appRoot.classList.toggle("hidden", isLoading);
     }
 
-    btnToggleProfile.addEventListener("click", toggleProfilePanel);
+    btnToggleSettings.addEventListener("click", toggleSettings);
 
     btnWhatsApp.addEventListener("click", () => {
       const msg = encodeURIComponent("أريد شراء كوينز من Codenest Gold");
