@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الدخول</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+        
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        
+        body {
+            margin: 0; padding: 0; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            background: linear-gradient(45deg, #1e3c72, #2a5298); /* خلفية متدرجة فخمة */
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative; width: 380px; min-height: 500px;
+            background: rgba(255, 255, 255, 0.1); /* تأثير زجاجي */
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 40px; overflow: hidden; transition: 0.5s;
+        }
+
+        .form-box { transition: 0.5s ease-in-out; }
+        .hidden { display: none; opacity: 0; }
+        .visible { display: block; opacity: 1; animation: fadeIn 0.5s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { color: #fff; text-align: center; margin-bottom: 30px; font-weight: 700; letter-spacing: 1px; }
+
+        .input-box { position: relative; width: 100%; margin-bottom: 20px; }
+        .input-box input, .input-box select {
+            width: 100%; padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.2); border: none;
+            outline: none; border-radius: 8px; color: #fff; font-size: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: 0.3s;
+        }
+        .input-box input::placeholder { color: rgba(255, 255, 255, 0.7); }
+        .input-box input:focus { background: rgba(255, 255, 255, 0.3); border-color: #fff; }
+        .input-box select { color: #333; background: #fff; }
+
+        .btn {
+            width: 100%; padding: 12px; background: #00d2ff;
+            color: #111; border: none; border-radius: 8px;
+            cursor: pointer; font-size: 16px; font-weight: 700;
+            transition: 0.3s; margin-top: 10px;
+        }
+        .btn:hover { background: #3a7bd5; color: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        .switch-link {
+            text-align: center; margin-top: 20px; color: #fff; font-size: 14px;
+        }
+        .switch-link span { color: #00d2ff; cursor: pointer; font-weight: bold; text-decoration: underline; }
+        .switch-link span:hover { color: #fff; }
+
+        /* دائرة تجميلية في الخلفية */
+        .circle { position: absolute; border-radius: 50%; background: linear-gradient(45deg, #00d2ff, #3a7bd5); z-index: -1; }
+        .circle1 { width: 200px; height: 200px; top: -50px; left: -50px; }
+        .circle2 { width: 150px; height: 150px; bottom: -50px; right: -50px; }
+    </style>
+</head>
+<body>
+
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+
+    <div class="container">
+        
+        <!-- فورم تسجيل الدخول -->
+        <div id="login-form" class="form-box visible">
+            <h2>تسجيل الدخول</h2>
+            <div class="input-box">
+                <input type="email" id="login-email" placeholder="البريد الإلكتروني" required>
+            </div>
+            <div class="input-box">
+                <input type="password" id="login-password" placeholder="كلمة المرور" required>
+            </div>
+            <button class="btn" id="btn-login">دخول</button>
+            <div class="switch-link">
+                ليس لديك حساب؟ <span onclick="switchForm('signup-form')">إنشاء حساب جديد</span>
+            </div>
+        </div>
+
+        <!-- فورم إنشاء الحساب -->
+        <div id="signup-form" class="form-box hidden">
+            <h2>إنشاء حساب</h2>
+            <div class="input-box"><input type="text" id="signup-name" placeholder="الاسم كامل" required></div>
+            <div class="input-box"><input type="email" id="signup-email" placeholder="البريد الإلكتروني" required></div>
+            <div class="input-box"><input type="password" id="signup-password" placeholder="كلمة المرور" required></div>
+            <div class="input-box"><input type="number" id="signup-age" placeholder="العمر" required></div>
+            <div class="input-box">
+                <select id="signup-source">
+                    <option value="youtube">جئت من: يوتيوب (مكافأة 100 كوينز)</option>
+                    <option value="facebook">جئت من: فيسبوك (مكافأة 100 كوينز)</option>
+                    <option value="other">جئت من: مكان آخر (مكافأة 100 كوينز)</option>
+                </select>
+            </div>
+            <button class="btn" id="btn-signup">تسجيل الآن</button>
+            <div class="switch-link">
+                لديك حساب بالفعل؟ <span onclick="switchForm('login-form')">تسجيل الدخول</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- كود الجافا سكريبت للتبديل والفايربيز -->
+    <script type="module">
+        // التبديل بين الفورمز
+        window.switchForm = function(formId) {
+            document.getElementById('login-form').classList.replace('visible', 'hidden');
+            document.getElementById('signup-form').classList.replace('visible', 'hidden');
+            
+            setTimeout(() => {
+                document.getElementById(formId).classList.replace('hidden', 'visible');
+            }, 100);
+        }
+
+        // استدعاء مكتبات الفايربيز
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // بيانات الربط بمشروعك
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4b_rffJQNdPtoLT7-BOzOVsNqiS26-zw",
+            authDomain: "codenest-1d057.firebaseapp.com",
+            projectId: "codenest-1d057",
+            storageBucket: "codenest-1d057.firebasestorage.app",
+            messagingSenderId: "608781618480",
+            appId: "1:608781618480:web:1095eb411684c51ef7ccf5",
+            measurementId: "G-WHTV2R74T7"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // مراقب حالة الدخول
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.location.href = "p1.html"; // التحويل التلقائي
+            }
+        });
+
+        // إنشاء حساب
+        document.getElementById('btn-signup').addEventListener('click', async () => {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const age = document.getElementById('signup-age').value;
+            const source = document.getElementById('signup-source').value;
+            const btn = document.getElementById('btn-signup');
+
+            if(!name || !email || !password || !age) { alert("رجاءً إكمال جميع البيانات!"); return; }
+
+            btn.innerText = "جاري التسجيل...";
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // حفظ البيانات وإعطاء الـ 100 كوينز
+                await setDoc(doc(db, "users", user.uid), {
+                    name: name,
+                    email: email,
+                    age: age,
+                    source: source,
+                    coins: 100 
+                });
+
+            } catch (error) {
+                alert("خطأ: " + error.message);
+                btn.innerText = "تسجيل الآن";
+            }
+        });
+
+        // تسجيل الدخول
+        document.getElementById('btn-login').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('btn-login');
+
+            if(!email || !password) { alert("أدخل الإيميل وكلمة المرور!"); return; }
+
+            btn.innerText = "جاري الدخول...";
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                alert("بيانات الدخول غير صحيحة!");
+                btn.innerText = "دخول";
+            }
+        });
+    </script>
+</body>
+</html>
