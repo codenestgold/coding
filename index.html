@@ -286,7 +286,6 @@
   <div class="circle circle2"></div>
 
   <div class="shell">
-    <!-- شاشة الدخول / التسجيل -->
     <div class="container" id="auth-shell">
       <div id="login-form" class="form-box visible">
         <h2>تسجيل الدخول</h2>
@@ -344,7 +343,6 @@
       </div>
     </div>
 
-    <!-- لوحة المستخدم -->
     <div class="panel" id="dashboard-panel">
       <div class="toolbar">
         <button class="btn secondary" id="btn-logout">تسجيل الخروج</button>
@@ -394,7 +392,6 @@
       </div>
     </div>
 
-    <!-- لوحة الأدمن -->
     <div class="panel" id="admin-panel">
       <div class="toolbar">
         <button class="btn secondary" id="btn-admin-logout">تسجيل الخروج</button>
@@ -466,8 +463,6 @@
       setDoc,
       getDoc,
       runTransaction,
-      increment,
-      updateDoc,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -486,6 +481,7 @@
     const db = getFirestore(app);
 
     const ADMIN_EMAIL = "1@gmail.com";
+    const USER_PAGE = "p1.html";
 
     const el = (id) => document.getElementById(id);
 
@@ -493,11 +489,6 @@
     const signupForm = el('signup-form');
     const dashboardPanel = el('dashboard-panel');
     const adminPanel = el('admin-panel');
-
-    const profileName = el('profile-name');
-    const profileEmail = el('profile-email');
-    const profileId = el('profile-id');
-    const profileCoins = el('profile-coins');
 
     function showStatus(node, message, type = 'success') {
       node.textContent = message;
@@ -582,6 +573,7 @@
         age: Number(age),
         source,
         coins: 100,
+        purchases: [],
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       });
@@ -640,48 +632,29 @@
       const user = await findUserById(userId);
       if (!user) throw new Error('المستخدم غير موجود.');
       await sendPasswordResetEmail(auth, user.email, {
-        url: window.location.origin + window.location.pathname
+        url: window.location.origin + "/" + USER_PAGE
       });
       return user.email;
     }
 
-    async function showCurrentUserProfile(user) {
-      const profile = await loadProfile(user.uid);
-      profileName.textContent = profile.name || '-';
-      profileEmail.textContent = profile.email || user.email || '-';
-      profileId.textContent = profile.userId || '-';
-      profileCoins.textContent = String(profile.coins ?? 0);
-
-      el('reset-email-self').value = profile.email || user.email || '';
-      el('admin-userid').value = profile.userId || '';
-      el('search-userid').value = profile.userId || '';
-      el('admin-reset-userid').value = profile.userId || '';
+    async function goToUserPage() {
+      window.location.href = USER_PAGE;
     }
 
     async function refreshLoggedInUI(user) {
-      await showCurrentUserProfile(user);
       const profile = await loadProfile(user.uid);
 
       if (user.email === ADMIN_EMAIL) {
         switchView('admin');
-      } else {
-        switchView('dashboard');
+        el('admin-userid').value = profile.userId || '';
+        el('search-userid').value = profile.userId || '';
+        el('admin-reset-userid').value = profile.userId || '';
+        return;
       }
 
-      if (user.email === ADMIN_EMAIL) {
-        adminPanel.classList.add('show');
-      } else {
-        adminPanel.classList.remove('show');
-      }
-
-      // show current info anyway
-      profileName.textContent = profile.name || '-';
-      profileEmail.textContent = profile.email || user.email || '-';
-      profileId.textContent = profile.userId || '-';
-      profileCoins.textContent = String(profile.coins ?? 0);
+      await goToUserPage();
     }
 
-    // Auth observer
     onAuthStateChanged(auth, async (user) => {
       clearStatus(el('user-status'));
       clearStatus(el('reset-status'));
@@ -700,12 +673,10 @@
       try {
         await refreshLoggedInUI(user);
       } catch (err) {
-        showStatus(el('user-status'), 'تم تسجيل الدخول، لكن لم يتم العثور على الملف في Firestore. تأكد من إنشاء الحساب مرة أخرى.', 'error');
-        switchView('dashboard');
+        switchView('login');
       }
     });
 
-    // Signup
     el('btn-signup').addEventListener('click', async () => {
       const name = el('signup-name').value.trim();
       const email = el('signup-email').value.trim();
@@ -734,13 +705,13 @@
           source
         });
 
-        profileName.textContent = name;
-        profileEmail.textContent = email;
-        profileId.textContent = userId;
-        profileCoins.textContent = '100';
-
-        switchView(email === ADMIN_EMAIL ? 'admin' : 'dashboard');
         alert(`تم إنشاء الحساب بنجاح.\nالمعرّف الخاص بك: ${userId}`);
+
+        if (email === ADMIN_EMAIL) {
+          switchView('admin');
+        } else {
+          await goToUserPage();
+        }
       } catch (error) {
         alert('خطأ: ' + (error?.message || 'حدث خطأ غير معروف'));
       } finally {
@@ -749,7 +720,6 @@
       }
     });
 
-    // Login
     el('btn-login').addEventListener('click', async () => {
       const email = el('login-email').value.trim();
       const password = el('login-password').value;
@@ -765,6 +735,9 @@
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
+        if (email !== ADMIN_EMAIL) {
+          await goToUserPage();
+        }
       } catch (error) {
         alert('بيانات الدخول غير صحيحة!');
       } finally {
@@ -773,7 +746,6 @@
       }
     });
 
-    // Forgot password
     el('btn-forgot').addEventListener('click', async () => {
       const email = el('login-email').value.trim();
       const box = el('reset-status');
@@ -786,7 +758,7 @@
       clearStatus(box);
       try {
         await sendPasswordResetEmail(auth, email, {
-          url: window.location.origin + window.location.pathname
+          url: window.location.origin + "/" + USER_PAGE
         });
         showStatus(box, 'تم إرسال رابط إعادة تعيين كلمة المرور إلى البريد.', 'success');
       } catch (error) {
@@ -794,15 +766,16 @@
       }
     });
 
-    // Logout
     el('btn-logout').addEventListener('click', async () => {
       await signOut(auth);
-    });
-    el('btn-admin-logout').addEventListener('click', async () => {
-      await signOut(auth);
+      window.location.href = 'index.html';
     });
 
-    // Reset self password email
+    el('btn-admin-logout').addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'index.html';
+    });
+
     el('btn-send-reset-self').addEventListener('click', async () => {
       const email = el('reset-email-self').value.trim();
       const box = el('reset-status');
@@ -815,7 +788,7 @@
       clearStatus(box);
       try {
         await sendPasswordResetEmail(auth, email, {
-          url: window.location.origin + window.location.pathname
+          url: window.location.origin + "/" + USER_PAGE
         });
         showStatus(box, 'تم إرسال رابط الاستعادة إلى البريد.', 'success');
       } catch (error) {
@@ -823,7 +796,6 @@
       }
     });
 
-    // Change own password (current session only)
     el('btn-change-own-password').addEventListener('click', async () => {
       const newPassword = el('current-new-password').value;
       const box = el('user-status');
@@ -843,7 +815,6 @@
       }
     });
 
-    // Admin search
     el('btn-search-user').addEventListener('click', async () => {
       const userId = el('search-userid').value.trim();
       const box = el('search-status');
@@ -869,7 +840,6 @@
       }
     });
 
-    // Admin coins
     el('btn-admin-coins').addEventListener('click', async () => {
       const userId = el('admin-userid').value.trim();
       const amount = Number(el('admin-amount').value);
@@ -886,13 +856,11 @@
       try {
         const newCoins = await changeCoinsByUserId(userId, amount, action);
         showStatus(box, `تم ${action === 'add' ? 'إضافة' : 'سحب'} الكمية بنجاح.\nالرصيد الجديد: ${newCoins}`, 'success');
-        await refreshLoggedInUI(auth.currentUser);
       } catch (error) {
         showStatus(box, error?.message || 'فشل تنفيذ العملية.', 'error');
       }
     });
 
-    // Admin reset password via email
     el('btn-admin-reset').addEventListener('click', async () => {
       const userId = el('admin-reset-userid').value.trim();
       const box = el('admin-reset-status');
@@ -912,7 +880,6 @@
       }
     });
 
-    // Start default
     switchView('login');
   </script>
 </body>
