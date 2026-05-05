@@ -665,22 +665,21 @@
         <div class="pill">الكوينز: <strong id="topCoins">0</strong></div>
         <div class="pill">ID: <strong id="topUserId">-----</strong></div>
         <button class="btn secondary" id="btnToggleSettings">الإعدادات</button>
-        <button class="btn secondary" id="btnWhatsApp">تواصل واتساب</button>
+        <button class="btn secondary" id="btnWhatsApp">شحن كوينز</button>
         <button class="btn danger" id="btnLogout">خروج</button>
       </div>
     </div>
 
     <div class="top-note">
-      من هنا تشوف رصيدك، وتشتري الملفات بالكوينز.
-      الإعدادات مخفية افتراضيًا، وتظهر فقط عند الضغط على زر الإعدادات.
-      بعد الشراء يظهر لك رابط تجربة داخل البطاقة وتتحفظ المشتريات داخل حسابك.
+      اضغط علي شراء كوينز لمعرفه اسعار الكوينز (تواصل مع الدعم "زر:شراء كوينز" لاخذ كوينز مجانا)
+     
     </div>
 
     <div class="layout">
       <main>
         <div class="section-title">
           <h2>الملفات المتاحة للشراء</h2>
-          <div class="small">اضغط على الصورة لعرض التفاصيل والصور الأخرى</div>
+          <div class="small">اضغط على الاسم لعرض تفاصيل الكود</div>
         </div>
 
         <div class="grid" id="catalogGrid"></div>
@@ -689,7 +688,7 @@
 
       <aside class="panel" id="settingsPanel">
         <h2>البيانات الشخصية</h2>
-        <div class="muted">يمكنك تعديل الاسم والعمر ومصدر التسجيل. البريد لا يتغير من هنا.</div>
+        <div class="muted">يمكنك تعديل البيانات ويمكنك تغير البريد من الدعم.</div>
 
         <div class="form-grid">
           <div class="input-box">
@@ -840,42 +839,6 @@
           "https://via.placeholder.com/1200x750?text=صفحة+المراجعة+السريعة+3"
         ],
         downloadUrl: "https://example.com/?product=p2"
-      },
-      {
-        id: "p3",
-        name: "حزمة التميز",
-        price: 250,
-        description: "حزمة متقدمة فيها ملف مرتب بعناية، مناسبة للمحتوى الاحترافي وتدعم الاستخدام الطويل. بعد الشراء يظهر رابط تجربة فقط داخل الحساب.",
-        images: [
-          "https://via.placeholder.com/1200x750?text=حزمة+التميز+1",
-          "https://via.placeholder.com/1200x750?text=حزمة+التميز+2",
-          "https://via.placeholder.com/1200x750?text=حزمة+التميز+3"
-        ],
-        downloadUrl: "https://example.com/?product=p3"
-      },
-      {
-        id: "p4",
-        name: "مذكرة النخبة",
-        price: 320,
-        description: "مذكرة غنية بالتفاصيل وتنسيق احترافي، مناسبة لمن يريد ملفًا أكثر عمقًا وتنظيمًا مع أكثر من صورة داخل نافذة العرض.",
-        images: [
-          "https://via.placeholder.com/1200x750?text=مذكرة+النخبة+1",
-          "https://via.placeholder.com/1200x750?text=مذكرة+النخبة+2",
-          "https://via.placeholder.com/1200x750?text=مذكرة+النخبة+3"
-        ],
-        downloadUrl: "https://example.com/?product=p4"
-      },
-      {
-        id: "p5",
-        name: "ملف الاحتراف الكامل",
-        price: 500,
-        description: "الملف الأعلى قيمة، مخصص للمحتوى الكامل مع شكل فاخر ورابط تجربة يظهر بعد الشراء فقط. مناسب كنسخة عرض وتجربة داخل الموقع.",
-        images: [
-          "https://via.placeholder.com/1200x750?text=ملف+الاحتراف+الكامل+1",
-          "https://via.placeholder.com/1200x750?text=ملف+الاحتراف+الكامل+2",
-          "https://via.placeholder.com/1200x750?text=ملف+الاحتراف+الكامل+3"
-        ],
-        downloadUrl: "https://example.com/?product=p5"
       }
     ];
 
@@ -1016,7 +979,7 @@
           link.href = purchased.downloadUrl || item.downloadUrl || "https://example.com";
           link.target = "_blank";
           link.rel = "noopener noreferrer";
-          link.textContent = "فتح رابط التجربة";
+          link.textContent = "فتح رابط تحميل الكود";
           actions.appendChild(link);
         } else if (enough) {
           const btn = document.createElement("button");
@@ -1191,7 +1154,7 @@
         renderPurchases(currentProfile);
         showStatus(profileStatus, "تم حفظ التعديلات بنجاح.", "success");
       } catch (err) {
-        showStatus(profileStatus, "تعذر حفظ البيانات. تأكد من اتصال Firestore.", "error");
+        showStatus(profileStatus, "تعذر حفظ البيانات. تأكد من اتصال .", "error");
       }
     }
 
