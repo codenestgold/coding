@@ -60,6 +60,13 @@
       border-radius:22px;
       padding:14px 16px;
       margin-bottom:16px;
+      transition: transform .28s ease, opacity .28s ease;
+    }
+
+    .topbar.scroll-hide{
+      transform: translate(-50%, -140%);
+      opacity:0;
+      pointer-events:none;
     }
 
     .brand{
@@ -492,22 +499,6 @@
       min-height:100%;
     }
 
-    .service-hero{
-      position:relative;
-      width:100%;
-      aspect-ratio: 16/9;
-      overflow:hidden;
-      background: rgba(255,255,255,.05);
-      border-bottom:1px solid rgba(255,255,255,.10);
-    }
-
-    .service-hero img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
     .service-body{
       padding:16px;
       display:flex;
@@ -549,38 +540,6 @@
       font-size:14px;
       min-height:56px;
       white-space:pre-wrap;
-    }
-
-    .link-strip{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap:8px;
-    }
-
-    .link-thumb{
-      position:relative;
-      aspect-ratio: 1 / 1;
-      border-radius:14px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-    }
-
-    .link-thumb img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .link-thumb .overlay{
-      position:absolute;
-      inset:auto 0 0 0;
-      padding:6px 8px;
-      background: linear-gradient(180deg, transparent, rgba(0,0,0,.74));
-      font-size:11px;
-      font-weight:700;
-      color:#fff;
     }
 
     .link-list{
@@ -881,9 +840,6 @@
       .modal-thumbs{
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-      .link-strip{
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
       .admin-users{
         grid-template-columns:1fr;
       }
@@ -933,7 +889,7 @@
   </div>
 
   <div class="wrap hidden" id="app">
-    <div class="topbar">
+    <div class="topbar" id="topbar">
       <div class="brand">
         <div class="logo">
           <img src="img1.PNG" alt="Codenest Logo">
@@ -1075,7 +1031,7 @@
         <div class="form-grid">
           <div class="input-box">
             <label>الـ ID المستهدف</label>
-            <input type="text" id="noticeTargetId" placeholder="UID المستخدم">
+            <input type="text" id="noticeTargetId" placeholder="UID المستخدم أو ID البروفايل">
           </div>
 
           <div class="input-box">
@@ -1125,6 +1081,7 @@
       getFirestore,
       doc,
       getDoc,
+      onSnapshot,
       updateDoc,
       deleteDoc,
       runTransaction,
@@ -1157,6 +1114,7 @@
 
     const loadingOverlay = $("loadingOverlay");
     const appRoot = $("app");
+    const topbar = $("topbar");
 
     const topCoins = $("topCoins");
     const topUserId = $("topUserId");
@@ -1230,6 +1188,10 @@
     let editingNoticeId = null;
     let currentNotice = null;
 
+    let usersUnsub = null;
+    let noticesUnsub = null;
+    let profileUnsub = null;
+
     const products = [
       {
         id: "28",
@@ -1278,15 +1240,6 @@
 
     function redirectToIndex() {
       window.location.replace(INDEX_PAGE);
-    }
-
-    function getPurchasedMap(profile) {
-      const map = new Map();
-      const arr = Array.isArray(profile?.purchases) ? profile.purchases : [];
-      for (const item of arr) {
-        if (item?.id) map.set(item.id, item);
-      }
-      return map;
     }
 
     function escapeHtml(str) {
@@ -1370,6 +1323,15 @@
       currentModalProduct = null;
     }
 
+    function getPurchasedMap(profile) {
+      const map = new Map();
+      const arr = Array.isArray(profile?.purchases) ? profile.purchases : [];
+      for (const item of arr) {
+        if (item?.id) map.set(item.id, item);
+      }
+      return map;
+    }
+
     function renderCatalog(profile) {
       const purchasedMap = getPurchasedMap(profile);
       catalogGrid.innerHTML = "";
@@ -1377,7 +1339,6 @@
       for (const item of products) {
         const purchased = purchasedMap.get(item.id);
         const enough = Number(profile?.coins || 0) >= item.price;
-
         const card = document.createElement("article");
         card.className = "catalog-card";
 
@@ -1402,8 +1363,7 @@
           </div>
         `;
 
-        const imageEl = card.querySelector(".thumb img");
-        imageEl.addEventListener("click", () => openDetails(item));
+        card.querySelector(".thumb img").addEventListener("click", () => openDetails(item));
 
         const moreBtn = card.querySelector(".more-link");
         if (moreBtn) {
@@ -1486,7 +1446,7 @@
       profileSource.value = profile?.source || "other";
       profileCoins.value = money(profile?.coins || 0);
       topCoins.textContent = money(profile?.coins || 0);
-      topUserId.textContent = profile?.userId || "-----";
+      topUserId.textContent = profile?.userId || profile?.uid || "-----";
     }
 
     function isAdminProfile(profile) {
@@ -1570,48 +1530,12 @@
       }
     }
 
-    async function loadProfile(uid) {
-      const snap = await getDoc(doc(db, "users", uid));
-      return snap.exists() ? snap.data() : null;
-    }
-
     function normalizeLinkInput(raw) {
       return String(raw || "")
         .split(/[\n,]+/g)
         .map(s => s.trim())
         .filter(Boolean)
         .map(url => /^https?:\/\//i.test(url) ? url : `https://${url}`);
-    }
-
-    function getYouTubeId(url) {
-      try {
-        const u = new URL(url);
-        const host = u.hostname.replace(/^www\./, "");
-        if (host === "youtu.be") return u.pathname.split("/").filter(Boolean)[0] || "";
-        if (host.includes("youtube.com")) {
-          return u.searchParams.get("v") || "";
-        }
-      } catch (_) {}
-      return "";
-    }
-
-    function servicePreviewImage(url, title = "Codenest Gold") {
-      const normalized = String(url || "").trim();
-      const ytId = getYouTubeId(normalized);
-      if (ytId) return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
-
-      if (/\.(png|jpg|jpeg|webp|gif|bmp|svg)(\?.*)?$/i.test(normalized)) {
-        return normalized;
-      }
-
-      try {
-        const u = new URL(normalized);
-        const host = u.hostname.replace(/^www\./, "");
-        const shortHost = host.split(".")[0];
-        return placeholderImage(shortHost || title, host);
-      } catch (_) {
-        return placeholderImage(title, "رابط خدمة");
-      }
     }
 
     function hostLabel(url) {
@@ -1690,11 +1614,7 @@
     async function loadServices() {
       const snap = await getDocs(collection(db, "services"));
       const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-      list.sort((a, b) => {
-        const at = a?.createdAt?.seconds ?? 0;
-        const bt = b?.createdAt?.seconds ?? 0;
-        return bt - at;
-      });
+      list.sort((a, b) => (b?.createdAt?.seconds || 0) - (a?.createdAt?.seconds || 0));
       cachedServices = list;
       renderServices(list);
     }
@@ -1811,14 +1731,19 @@
       }
     }
 
-    async function loadNotices() {
-      const snap = await getDocs(collection(db, "notices"));
-      cachedNotices = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-      cachedNotices.sort((a, b) => (b?.createdAt?.seconds || 0) - (a?.createdAt?.seconds || 0));
+    function getUserIdentifiers(profile, user) {
+      const ids = [];
+      if (user?.uid) ids.push(String(user.uid).trim());
+      if (profile?.userId) ids.push(String(profile.userId).trim());
+      if (profile?.email) ids.push(String(profile.email).trim().toLowerCase());
+      return ids.filter(Boolean);
+    }
 
-      if (isAdminProfile(currentProfile) || isAdminProfile(currentUser)) {
-        renderNotices(cachedNotices);
-      }
+    function noticeMatchesCurrentUser(notice, profile, user) {
+      const target = String(notice?.targetUserId || "").trim().toLowerCase();
+      if (!target) return false;
+      const ids = getUserIdentifiers(profile, user).map(v => String(v).trim().toLowerCase());
+      return ids.includes(target);
     }
 
     function getDismissedNotices(profile) {
@@ -1829,11 +1754,10 @@
       if (!currentUser || !currentProfile) return null;
 
       const dismissed = getDismissedNotices(currentProfile);
-      const uid = String(currentUser.uid).trim();
 
       return cachedNotices.find((n) =>
         n.active !== false &&
-        String(n.targetUserId || "").trim() === uid &&
+        noticeMatchesCurrentUser(n, currentProfile, currentUser) &&
         !dismissed.has(n.id)
       ) || null;
     }
@@ -1871,14 +1795,10 @@
 
       try {
         currentProfile = await loadProfile(currentUser.uid);
+        fillProfileForm(currentProfile);
       } catch (_) {}
 
-      const next = getNextNoticeForCurrentUser();
-      if (next) {
-        showNoticeModal(next);
-      } else {
-        currentNotice = null;
-      }
+      currentNotice = null;
     }
 
     async function toggleNoticeActive(notice) {
@@ -1888,7 +1808,6 @@
           active: !notice.active,
           updatedAt: serverTimestamp()
         });
-        await loadNotices();
         showStatus(noticeAdminStatus, notice.active ? "تم تعطيل التنبيه." : "تم تشغيل التنبيه.", "success");
       } catch (err) {
         showStatus(noticeAdminStatus, err?.message || "تعذر تغيير حالة التنبيه.", "error");
@@ -1903,7 +1822,6 @@
       try {
         await deleteDoc(doc(db, "notices", notice.id));
         if (editingNoticeId === notice.id) cancelNoticeEdit();
-        await loadNotices();
         showStatus(noticeAdminStatus, "تم حذف التنبيه بنجاح.", "success");
       } catch (err) {
         showStatus(noticeAdminStatus, err?.message || "تعذر حذف التنبيه.", "error");
@@ -1955,8 +1873,6 @@
           showStatus(noticeAdminStatus, "تمت إضافة التنبيه بنجاح.", "success");
           resetNoticeForm();
         }
-
-        await loadNotices();
       } catch (err) {
         showStatus(noticeAdminStatus, err?.message || "تعذر حفظ التنبيه.", "error");
       } finally {
@@ -1970,30 +1886,9 @@
       appRoot.classList.toggle("hidden", isLoading);
     }
 
-    async function refreshAll() {
-      if (!currentUser) return;
-
-      currentProfile = await loadProfile(currentUser.uid);
-      if (!currentProfile) {
-        redirectToIndex();
-        return;
-      }
-
-      fillProfileForm(currentProfile);
-      setAdminVisibility(currentProfile);
-      renderCatalog(currentProfile);
-      renderPurchases(currentProfile);
-      await loadServices();
-      await loadNotices();
-
-      if (isAdminProfile(currentProfile)) {
-        await loadAllUsers();
-      }
-
-      const nextNotice = getNextNoticeForCurrentUser();
-      if (nextNotice) {
-        showNoticeModal(nextNotice);
-      }
+    async function loadProfile(uid) {
+      const snap = await getDoc(doc(db, "users", uid));
+      return snap.exists() ? snap.data() : null;
     }
 
     async function purchaseItem(item, buttonEl) {
@@ -2153,6 +2048,91 @@
       }
     }
 
+    async function refreshUsersAndNoticesForAdmin() {
+      if (isAdminProfile(currentProfile)) {
+        await loadAllUsers();
+      }
+    }
+
+    function maybeShowNextNotice() {
+      const nextNotice = getNextNoticeForCurrentUser();
+      if (!nextNotice) return;
+
+      if (currentNotice && currentNotice.id === nextNotice.id && noticeModal.classList.contains("show")) return;
+
+      showNoticeModal(nextNotice);
+    }
+
+    async function loadServicesOnce() {
+      const snap = await getDocs(collection(db, "services"));
+      const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      list.sort((a, b) => (b?.createdAt?.seconds || 0) - (a?.createdAt?.seconds || 0));
+      cachedServices = list;
+      renderServices(list);
+    }
+
+    async function loadAllUsersOnce() {
+      const snap = await getDocs(collection(db, "users"));
+      cachedUsers = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      cachedUsers.sort((a, b) => String(a.email || "").localeCompare(String(b.email || "")));
+      renderAdminUsers(cachedUsers);
+    }
+
+    function attachLiveProfileListener(uid) {
+      if (profileUnsub) profileUnsub();
+
+      profileUnsub = onSnapshot(doc(db, "users", uid), (snap) => {
+        if (!snap.exists()) return;
+        currentProfile = snap.data();
+        fillProfileForm(currentProfile);
+        setAdminVisibility(currentProfile);
+        renderCatalog(currentProfile);
+        renderPurchases(currentProfile);
+        refreshUsersAndNoticesForAdmin();
+        maybeShowNextNotice();
+      }, () => {});
+    }
+
+    function attachLiveNoticesListener() {
+      if (noticesUnsub) noticesUnsub();
+
+      noticesUnsub = onSnapshot(collection(db, "notices"), (snap) => {
+        cachedNotices = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        cachedNotices.sort((a, b) => (b?.createdAt?.seconds || 0) - (a?.createdAt?.seconds || 0));
+
+        if (isAdminProfile(currentProfile) || isAdminProfile(currentUser)) {
+          renderNotices(cachedNotices);
+        }
+
+        maybeShowNextNotice();
+      }, () => {});
+    }
+
+    function attachLiveUsersListener() {
+      if (usersUnsub) usersUnsub();
+
+      usersUnsub = onSnapshot(collection(db, "users"), (snap) => {
+        cachedUsers = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        cachedUsers.sort((a, b) => String(a.email || "").localeCompare(String(b.email || "")));
+
+        if (isAdminProfile(currentProfile) || isAdminProfile(currentUser)) {
+          renderAdminUsers(cachedUsers);
+        }
+      }, () => {});
+    }
+
+    let lastScrollY = window.scrollY || 0;
+
+    window.addEventListener("scroll", () => {
+      const y = window.scrollY || 0;
+      if (y > 120 && y > lastScrollY) {
+        topbar.classList.add("scroll-hide");
+      } else {
+        topbar.classList.remove("scroll-hide");
+      }
+      lastScrollY = y;
+    }, { passive: true });
+
     btnToggleSettings.addEventListener("click", () => {
       settingsPanel.classList.toggle("show");
     });
@@ -2208,17 +2188,18 @@
         renderCatalog(profile);
         renderPurchases(profile);
 
-        await loadServices();
-        await loadNotices();
+        await loadServicesOnce();
+        await loadAllUsersOnce();
+        attachLiveProfileListener(user.uid);
+        attachLiveNoticesListener();
+        attachLiveUsersListener();
 
         if (isAdminProfile(profile)) {
-          await loadAllUsers();
+          await loadAllUsersOnce();
+          renderNotices(cachedNotices);
         }
 
-        const nextNotice = getNextNoticeForCurrentUser();
-        if (nextNotice) {
-          showNoticeModal(nextNotice);
-        }
+        maybeShowNextNotice();
 
         setLoading(false);
       } catch (err) {
