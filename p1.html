@@ -619,6 +619,41 @@
       justify-content:center;
     }
 
+    .service-admin-actions{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:8px;
+    }
+
+    .service-card.inactive{
+      opacity:.58;
+      filter:saturate(.8);
+    }
+
+    .service-state{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      margin-inline-start:8px;
+      vertical-align:middle;
+    }
+
+    .service-state.active{
+      background: rgba(52,211,153,.14);
+      color:#86efac;
+      border:1px solid rgba(52,211,153,.28);
+    }
+
+    .service-state.inactive{
+      background: rgba(248,113,113,.14);
+      color:#fda4af;
+      border:1px solid rgba(248,113,113,.28);
+    }
+
     .loading-overlay{
       position:fixed;
       inset:0;
@@ -935,8 +970,12 @@
 
       <div class="service-admin" id="serviceAdminWrap">
         <div class="section-title" style="margin-top:0;">
-          <h2 style="font-size:18px;">إضافة خدمة جديدة</h2>
+          <h2 style="font-size:18px;" id="serviceFormTitle">إضافة خدمة جديدة</h2>
           <div class="small">مسموح فقط للحساب: 2@gmail.com</div>
+        </div>
+
+        <div class="muted-box" id="serviceEditHint" style="display:none; margin-bottom:12px;">
+          أنت الآن في وضع تعديل خدمة موجودة. يمكنك الحفظ كتعديل أو إلغاء التعديل.
         </div>
 
         <div class="form-grid">
@@ -961,6 +1000,7 @@
           </div>
 
           <button class="btn success block" id="btnAddService">إضافة الخدمة</button>
+          <button class="btn secondary block hidden" id="btnCancelServiceEdit" type="button">إلغاء التعديل</button>
         </div>
 
         <div class="status" id="serviceAdminStatus"></div>
@@ -983,6 +1023,7 @@
       doc,
       getDoc,
       updateDoc,
+      deleteDoc,
       runTransaction,
       serverTimestamp,
       getDocs,
@@ -1048,16 +1089,20 @@
     const servicesStatus = $("servicesStatus");
     const serviceAdminWrap = $("serviceAdminWrap");
     const serviceAdminStatus = $("serviceAdminStatus");
+    const serviceFormTitle = $("serviceFormTitle");
+    const serviceEditHint = $("serviceEditHint");
     const serviceName = $("serviceName");
     const servicePrice = $("servicePrice");
     const serviceDesc = $("serviceDesc");
     const serviceLinks = $("serviceLinks");
     const btnAddService = $("btnAddService");
+    const btnCancelServiceEdit = $("btnCancelServiceEdit");
 
     let currentUser = null;
     let currentProfile = null;
     let currentModalProduct = null;
     let cachedServices = [];
+    let editingServiceId = null;
 
     const products = [
       {
@@ -1321,6 +1366,73 @@
       serviceAdminWrap.classList.toggle("show", isAdmin);
       if (!isAdmin) {
         clearStatus(serviceAdminStatus);
+        resetServiceForm();
+      }
+    }
+
+    function resetServiceForm() {
+      editingServiceId = null;
+      serviceFormTitle.textContent = "إضافة خدمة جديدة";
+      serviceEditHint.style.display = "none";
+      serviceName.value = "";
+      servicePrice.value = "";
+      serviceDesc.value = "";
+      serviceLinks.value = "";
+      btnAddService.textContent = "إضافة الخدمة";
+      btnCancelServiceEdit.classList.add("hidden");
+    }
+
+    function startServiceEdit(service) {
+      editingServiceId = service.id;
+      serviceFormTitle.textContent = "تعديل خدمة";
+      serviceEditHint.style.display = "block";
+      serviceName.value = service.name || "";
+      servicePrice.value = service.price ?? "";
+      serviceDesc.value = service.description || "";
+      serviceLinks.value = Array.isArray(service.links) ? service.links.join("\n") : "";
+      btnAddService.textContent = "حفظ التعديلات";
+      btnCancelServiceEdit.classList.remove("hidden");
+      window.location.hash = "#servicesSection";
+    }
+
+    function cancelServiceEdit() {
+      resetServiceForm();
+    }
+
+    function serviceSupportText(service) {
+      return `مرحبًا، أريد استفسارًا أكثر عن خدمة:\nالعنوان: ${service.name}\nالوصف: ${service.description || "لا يوجد وصف"}\n\nأرغب في معرفة المزيد من التفاصيل قبل الطلب.`;
+    }
+
+    function openSupportForService(service) {
+      const msg = encodeURIComponent(serviceSupportText(service));
+      window.open(`https://wa.me/${SUPPORT_NUMBER}?text=${msg}`, "_blank", "noopener,noreferrer");
+    }
+
+    async function deleteService(service) {
+      const ok = confirm(`هل تريد حذف الخدمة: ${service.name} ؟`);
+      if (!ok) return;
+      clearStatus(serviceAdminStatus);
+      try {
+        await deleteDoc(doc(db, "services", service.id));
+        if (editingServiceId === service.id) cancelServiceEdit();
+        await loadServices();
+        showStatus(serviceAdminStatus, "تم حذف الخدمة بنجاح.", "success");
+      } catch (err) {
+        showStatus(serviceAdminStatus, err?.message || "تعذر حذف الخدمة.", "error");
+      }
+    }
+
+    async function toggleServiceActive(service) {
+      clearStatus(serviceAdminStatus);
+      try {
+        await updateDoc(doc(db, "services", service.id), {
+          active: !service.active,
+          updatedAt: serverTimestamp()
+        });
+        await loadServices();
+        showStatus(serviceAdminStatus, service.active ? "تم تعطيل الخدمة." : "تم تشغيل الخدمة.", "success");
+      } catch (err) {
+        showStatus(serviceAdminStatus, err?.message || "تعذر تغيير حالة الخدمة.", "error");
       }
     }
 
@@ -1379,19 +1491,6 @@
       }
     }
 
-    function supportMessageForService(service) {
-      return `مرحبًا، أريد استفسارًا أكثر عن خدمة:
-العنوان: ${service.name}
-الوصف: ${service.description || "لا يوجد وصف"}
-
-أرغب في معرفة المزيد من التفاصيل قبل الطلب.`;
-    }
-
-    function openSupportForService(service) {
-      const msg = encodeURIComponent(supportMessageForService(service));
-      window.open(`https://wa.me/${SUPPORT_NUMBER}?text=${msg}`, "_blank", "noopener,noreferrer");
-    }
-
     function renderServices(services) {
       servicesGrid.innerHTML = "";
 
@@ -1400,22 +1499,28 @@
         return;
       }
 
+      const isAdmin = (currentProfile?.email || currentUser?.email || "").toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
       services.forEach((service) => {
         const links = Array.isArray(service.links) ? service.links.filter(Boolean) : [];
+        const active = service.active !== false;
 
         const card = document.createElement("article");
-        card.className = "service-card";
+        card.className = `service-card${active ? "" : " inactive"}`;
 
         const linkChips = links.slice(0, 6).map((link, index) => `
           <a class="link-chip" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
             رابط ${index + 1}: ${escapeHtml(hostLabel(link))}
           </a>
         `).join("");
+        const stateLabel = active
+          ? '<span class="service-state active">مفعلة</span>'
+          : '<span class="service-state inactive">متوقفة</span>';
 
         card.innerHTML = `
           <div class="service-body" style="padding-top:18px;">
             <div class="service-head">
-              <h3 class="service-name">${escapeHtml(service.name)}</h3>
+              <h3 class="service-name">${escapeHtml(service.name)} ${stateLabel}</h3>
               <div class="service-price">${money(service.price)} كوينز</div>
             </div>
 
@@ -1424,12 +1529,25 @@
             ${linkChips ? `<div class="link-list">${linkChips}</div>` : `<div class="muted-box">لا توجد روابط مرفقة لهذه الخدمة.</div>`}
 
             <div class="service-actions">
-              <button class="btn secondary block" type="button">تواصل مع دعم كودنيست</button>
+              <button class="btn secondary block btn-support" type="button" ${active ? "" : "disabled"}>تواصل مع دعم كودنيست</button>
+              ${isAdmin ? `
+                <div class="service-admin-actions">
+                  <button class="btn secondary btn-edit" type="button">تعديل</button>
+                  <button class="btn secondary btn-toggle" type="button">${active ? "تعطيل" : "تشغيل"}</button>
+                  <button class="btn danger btn-delete" type="button" style="grid-column:1/-1;">مسح</button>
+                </div>
+              ` : ""}
             </div>
           </div>
         `;
 
-        card.querySelector("button").addEventListener("click", () => openSupportForService(service));
+        card.querySelector(".btn-support").addEventListener("click", () => openSupportForService(service));
+        if (isAdmin) {
+          card.querySelector(".btn-edit").addEventListener("click", () => startServiceEdit(service));
+          card.querySelector(".btn-toggle").addEventListener("click", () => toggleServiceActive(service));
+          card.querySelector(".btn-delete").addEventListener("click", () => deleteService(service));
+        }
+
         servicesGrid.appendChild(card);
       });
     }
@@ -1578,30 +1696,43 @@
 
       try {
         btnAddService.disabled = true;
-        btnAddService.textContent = "جارٍ الإضافة...";
+        btnAddService.textContent = editingServiceId ? "جارٍ حفظ التعديل..." : "جارٍ الإضافة...";
 
-        await addDoc(collection(db, "services"), {
-          name,
-          price,
-          description,
-          links,
-          createdAt: serverTimestamp(),
-          createdBy: currentUser.uid,
-          createdByEmail: currentUser.email || currentProfile?.email || ""
-        });
-
-        serviceName.value = "";
-        servicePrice.value = "";
-        serviceDesc.value = "";
-        serviceLinks.value = "";
+        if (editingServiceId) {
+          await updateDoc(doc(db, "services", editingServiceId), {
+            name,
+            price,
+            description,
+            links,
+            updatedAt: serverTimestamp()
+          });
+          showStatus(serviceAdminStatus, "تم تعديل الخدمة بنجاح.", "success");
+          cancelServiceEdit();
+        } else {
+          await addDoc(collection(db, "services"), {
+            name,
+            price,
+            description,
+            links,
+            active: true,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            createdBy: currentUser.uid,
+            createdByEmail: currentUser.email || currentProfile?.email || ""
+          });
+          showStatus(serviceAdminStatus, "تمت إضافة الخدمة بنجاح.", "success");
+          serviceName.value = "";
+          servicePrice.value = "";
+          serviceDesc.value = "";
+          serviceLinks.value = "";
+        }
 
         await loadServices();
-        showStatus(serviceAdminStatus, "تمت إضافة الخدمة بنجاح.", "success");
       } catch (err) {
-        showStatus(serviceAdminStatus, err?.message || "تعذر إضافة الخدمة.", "error");
+        showStatus(serviceAdminStatus, err?.message || "تعذر حفظ الخدمة.", "error");
       } finally {
         btnAddService.disabled = false;
-        btnAddService.textContent = "إضافة الخدمة";
+        btnAddService.textContent = editingServiceId ? "حفظ التعديلات" : "إضافة الخدمة";
       }
     }
 
@@ -1626,6 +1757,7 @@
 
     btnSaveProfile.addEventListener("click", saveProfile);
     btnAddService.addEventListener("click", addService);
+    btnCancelServiceEdit.addEventListener("click", cancelServiceEdit);
 
     closeModalBtn.addEventListener("click", closeDetails);
     detailsModal.addEventListener("click", (e) => {
