@@ -24,6 +24,7 @@
     }
 
     *{ box-sizing:border-box; font-family:'Tajawal',sans-serif; }
+    html{ scroll-behavior:smooth; }
     body{
       margin:0;
       min-height:100vh;
@@ -170,7 +171,7 @@
       align-items:start;
     }
 
-    .panel, .card, .catalog-card, .purchase-item, .loading-box, .modal-box{
+    .panel, .catalog-card, .purchase-item, .loading-box, .modal-box, .service-card, .service-admin{
       background: var(--card);
       border:1px solid var(--line);
       backdrop-filter: blur(12px);
@@ -202,6 +203,26 @@
     }
 
     .hidden{ display:none !important; }
+
+    .section-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin:18px 0 12px;
+      flex-wrap:wrap;
+    }
+
+    .section-title h2{
+      margin:0;
+      font-size:20px;
+      font-weight:800;
+    }
+
+    .section-title .small{
+      color:var(--muted);
+      font-size:13px;
+    }
 
     .grid{
       display:grid;
@@ -251,14 +272,6 @@
       font-weight:800;
     }
 
-    .desc{
-      margin:0 0 14px;
-      color:var(--muted);
-      line-height:1.9;
-      font-size:14px;
-      min-height:0;
-    }
-
     .desc-row{
       display:flex;
       align-items:flex-end;
@@ -272,6 +285,7 @@
       color:var(--muted);
       line-height:1.9;
       font-size:14px;
+      margin:0;
     }
 
     .more-link{
@@ -415,26 +429,6 @@
       border-color: rgba(248,113,113,.35);
     }
 
-    .section-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin:18px 0 12px;
-      flex-wrap:wrap;
-    }
-
-    .section-title h2{
-      margin:0;
-      font-size:20px;
-      font-weight:800;
-    }
-
-    .section-title .small{
-      color:var(--muted);
-      font-size:13px;
-    }
-
     .purchase-list{
       display:grid;
       gap:12px;
@@ -471,6 +465,158 @@
       padding:14px;
       line-height:1.9;
       color:rgba(255,255,255,.92);
+    }
+
+    .service-admin{
+      display:none;
+      padding:16px;
+      margin:22px 0 16px;
+    }
+
+    .service-admin.show{ display:block; }
+
+    .services-grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:16px;
+      margin-top:12px;
+    }
+
+    .service-card{
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height:100%;
+    }
+
+    .service-hero{
+      position:relative;
+      width:100%;
+      aspect-ratio: 16/9;
+      overflow:hidden;
+      background: rgba(255,255,255,.05);
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+
+    .service-hero img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .service-body{
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      flex:1;
+    }
+
+    .service-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .service-name{
+      margin:0;
+      font-size:19px;
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    .service-price{
+      flex:0 0 auto;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(251,191,36,.16);
+      color:#fde68a;
+      border:1px solid rgba(251,191,36,.28);
+      font-weight:800;
+      font-size:13px;
+      white-space:nowrap;
+    }
+
+    .service-desc{
+      margin:0;
+      color:var(--muted);
+      line-height:1.9;
+      font-size:14px;
+      min-height:56px;
+      white-space:pre-wrap;
+    }
+
+    .link-strip{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:8px;
+    }
+
+    .link-thumb{
+      position:relative;
+      aspect-ratio: 1 / 1;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+
+    .link-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .link-thumb .overlay{
+      position:absolute;
+      inset:auto 0 0 0;
+      padding:6px 8px;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,.74));
+      font-size:11px;
+      font-weight:700;
+      color:#fff;
+    }
+
+    .link-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .link-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 11px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      text-decoration:none;
+      color:#fff;
+      background: rgba(255,255,255,.08);
+      font-size:13px;
+      font-weight:800;
+      max-width:100%;
+    }
+
+    .link-chip:hover{
+      background: rgba(255,255,255,.14);
+    }
+
+    .service-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-top:auto;
+      flex-wrap:wrap;
+    }
+
+    .service-actions .btn,
+    .service-actions .mini-link{
+      width:100%;
+      justify-content:center;
     }
 
     .loading-overlay{
@@ -527,7 +673,7 @@
     .modal-close{
       position:absolute;
       top:14px;
-      leftPngpx;
+      left:14px;
       width:38px;
       height:38px;
       border:none;
@@ -612,6 +758,10 @@
       white-space:pre-wrap;
     }
 
+    @media (max-width: 1100px){
+      .services-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
     @media (max-width: 960px){
       .layout{ grid-template-columns:1fr; }
       .panel{
@@ -622,6 +772,9 @@
         grid-template-columns:1fr;
       }
       .modal-grid{
+        grid-template-columns:1fr;
+      }
+      .services-grid{
         grid-template-columns:1fr;
       }
     }
@@ -646,10 +799,12 @@
       .modal-thumbs{
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
+      .link-strip{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
   </style>
 </head>
-	<script src="/global.js"></script>
 <body>
   <div class="loading-overlay" id="loadingOverlay">
     <div class="loading-box">
@@ -702,15 +857,15 @@
     </div>
 
     <div class="top-note">
-      اضغط علي شراء كوينز لمعرفه اسعار الكوينز (تواصل مع الدعم "زر:شراء كوينز" لاخذ كوينز مجانا)
-     
+      اضغط على شحن كوينز لمعرفه اسعار الكوينز، وللتواصل السريع مع الدعم.  
+      قسم الخدمات بالأسفل مخصص للإضافة من الحساب الإداري فقط: <strong>2@gmail.com</strong>.
     </div>
 
     <div class="layout">
       <main>
         <div class="section-title">
           <h2>الملفات المتاحة للشراء</h2>
-          <div class="small">اضغط على الاسم لعرض تفاصيل الكود</div>
+          <div class="small">اضغط على الصورة أو عرض المزيد لفتح التفاصيل</div>
         </div>
 
         <div class="grid" id="catalogGrid"></div>
@@ -719,7 +874,7 @@
 
       <aside class="panel" id="settingsPanel">
         <h2>البيانات الشخصية</h2>
-        <div class="muted">يمكنك تعديل البيانات ويمكنك تغير البريد من الدعم.</div>
+        <div class="muted">يمكنك تعديل الاسم والعمر ومصدر التسجيل. البريد الإلكتروني والـ ID للعرض فقط.</div>
 
         <div class="form-grid">
           <div class="input-box">
@@ -771,6 +926,49 @@
         <div class="status" id="profileStatus"></div>
       </aside>
     </div>
+
+    <section id="servicesSection">
+      <div class="section-title">
+        <h2>الخدمات الإضافية</h2>
+        <div class="small">معاينات للروابط + تواصل مباشر مع دعم كودنيست | واتساب الدعم: 01124680211</div>
+      </div>
+
+      <div class="service-admin" id="serviceAdminWrap">
+        <div class="section-title" style="margin-top:0;">
+          <h2 style="font-size:18px;">إضافة خدمة جديدة</h2>
+          <div class="small">مسموح فقط للحساب: 2@gmail.com</div>
+        </div>
+
+        <div class="form-grid">
+          <div class="input-box">
+            <label>اسم الخدمة</label>
+            <input type="text" id="serviceName" placeholder="مثال: تعديل واجهة موقع">
+          </div>
+
+          <div class="input-box">
+            <label>سعر الخدمة</label>
+            <input type="number" id="servicePrice" placeholder="مثال: 120">
+          </div>
+
+          <div class="input-box">
+            <label>وصف الخدمة</label>
+            <textarea id="serviceDesc" placeholder="اكتب وصفًا واضحًا ومختصرًا عن الخدمة"></textarea>
+          </div>
+
+          <div class="input-box">
+            <label>اللينكات (كل رابط في سطر أو مفصول بفاصلة)</label>
+            <textarea id="serviceLinks" placeholder="https://youtube.com/watch?v=...&#10;https://example.com/image.png"></textarea>
+          </div>
+
+          <button class="btn success block" id="btnAddService">إضافة الخدمة</button>
+        </div>
+
+        <div class="status" id="serviceAdminStatus"></div>
+      </div>
+
+      <div class="services-grid" id="servicesGrid"></div>
+      <div class="status" id="servicesStatus"></div>
+    </section>
   </div>
 
   <script type="module">
@@ -786,7 +984,10 @@
       getDoc,
       updateDoc,
       runTransaction,
-      serverTimestamp
+      serverTimestamp,
+      getDocs,
+      collection,
+      addDoc
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -804,7 +1005,8 @@
     const db = getFirestore(app);
 
     const INDEX_PAGE = "index.html";
-    const WHATSAPP_NUMBER = "201124680211";
+    const SUPPORT_NUMBER = "201124680211";
+    const ADMIN_EMAIL = "2@gmail.com";
 
     const $ = (id) => document.getElementById(id);
 
@@ -842,9 +1044,20 @@
     const modalPrice = $("modalPrice");
     const modalDesc = $("modalDesc");
 
+    const servicesGrid = $("servicesGrid");
+    const servicesStatus = $("servicesStatus");
+    const serviceAdminWrap = $("serviceAdminWrap");
+    const serviceAdminStatus = $("serviceAdminStatus");
+    const serviceName = $("serviceName");
+    const servicePrice = $("servicePrice");
+    const serviceDesc = $("serviceDesc");
+    const serviceLinks = $("serviceLinks");
+    const btnAddService = $("btnAddService");
+
     let currentUser = null;
     let currentProfile = null;
     let currentModalProduct = null;
+    let cachedServices = [];
 
     const products = [
       {
@@ -852,17 +1065,17 @@
         name: "لوحه تسجيل دخول موقع ويب قابله للتعديل",
         price: 50,
         description: `هذا الكود يمثل صفحة تسجيل دخول وإنشاء حساب (Login/Register) تفاعلية قابله للتعديل (Neumorphism / Glowing Neon) وواجهة عربية كاملة تدعم اتجاه اليمين إلى اليسار (RTL).
-	أبرز مميزات التصميم والبرمجة:
-	تأثيرات بصرية ثلاثية الأبعاد (3D & Perspective):
+أبرز مميزات التصميم والبرمجة:
+تأثيرات بصرية ثلاثية الأبعاد (3D & Perspective):
 تستخدم الصفحة خاصية perspective مع تأثير دوران rotateY للبطاقة عند التبديل بين نموذج تسجيل الدخول والنموذج الجديد.
-	الخلفية التفاعلية:
+الخلفية التفاعلية:
 تتميز بخلفية داكنة مع دوائر متوهجة (أزرق وأرجواني) تتحرك بشكل مستمر (animation: float) وتستخدم تأثير backdrop-filter لإعطاء مظهر زجاجي شفاف.
-	واجهة مزدوجة (Card Flipping):
-	الوجه الأمامي: مخصص لتسجيل الدخول ويحتوي على حقول البريد الإلكتروني وكلمة المرور وتأثير متوهج باللون الأزرق السماوي #00f3ff.
-	الوجه الخلفي: مخصص لإنشاء حساب جديد، ويحتوي على حقول متعددة (الاسم، السن، الجنس، الدولة، الهاتف، البريد، وكلمة المرور) مع شريط تمرير مخصص وتوهج باللون الوردي #ff00a0.
-	التفاعل البرمجي (JavaScript):
-	يسمح بالتبديل بين الواجهتين بسلاسة عبر النقر على أزرار "حساب جديد" و"رجوع لتسجيل الدخول".
-	عند إرسال النموذج (Submit)، يتم توجيه المستخدم إلى صفحة part2.html..`,
+واجهة مزدوجة (Card Flipping):
+الوجه الأمامي: مخصص لتسجيل الدخول ويحتوي على حقول البريد الإلكتروني وكلمة المرور وتأثير متوهج باللون الأزرق السماوي #00f3ff.
+الوجه الخلفي: مخصص لإنشاء حساب جديد، ويحتوي على حقول متعددة (الاسم، السن، الجنس، الدولة، الهاتف، البريد، وكلمة المرور) مع شريط تمرير مخصص وتوهج باللون الوردي #ff00a0.
+التفاعل البرمجي (JavaScript):
+يسمح بالتبديل بين الواجهتين بسلاسة عبر النقر على أزرار "حساب جديد" و"رجوع لتسجيل الدخول".
+عند إرسال النموذج (Submit)، يتم توجيه المستخدم إلى صفحة part2.html..`,
         images: [
           "login281.png",
           "login282.png",
@@ -903,6 +1116,15 @@
         if (item?.id) map.set(item.id, item);
       }
       return map;
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
     }
 
     function escapeXml(str) {
@@ -990,17 +1212,17 @@
 
         card.innerHTML = `
           <div class="thumb">
-            <img src="${productMainImage(item)}" alt="${item.name}">
-            <div class="badge">${purchased ? "تم الشراء" : `${item.price} كوينز`}</div>
+            <img src="${escapeHtml(productMainImage(item))}" alt="${escapeHtml(item.name)}">
+            <div class="badge">${purchased ? "تم الشراء" : `${money(item.price)} كوينز`}</div>
           </div>
           <div class="content">
-            <h3 class="title">${item.name}</h3>
+            <h3 class="title">${escapeHtml(item.name)}</h3>
             <div class="desc-row">
-              <p class="desc-short">${escapeXml(truncateText(item.description, 120).text)}</p>
+              <p class="desc-short">${escapeHtml(truncateText(item.description, 120).text)}</p>
               ${truncateText(item.description, 120).more ? '<button class="more-link" type="button">عرض المزيد</button>' : ''}
             </div>
             <div class="meta-line">
-              <div class="price">السعر: <span>${item.price}</span> كوينز</div>
+              <div class="price">السعر: <span>${money(item.price)}</span> كوينز</div>
               <div style="color:rgba(255,255,255,.75);font-size:13px;">الرصيد: ${money(profile?.coins || 0)}</div>
             </div>
             <div class="actions"></div>
@@ -1063,7 +1285,7 @@
 
         row.innerHTML = `
           <div class="left">
-            <div class="name">${item.name || item.id}</div>
+            <div class="name">${escapeHtml(item.name || item.id)}</div>
             <div class="info">
               تم الشراء مقابل ${money(item.price)} كوينز
               ${item.purchasedAt ? "<br>تمت الإضافة إلى الحساب" : ""}
@@ -1094,9 +1316,165 @@
       topUserId.textContent = profile?.userId || "-----";
     }
 
+    function setAdminVisibility(profile) {
+      const isAdmin = (profile?.email || "").toLowerCase() === ADMIN_EMAIL.toLowerCase();
+      serviceAdminWrap.classList.toggle("show", isAdmin);
+      if (!isAdmin) {
+        clearStatus(serviceAdminStatus);
+      }
+    }
+
     async function loadProfile(uid) {
       const snap = await getDoc(doc(db, "users", uid));
       return snap.exists() ? snap.data() : null;
+    }
+
+    function normalizeLinkInput(raw) {
+      return String(raw || "")
+        .split(/[\n,]+/g)
+        .map(s => s.trim())
+        .filter(Boolean)
+        .map(url => /^https?:\/\//i.test(url) ? url : `https://${url}`);
+    }
+
+    function getYouTubeId(url) {
+      try {
+        const u = new URL(url);
+        const host = u.hostname.replace(/^www\./, "");
+        if (host === "youtu.be") return u.pathname.split("/").filter(Boolean)[0] || "";
+        if (host.includes("youtube.com")) {
+          return u.searchParams.get("v") || "";
+        }
+      } catch (_) {}
+      return "";
+    }
+
+    function servicePreviewImage(url, title = "Codenest Gold") {
+      const normalized = String(url || "").trim();
+      const ytId = getYouTubeId(normalized);
+      if (ytId) return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+
+      if (/\.(png|jpg|jpeg|webp|gif|bmp|svg)(\?.*)?$/i.test(normalized)) {
+        return normalized;
+      }
+
+      try {
+        const u = new URL(normalized);
+        const host = u.hostname.replace(/^www\./, "");
+        const shortHost = host.split(".")[0];
+        return placeholderImage(shortHost || title, host);
+      } catch (_) {
+        return placeholderImage(title, "رابط خدمة");
+      }
+    }
+
+    function hostLabel(url) {
+      try {
+        const u = new URL(url);
+        const host = u.hostname.replace(/^www\./, "");
+        if (host.includes("youtube.com") || host.includes("youtu.be")) return "يوتيوب";
+        return host.split(".")[0] || "رابط";
+      } catch (_) {
+        return "رابط";
+      }
+    }
+
+    function supportMessageForService(service) {
+      return `مرحبًا، أريد استفسارًا أكثر عن خدمة:
+العنوان: ${service.name}
+الوصف: ${service.description || "لا يوجد وصف"}
+
+أرغب في معرفة المزيد من التفاصيل قبل الطلب.`;
+    }
+
+    function openSupportForService(service) {
+      const msg = encodeURIComponent(supportMessageForService(service));
+      window.open(`https://wa.me/${SUPPORT_NUMBER}?text=${msg}`, "_blank", "noopener,noreferrer");
+    }
+
+    function renderServices(services) {
+      servicesGrid.innerHTML = "";
+
+      if (!services.length) {
+        servicesGrid.innerHTML = `<div class="muted-box" style="grid-column:1/-1;">لا توجد خدمات مضافة بعد.</div>`;
+        return;
+      }
+
+      services.forEach((service) => {
+        const links = Array.isArray(service.links) ? service.links.filter(Boolean) : [];
+        const previewSources = links.length ? links.slice(0, 3).map(link => servicePreviewImage(link, service.name)) : [placeholderImage(service.name, `${money(service.price)} كوينز`)];
+        while (previewSources.length < 3) {
+          previewSources.push(placeholderImage(service.name, `${money(service.price)} كوينز`));
+        }
+
+        const card = document.createElement("article");
+        card.className = "service-card";
+
+        const previewHtml = previewSources.slice(0, 3).map((src, i) => {
+          const label = links[i] ? hostLabel(links[i]) : `صورة ${i + 1}`;
+          const href = links[i] || "#";
+          const clickable = Boolean(links[i]);
+          if (clickable) {
+            return `
+              <a class="link-thumb" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">
+                <img src="${escapeHtml(src)}" alt="${escapeHtml(service.name)}">
+                <div class="overlay">${escapeHtml(label)}</div>
+              </a>
+            `;
+          }
+          return `
+            <div class="link-thumb">
+              <img src="${escapeHtml(src)}" alt="${escapeHtml(service.name)}">
+              <div class="overlay">${escapeHtml(label)}</div>
+            </div>
+          `;
+        }).join("");
+
+        const linkChips = links.slice(0, 6).map((link) => `
+          <a class="link-chip" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
+            ${escapeHtml(hostLabel(link))}
+          </a>
+        `).join("");
+
+        card.innerHTML = `
+          <div class="service-hero">
+            <img src="${escapeHtml(previewSources[0])}" alt="${escapeHtml(service.name)}">
+          </div>
+          <div class="service-body">
+            <div class="service-head">
+              <h3 class="service-name">${escapeHtml(service.name)}</h3>
+              <div class="service-price">${money(service.price)} كوينز</div>
+            </div>
+
+            <p class="service-desc">${escapeHtml(service.description || "لا يوجد وصف للخدمة.")}</p>
+
+            <div class="link-strip">
+              ${previewHtml}
+            </div>
+
+            ${linkChips ? `<div class="link-list">${linkChips}</div>` : `<div class="muted-box">لا توجد روابط مرفقة لهذه الخدمة.</div>`}
+
+            <div class="service-actions">
+              <button class="btn secondary block" type="button">تواصل مع دعم كودنيست</button>
+            </div>
+          </div>
+        `;
+
+        card.querySelector("button").addEventListener("click", () => openSupportForService(service));
+        servicesGrid.appendChild(card);
+      });
+    }
+
+    async function loadServices() {
+      const snap = await getDocs(collection(db, "services"));
+      const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      list.sort((a, b) => {
+        const at = a?.createdAt?.seconds ?? 0;
+        const bt = b?.createdAt?.seconds ?? 0;
+        return bt - at;
+      });
+      cachedServices = list;
+      renderServices(list);
     }
 
     async function refreshAll() {
@@ -1108,8 +1486,10 @@
       }
 
       fillProfileForm(currentProfile);
+      setAdminVisibility(currentProfile);
       renderCatalog(currentProfile);
       renderPurchases(currentProfile);
+      await loadServices();
     }
 
     async function purchaseItem(item, buttonEl) {
@@ -1161,9 +1541,10 @@
 
         currentProfile = await loadProfile(currentUser.uid);
         fillProfileForm(currentProfile);
+        setAdminVisibility(currentProfile);
         renderCatalog(currentProfile);
         renderPurchases(currentProfile);
-        showStatus(catalogStatus, `تم شراء "${item.name}" بنجاح وتم خصم ${item.price} كوينز.`, "success");
+        showStatus(catalogStatus, `تم شراء "${item.name}" بنجاح وتم خصم ${money(item.price)} كوينز.`, "success");
       } catch (err) {
         showStatus(catalogStatus, err?.message || "حدث خطأ أثناء الشراء.", "error");
       } finally {
@@ -1198,11 +1579,60 @@
 
         currentProfile = await loadProfile(currentUser.uid);
         fillProfileForm(currentProfile);
+        setAdminVisibility(currentProfile);
         renderCatalog(currentProfile);
         renderPurchases(currentProfile);
         showStatus(profileStatus, "تم حفظ التعديلات بنجاح.", "success");
       } catch (err) {
-        showStatus(profileStatus, "تعذر حفظ البيانات. تأكد من اتصال .", "error");
+        showStatus(profileStatus, "تعذر حفظ البيانات. تأكد من اتصال الإنترنت.", "error");
+      }
+    }
+
+    async function addService() {
+      clearStatus(serviceAdminStatus);
+
+      const isAdmin = (currentProfile?.email || currentUser?.email || "").toLowerCase() === ADMIN_EMAIL.toLowerCase();
+      if (!isAdmin) {
+        showStatus(serviceAdminStatus, "هذه الميزة مخصصة للحساب الإداري فقط.", "error");
+        return;
+      }
+
+      const name = serviceName.value.trim();
+      const price = Number(servicePrice.value);
+      const description = serviceDesc.value.trim();
+      const links = normalizeLinkInput(serviceLinks.value);
+
+      if (!name || !price || !description) {
+        showStatus(serviceAdminStatus, "املأ اسم الخدمة والسعر والوصف أولًا.", "error");
+        return;
+      }
+
+      try {
+        btnAddService.disabled = true;
+        btnAddService.textContent = "جارٍ الإضافة...";
+
+        await addDoc(collection(db, "services"), {
+          name,
+          price,
+          description,
+          links,
+          createdAt: serverTimestamp(),
+          createdBy: currentUser.uid,
+          createdByEmail: currentUser.email || currentProfile?.email || ""
+        });
+
+        serviceName.value = "";
+        servicePrice.value = "";
+        serviceDesc.value = "";
+        serviceLinks.value = "";
+
+        await loadServices();
+        showStatus(serviceAdminStatus, "تمت إضافة الخدمة بنجاح.", "success");
+      } catch (err) {
+        showStatus(serviceAdminStatus, err?.message || "تعذر إضافة الخدمة.", "error");
+      } finally {
+        btnAddService.disabled = false;
+        btnAddService.textContent = "إضافة الخدمة";
       }
     }
 
@@ -1217,7 +1647,7 @@
 
     btnWhatsApp.addEventListener("click", () => {
       const msg = encodeURIComponent("أريد شراء كوينز من Codenest Gold");
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank", "noopener,noreferrer");
+      window.open(`https://wa.me/${SUPPORT_NUMBER}?text=${msg}`, "_blank", "noopener,noreferrer");
     });
 
     btnLogout.addEventListener("click", async () => {
@@ -1226,6 +1656,7 @@
     });
 
     btnSaveProfile.addEventListener("click", saveProfile);
+    btnAddService.addEventListener("click", addService);
 
     closeModalBtn.addEventListener("click", closeDetails);
     detailsModal.addEventListener("click", (e) => {
@@ -1251,8 +1682,10 @@
 
         currentProfile = profile;
         fillProfileForm(profile);
+        setAdminVisibility(profile);
         renderCatalog(profile);
         renderPurchases(profile);
+        await loadServices();
         setLoading(false);
       } catch (err) {
         redirectToIndex();
