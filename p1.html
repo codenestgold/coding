@@ -930,7 +930,7 @@
     <section id="servicesSection">
       <div class="section-title">
         <h2>الخدمات الإضافية</h2>
-        <div class="small">معاينات للروابط + تواصل مباشر مع دعم كودنيست | واتساب الدعم: 01124680211</div>
+        <div class="small">روابط الخدمة + تواصل مباشر مع دعم كودنيست | واتساب الدعم: 01124680211</div>
       </div>
 
       <div class="service-admin" id="serviceAdminWrap">
@@ -957,7 +957,7 @@
 
           <div class="input-box">
             <label>اللينكات (كل رابط في سطر أو مفصول بفاصلة)</label>
-            <textarea id="serviceLinks" placeholder="https://youtube.com/watch?v=...&#10;https://example.com/image.png"></textarea>
+            <textarea id="serviceLinks" placeholder="https://youtube.com/watch?v=...&#10;https://example.com/page"></textarea>
           </div>
 
           <button class="btn success block" id="btnAddService">إضافة الخدمة</button>
@@ -1402,55 +1402,24 @@
 
       services.forEach((service) => {
         const links = Array.isArray(service.links) ? service.links.filter(Boolean) : [];
-        const previewSources = links.length ? links.slice(0, 3).map(link => servicePreviewImage(link, service.name)) : [placeholderImage(service.name, `${money(service.price)} كوينز`)];
-        while (previewSources.length < 3) {
-          previewSources.push(placeholderImage(service.name, `${money(service.price)} كوينز`));
-        }
 
         const card = document.createElement("article");
         card.className = "service-card";
 
-        const previewHtml = previewSources.slice(0, 3).map((src, i) => {
-          const label = links[i] ? hostLabel(links[i]) : `صورة ${i + 1}`;
-          const href = links[i] || "#";
-          const clickable = Boolean(links[i]);
-          if (clickable) {
-            return `
-              <a class="link-thumb" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">
-                <img src="${escapeHtml(src)}" alt="${escapeHtml(service.name)}">
-                <div class="overlay">${escapeHtml(label)}</div>
-              </a>
-            `;
-          }
-          return `
-            <div class="link-thumb">
-              <img src="${escapeHtml(src)}" alt="${escapeHtml(service.name)}">
-              <div class="overlay">${escapeHtml(label)}</div>
-            </div>
-          `;
-        }).join("");
-
-        const linkChips = links.slice(0, 6).map((link) => `
+        const linkChips = links.slice(0, 6).map((link, index) => `
           <a class="link-chip" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
-            ${escapeHtml(hostLabel(link))}
+            رابط ${index + 1}: ${escapeHtml(hostLabel(link))}
           </a>
         `).join("");
 
         card.innerHTML = `
-          <div class="service-hero">
-            <img src="${escapeHtml(previewSources[0])}" alt="${escapeHtml(service.name)}">
-          </div>
-          <div class="service-body">
+          <div class="service-body" style="padding-top:18px;">
             <div class="service-head">
               <h3 class="service-name">${escapeHtml(service.name)}</h3>
               <div class="service-price">${money(service.price)} كوينز</div>
             </div>
 
             <p class="service-desc">${escapeHtml(service.description || "لا يوجد وصف للخدمة.")}</p>
-
-            <div class="link-strip">
-              ${previewHtml}
-            </div>
 
             ${linkChips ? `<div class="link-list">${linkChips}</div>` : `<div class="muted-box">لا توجد روابط مرفقة لهذه الخدمة.</div>`}
 
