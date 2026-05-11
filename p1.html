@@ -2,9 +2,17 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Codenest Gold</title>
-  <link rel="icon" href="img1.PNG">
+  <title>Codenestall | خدمات برمجة وتسويق</title>
+  <meta name="description" content="أفضل خدمات البرمجة وتصميم المواقع والتسويق الإلكتروني الحديثة">
+  <meta name="keywords" content="برمجة, تصميم مواقع, HTML, CSS, JavaScript, Codenestall">
+  <meta name="author" content="Ahmed Mostafa">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="Codenestall">
+  <meta property="og:description" content="خدمات برمجة وتصميم احترافية">
+  <meta property="og:image" content="https://codenestall.netlify.app/logo2.png">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="/logo2.png">
+  <link rel="manifest" href="/manifest.json">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
 
@@ -1049,7 +1057,7 @@
     <div class="topbar" id="topbar">
       <div class="brand">
         <div class="logo">
-          <img src="img1.PNG" alt="Codenest Logo">
+          <img src="/logo2.png" alt="Codenest Logo">
         </div>
         <div>
           <h1>Codenest Gold</h1>
@@ -1060,6 +1068,7 @@
       <div class="top-actions">
         <div class="pill">الكوينز: <strong id="topCoins">0</strong></div>
         <div class="pill">ID: <strong id="topUserId">-----</strong></div>
+        <button class="btn secondary" id="btnSupportTop">تواصل مع الدعم</button>
         <button class="btn secondary" id="btnToggleSettings">الإعدادات</button>
         <button class="btn secondary" id="btnWhatsApp">شحن كوينز</button>
         <button class="btn danger" id="btnLogout">خروج</button>
@@ -1083,6 +1092,17 @@
       </main>
 
       <aside class="panel" id="settingsPanel">
+        
+        <!-- قسم تفعيل رقم الهاتف الجديد -->
+        <div class="section-title" style="margin-top:0;">
+          <h2 style="font-size:18px;">تفعيل رقم الهاتف</h2>
+        </div>
+        <div class="form-grid" id="verificationArea" style="margin-bottom: 20px;">
+          <!-- سيتم تعبئته برمجياً حسب الحالة -->
+        </div>
+        
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+
         <h2>البيانات الشخصية</h2>
         <div class="muted">يمكنك تعديل الاسم والعمر ومصدر التسجيل. البريد الإلكتروني والـ ID للعرض فقط.</div>
 
@@ -1332,6 +1352,7 @@
     const purchasesCount    = $("purchasesCount");
     const btnToggleSettings = $("btnToggleSettings");
     const btnWhatsApp       = $("btnWhatsApp");
+    const btnSupportTop     = $("btnSupportTop"); // زر الدعم الجديد
     const btnLogout         = $("btnLogout");
     const btnSaveProfile    = $("btnSaveProfile");
     const detailsModal      = $("detailsModal");
@@ -1369,6 +1390,7 @@
     const adminUserCount    = $("adminUserCount");
     const noticesGrid       = $("noticesGrid");
     const noticeCount       = $("noticeCount");
+    const verificationArea  = $("verificationArea"); // منطقة تفعيل الهاتف
 
     // Terms elements
     const termsSection      = $("termsSection");
@@ -1561,7 +1583,19 @@
         if (moreBtn) moreBtn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openDetails(item); });
 
         const actions = card.querySelector(".actions");
-        if (purchased) {
+        
+        // التحقق من تفعيل رقم الهاتف أولاً
+        if (!profile?.phoneVerified) {
+          const btn = document.createElement("button");
+          btn.className = "btn warn block";
+          btn.textContent = "يجب تفعيل رقم الهاتف أولاً";
+          btn.addEventListener("click", () => {
+             settingsPanel.classList.add("show");
+             window.scrollTo(0, 0);
+             alert("يرجى إكمال تفعيل رقم الهاتف من الإعدادات للتمكن من الشراء.");
+          });
+          actions.appendChild(btn);
+        } else if (purchased) {
           const link = document.createElement("a");
           link.className = "download-link";
           link.href = purchased.downloadUrl || item.downloadUrl || "https://example.com";
@@ -1620,7 +1654,108 @@
       profileCoins.value   = money(profile?.coins || 0);
       topCoins.textContent = money(profile?.coins || 0);
       topUserId.textContent= profile?.userId || profile?.uid || "-----";
+      
+      renderVerificationArea(profile); // عرض قسم تفعيل الهاتف
     }
+
+    // ──────────────────────────────────────
+    // Phone Verification Logic
+    // ──────────────────────────────────────
+    function renderVerificationArea(profile) {
+      verificationArea.innerHTML = "";
+      if (profile?.phoneVerified) {
+        verificationArea.innerHTML = `<div class="status success show">✅ رقم الهاتف مفعل: ${escapeHtml(profile.phoneNumber || "")}</div>`;
+        return;
+      }
+
+      if (profile?.verificationRequested && profile?.verificationCode) {
+        verificationArea.innerHTML = `
+          <div class="muted-box">تم طلب التفعيل للرقم: ${escapeHtml(profile.phoneNumber)}.<br>سيتم ارسال كود التحقق لرقمك عبر وتساب خلال 24 ساعه.</div>
+          <div class="input-box">
+              <label>أدخل كود التحقق</label>
+              <input type="text" id="verifyCodeInput" placeholder="اكتب كود التحقق هنا">
+          </div>
+          <button class="btn success block" id="btnConfirmCode">تأكيد الكود</button>
+          <button class="btn secondary block" id="btnResendCode" style="margin-top:8px;">تغيير الرقم أو إعادة الطلب</button>
+        `;
+        $("btnConfirmCode").addEventListener("click", confirmVerificationCode);
+        $("btnResendCode").addEventListener("click", resetVerification);
+      } else {
+        verificationArea.innerHTML = `
+          <div class="muted-box" style="color:var(--danger); border-color:var(--danger);">يجب تفعيل رقم الهاتف لتتمكن من الشراء داخل المنصة.</div>
+          <div class="input-box">
+              <label>رقم الهاتف (واتساب)</label>
+              <input type="text" id="verifyPhoneInput" placeholder="اكتب رقم هاتفك المربوط بواتساب" value="${profile?.phoneNumber || ''}">
+          </div>
+          <button class="btn success block" id="btnRequestCode">طلب كود التفعيل</button>
+        `;
+        $("btnRequestCode").addEventListener("click", requestVerificationCode);
+      }
+    }
+
+    async function requestVerificationCode() {
+      const phone = $("verifyPhoneInput").value.trim();
+      if (!phone) { alert("رجاءً إدخال رقم الهاتف"); return; }
+      
+      // إنشاء كود مكون من 6 أرقام
+      const code = Math.floor(100000 + Math.random() * 900000).toString(); 
+      
+      try {
+        const btn = $("btnRequestCode");
+        btn.disabled = true;
+        btn.textContent = "جاري الطلب...";
+        
+        await updateDoc(doc(db, "users", currentUser.uid), {
+            phoneNumber: phone,
+            verificationRequested: true,
+            verificationCode: code,
+            updatedAt: serverTimestamp()
+        });
+        
+        // إظهار الكود للأدمن في الكونسول كما طلبت
+        console.log(`%c[Admin Alert] تم إنشاء كود تفعيل للمستخدم ${currentUser.email}: ${code}`, "color: red; font-size: 16px; font-weight: bold;");
+        
+        alert("سيتم ارسال كود التحقق لرقمك عبر وتساب خلال 24ساعه");
+      } catch (err) {
+        alert("خطأ: " + err.message);
+      }
+    }
+
+    async function confirmVerificationCode() {
+      const codeInput = $("verifyCodeInput").value.trim();
+      if (!codeInput) { alert("يرجى إدخال الكود أولاً."); return; }
+      
+      if (codeInput === currentProfile.verificationCode) {
+        try {
+            const btn = $("btnConfirmCode");
+            btn.disabled = true;
+            btn.textContent = "جاري التأكيد...";
+            
+            await updateDoc(doc(db, "users", currentUser.uid), {
+                phoneVerified: true,
+                updatedAt: serverTimestamp()
+            });
+            alert("تم تفعيل رقم الهاتف بنجاح! يمكنك الآن إتمام عمليات الشراء.");
+        } catch (err) {
+            alert("خطأ: " + err.message);
+        }
+      } else {
+        alert("الكود غير صحيح، يرجى المحاولة مرة أخرى.");
+      }
+    }
+
+    async function resetVerification() {
+      try {
+        await updateDoc(doc(db, "users", currentUser.uid), {
+            verificationRequested: false,
+            verificationCode: null,
+            updatedAt: serverTimestamp()
+        });
+      } catch (err) {
+        alert("خطأ: " + err.message);
+      }
+    }
+
 
     function isAdminProfile(profile) {
       return (profile?.email || "").toLowerCase() === ADMIN_EMAIL.toLowerCase();
@@ -1778,12 +1913,21 @@
       }
       for (const u of users) {
         const isBanned = u.banned === true;
+        
+        // عرض حالة التفعيل ورقم الهاتف وكود التفعيل للأدمن
+        const verificationInfo = u.phoneVerified 
+          ? `<div class="email" style="color:#86efac; font-weight:bold;">✅ الهاتف مفعل: ${escapeHtml(u.phoneNumber || '')}</div>`
+          : (u.verificationRequested && u.verificationCode
+             ? `<div class="email" style="color:#fde68a; font-weight:bold;">⚠️ يطلب تفعيل: ${escapeHtml(u.phoneNumber || '')} <br> كود التفعيل: <span style="color:#fff;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:4px;">${u.verificationCode}</span></div>`
+             : `<div class="email" style="color:#fda4af;">❌ الهاتف غير مفعل</div>`);
+
         const card = document.createElement("div");
         card.className = "admin-user-card";
         card.innerHTML = `
           <div class="uid">ID: ${escapeHtml(u.id)}</div>
           <div class="email">الإيميل: ${escapeHtml(u.email || "بدون")}</div>
           <div class="email">الاسم: ${escapeHtml(u.name || "بدون")}</div>
+          ${verificationInfo}
           ${isBanned ? '<div class="ban-badge">🚫 محظور</div>' : ""}
         `;
 
@@ -2094,6 +2238,13 @@
     async function purchaseItem(item, buttonEl) {
       clearStatus(catalogStatus);
       if (!currentUser || !currentProfile) { showStatus(catalogStatus, "جلسة الدخول غير صالحة.", "error"); return; }
+      
+      // تأكيد إضافي لمنع الشراء
+      if (!currentProfile.phoneVerified) {
+         showStatus(catalogStatus, "يجب تفعيل رقم الهاتف أولاً من الإعدادات للتمكن من الشراء.", "error"); 
+         return;
+      }
+      
       try {
         if (buttonEl) { buttonEl.disabled = true; buttonEl.textContent = "جاري الشراء..."; }
         const userRef  = doc(db, "users", currentUser.uid);
@@ -2235,6 +2386,12 @@
 
     btnWhatsApp.addEventListener("click", () => {
       const msg = encodeURIComponent("أريد شراء كوينز من Codenest Gold");
+      window.open(`https://wa.me/${SUPPORT_NUMBER}?text=${msg}`, "_blank", "noopener,noreferrer");
+    });
+
+    // زر الدعم الإضافي في الشريط العلوي
+    btnSupportTop.addEventListener("click", () => {
+      const msg = encodeURIComponent("مرحباً، أحتاج إلى المساعدة في موقع Codenest Gold");
       window.open(`https://wa.me/${SUPPORT_NUMBER}?text=${msg}`, "_blank", "noopener,noreferrer");
     });
 
