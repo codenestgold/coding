@@ -1,21 +1,16 @@
-<title>Codenest Gold | خدمات برمجة وتسويق</title>
-
-<meta name="description" content="أفضل خدمات البرمجة وتصميم المواقع والتسويق الإلكتروني الحديثة">
-
-<meta name="keywords" content="برمجة, تصميم مواقع, HTML, CSS, JavaScript, Codenest Gold">
-
-<meta name="author" content="Ahmed Mostafa">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta property="og:title" content="Codenest Gold">
-
-<meta property="og:description" content="خدمات برمجة وتصميم احترافية">
-
-<meta property="og:image" content="https://codenestall.netlify.app/logo2.png">
-
-<meta property="og:type" content="website">
-
-<link rel="icon" href="/logo2.png">
-
-<link rel="manifest" href="/manifest.json">
+{
+  "name": "Codenest Gold",
+  "short_name": "Codenest",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "description": "خدمات برمجة وتصميم مواقع وتسويق إلكتروني",
+  "icons": [
+    {
+      "src": "/logo2.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
