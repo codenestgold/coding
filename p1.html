@@ -2,1315 +2,621 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>Codenestall | خدمات برمجة وتسويق</title>
-  <meta name="description" content="أفضل خدمات البرمجة وتصميم المواقع والتسويق الإلكتروني الحديثة">
-  <meta name="keywords" content="برمجة, تصميم مواقع, HTML, CSS, JavaScript, Codenestall">
-  <meta name="author" content="Ahmed Mostafa">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:title" content="Codenestall">
-  <meta property="og:description" content="خدمات برمجة وتصميم احترافية">
-  <meta property="og:image" content="https://codenestall.netlify.app/logo2.png">
-  <meta property="og:type" content="website">
-  <link rel="icon" href="/logo2.png">
-  <link rel="manifest" href="/manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="p5CADMhqEvvefMIBUlloGW_58Bu_6NVAoa28rrbz7R8" />
+  <meta name="theme-color" content="#1e3c72" />
+  <meta name="description" content="Coding - أكواد وخدمات برمجة وحسابات مستخدمين ولوحة إدارة" />
+  <meta name="keywords" content="coding, اكواد, برمجة, Firebase, حسابات, لوحة إدارة" />
+  <meta name="author" content="Codenest" />
+  <title>coding - اكواد</title>
+  <link rel="icon" href="/logo2.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/logo2.png" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
 
     :root{
-      --bg1:#0f172a;
-      --bg2:#1e3a8a;
-      --card:rgba(255,255,255,.10);
+      --bg1:#1e3c72;
+      --bg2:#2a5298;
+      --card:rgba(255,255,255,.12);
       --card2:rgba(255,255,255,.08);
-      --line:rgba(255,255,255,.14);
+      --line:rgba(255,255,255,.18);
       --text:#fff;
-      --muted:rgba(255,255,255,.75);
-      --accent:#fbbf24;
-      --accent2:#f59e0b;
-      --danger:#f87171;
-      --success:#34d399;
-      --shadow:0 18px 42px rgba(0,0,0,.25);
+      --muted:rgba(255,255,255,.78);
+      --accent:#00d2ff;
+      --accent2:#3a7bd5;
+      --danger:#ff6b6b;
+      --success:#2ecc71;
+      --warn:#fbbf24;
+      --dark:#111827;
     }
 
     *{ box-sizing:border-box; font-family:'Tajawal',sans-serif; }
-    html{ scroll-behavior:smooth; }
     body{
       margin:0;
       min-height:100vh;
-      background:
-        radial-gradient(circle at top right, rgba(251,191,36,.18), transparent 20%),
-        radial-gradient(circle at bottom left, rgba(34,211,238,.16), transparent 25%),
-        linear-gradient(135deg, var(--bg1), var(--bg2));
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(45deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
       color:var(--text);
+      padding:12px;
     }
 
-    .wrap{
-      width:min(1260px, calc(100vw - 24px));
-      margin:0 auto;
-      padding:112px 0 28px;
-    }
-
-    .topbar{
+    .circle{
       position:fixed;
-      top:10px;
-      left:50%;
-      transform:translateX(-50%);
-      width:min(1260px, calc(100vw - 24px));
-      z-index:1200;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      background: var(--card);
-      border:1px solid var(--line);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: var(--shadow);
-      border-radius:22px;
-      padding:14px 16px;
-      margin-bottom:16px;
-      transition: transform .28s ease, opacity .28s ease;
+      border-radius:50%;
+      background: linear-gradient(45deg, var(--accent), var(--accent2));
+      filter: blur(.2px);
+      opacity:.85;
+      z-index:-1;
     }
+    .circle1{ width:220px;height:220px; top:-60px; left:-60px; }
+    .circle2{ width:180px;height:180px; bottom:-60px; right:-60px; }
 
-    .topbar.scroll-hide{
-      transform: translate(-50%, -140%);
-      opacity:0;
-      pointer-events:none;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-    }
-
-    .logo{
-      width:48px;
-      height:48px;
-      border-radius:16px;
-      overflow:hidden;
-      flex:0 0 auto;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 10px 24px rgba(0,0,0,.18);
+    .shell{
+      width:min(1100px, calc(100vw - 24px));
       display:grid;
-      place-items:center;
-    }
-
-    .logo img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .brand h1{
-      margin:0;
-      font-size:22px;
-      font-weight:800;
-      line-height:1.1;
-    }
-
-    .brand p{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .top-actions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-
-    .pill{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 14px;
-      border-radius:999px;
-      background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.14);
-      white-space:nowrap;
-      font-weight:700;
-    }
-
-    .pill strong{ color:#fff; }
-
-    .btn{
-      border:none;
-      cursor:pointer;
-      padding:11px 14px;
-      border-radius:14px;
-      font-size:15px;
-      font-weight:800;
-      transition:.22s ease;
-      color:#111827;
-      background: linear-gradient(135deg, var(--accent), #fde68a);
-    }
-
-    .btn:hover{
-      transform: translateY(-1px);
-      filter:saturate(1.05);
-    }
-
-    .btn.secondary{
-      color:#fff;
-      background: rgba(255,255,255,.11);
-      border:1px solid rgba(255,255,255,.16);
-    }
-
-    .btn.secondary:hover{
-      background: rgba(255,255,255,.16);
-    }
-
-    .btn.success{
-      color:#052e16;
-      background: linear-gradient(135deg, var(--success), #a7f3d0);
-    }
-
-    .btn.danger{
-      color:#fff;
-      background: linear-gradient(135deg, var(--danger), #fda4af);
-    }
-
-    .btn.warn{
-      color:#1c1917;
-      background: linear-gradient(135deg, #fb923c, #fde68a);
-    }
-
-    .btn.block{ width:100%; }
-    .btn:disabled{
-      opacity:.55;
-      cursor:not-allowed;
-      transform:none;
-    }
-
-    .layout{
-      display:grid;
-      grid-template-columns: 1fr 360px;
-      gap:16px;
+      grid-template-columns: 1fr;
+      gap:18px;
       align-items:start;
     }
 
-    .panel, .catalog-card, .purchase-item, .loading-box, .modal-box, .service-card, .service-admin, .admin-user-card{
+    .container, .panel, .blocked-screen{
       background: var(--card);
       border:1px solid var(--line);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      box-shadow: var(--shadow);
-      border-radius:22px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.22);
+      border-radius:24px;
+      overflow:hidden;
+    }
+
+    .container{
+      width:min(460px, 100%);
+      margin:auto;
+      padding:28px;
     }
 
     .panel{
-      padding:16px;
-      position:sticky;
-      top:88px;
+      padding:24px;
       display:none;
     }
 
     .panel.show{ display:block; }
 
-    .panel h2{
-      margin:0 0 8px;
-      font-size:20px;
-      font-weight:800;
-    }
-
-    .panel .muted{
-      color:var(--muted);
-      line-height:1.8;
-      font-size:14px;
-      margin-bottom:12px;
-    }
-
-    .hidden{ display:none !important; }
-
-    .section-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin:18px 0 12px;
-      flex-wrap:wrap;
-    }
-
-    .section-title h2{
-      margin:0;
-      font-size:20px;
-      font-weight:800;
-    }
-
-    .section-title .small{
-      color:var(--muted);
-      font-size:13px;
-    }
-
     .grid{
       display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap:16px;
     }
 
-    .catalog-card{
-      overflow:hidden;
+    .card{
+      background: var(--card2);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
     }
 
-    .thumb{
-      position:relative;
-      width:100%;
-      aspect-ratio: 16 / 10;
-      overflow:hidden;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      cursor:pointer;
-    }
-
-    .thumb img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .badge{
-      position:absolute;
-      top:12px;
-      right:12px;
-      background: rgba(17,24,39,.82);
-      border:1px solid rgba(255,255,255,.15);
-      color:#fff;
-      padding:7px 10px;
-      border-radius:999px;
-      font-size:12px;
+    h1,h2,h3{ margin:0 0 14px 0; }
+    h2{
+      text-align:center;
+      font-size:28px;
       font-weight:800;
+      letter-spacing:.5px;
     }
-
-    .content{ padding:16px; }
-
-    .title{
-      margin:0 0 8px;
-      font-size:19px;
+    h3{
+      font-size:20px;
       font-weight:800;
+      color: #fff;
     }
 
-    .desc-row{
-      display:flex;
-      align-items:flex-end;
-      gap:6px;
-      flex-wrap:wrap;
-      margin:0 0 14px;
-    }
-
-    .desc-short{
-      display:inline;
+    .sub{
       color:var(--muted);
-      line-height:1.9;
       font-size:14px;
-      margin:0;
-    }
-
-    .more-link{
-      border:none;
-      background:transparent;
-      color:var(--accent);
-      font-weight:800;
-      font-size:14px;
-      padding:0;
-      cursor:pointer;
-      white-space:nowrap;
-    }
-
-    .more-link:hover{
-      text-decoration:underline;
-    }
-
-    .meta-line{
-      display:flex;
-      gap:10px;
-      justify-content:space-between;
-      align-items:center;
-      margin:10px 0 14px;
-      flex-wrap:wrap;
-    }
-
-    .price{
-      font-size:15px;
-      font-weight:800;
-      color:#fff;
-    }
-
-    .price span{
-      color:var(--accent);
-      font-size:18px;
-    }
-
-    .download-link, .mini-link{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      text-decoration:none;
-      padding:11px 14px;
-      border-radius:14px;
-      font-weight:800;
-      border:1px solid rgba(255,255,255,.14);
-      width:100%;
-      transition:.2s ease;
-    }
-
-    .download-link{
-      background: linear-gradient(135deg, var(--success), #86efac);
-      color:#052e16;
-    }
-
-    .download-link:hover{
-      filter:saturate(1.05);
-      transform: translateY(-1px);
-    }
-
-    .mini-link{
-      background: rgba(255,255,255,.10);
-      color:#fff;
-    }
-
-    .mini-link:hover{
-      background: rgba(255,255,255,.15);
-    }
-
-    .form-grid{
-      display:grid;
-      gap:12px;
+      margin-top:-6px;
+      margin-bottom:16px;
+      text-align:center;
+      line-height:1.8;
     }
 
     .input-box{
+      position:relative;
       width:100%;
-    }
-
-    .input-box label{
-      display:block;
-      font-size:13px;
-      margin:0 0 6px;
-      color:rgba(255,255,255,.78);
+      margin-bottom:14px;
     }
 
     .input-box input, .input-box select, .input-box textarea{
       width:100%;
       padding:13px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.28);
       outline:none;
-      background: rgba(255,255,255,.10);
+      border-radius:12px;
       color:#fff;
       font-size:15px;
-      transition:.22s ease;
-    }
-
-    .input-box textarea{
-      min-height:94px;
-      resize:vertical;
+      transition:.25s;
     }
 
     .input-box input::placeholder, .input-box textarea::placeholder{
-      color:rgba(255,255,255,.60);
+      color:rgba(255,255,255,.72);
     }
 
     .input-box input:focus, .input-box select:focus, .input-box textarea:focus{
-      border-color: rgba(255,255,255,.45);
-      background: rgba(255,255,255,.16);
+      background: rgba(255,255,255,.26);
+      border-color:#fff;
     }
 
-    .muted-box{
-      background: rgba(255,255,255,.08);
-      border:1px dashed rgba(255,255,255,.16);
-      border-radius:16px;
-      padding:12px;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.9;
+    .input-box select{
+      background:#fff;
+      color:#1f2937;
     }
 
-    .status{
-      display:none;
-      margin-top:12px;
+    .btn{
+      width:100%;
       padding:12px 14px;
-      border-radius:14px;
-      line-height:1.8;
-      white-space:pre-wrap;
-      border:1px solid transparent;
-    }
-
-    .status.show{ display:block; }
-    .status.success{
-      display:block;
-      background: rgba(52,211,153,.12);
-      border-color: rgba(52,211,153,.35);
-    }
-    .status.error{
-      display:block;
-      background: rgba(248,113,113,.12);
-      border-color: rgba(248,113,113,.35);
-    }
-
-    .purchase-list{
-      display:grid;
-      gap:12px;
-    }
-
-    .purchase-item{
-      padding:14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .purchase-item .left{ min-width:0; }
-
-    .purchase-item .name{
-      font-size:16px;
-      font-weight:800;
-      margin-bottom:4px;
-    }
-
-    .purchase-item .info{
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.7;
-    }
-
-    .top-note{
-      margin-bottom:14px;
-      background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:18px;
-      padding:14px;
-      line-height:1.9;
-      color:rgba(255,255,255,.92);
-    }
-
-    .service-admin{
-      display:none;
-      padding:16px;
-      margin:22px 0 16px;
-    }
-
-    .service-admin.show{ display:block; }
-
-    .services-grid{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap:16px;
-      margin-top:12px;
-    }
-
-    .service-card{
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      min-height:100%;
-    }
-
-    .service-body{
-      padding:16px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      flex:1;
-    }
-
-    .service-head{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-    }
-
-    .service-name{
-      margin:0;
-      font-size:19px;
-      font-weight:800;
-      line-height:1.5;
-    }
-
-    .service-price{
-      flex:0 0 auto;
-      padding:8px 10px;
-      border-radius:999px;
-      background: rgba(251,191,36,.16);
-      color:#fde68a;
-      border:1px solid rgba(251,191,36,.28);
-      font-weight:800;
-      font-size:13px;
-      white-space:nowrap;
-    }
-
-    .service-desc{
-      margin:0;
-      color:var(--muted);
-      line-height:1.9;
-      font-size:14px;
-      min-height:56px;
-      white-space:pre-wrap;
-    }
-
-    .link-list{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-
-    .link-chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:9px 11px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      text-decoration:none;
-      color:#fff;
-      background: rgba(255,255,255,.08);
-      font-size:13px;
-      font-weight:800;
-      max-width:100%;
-    }
-
-    .link-chip:hover{
-      background: rgba(255,255,255,.14);
-    }
-
-    .service-actions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      margin-top:auto;
-      flex-wrap:wrap;
-    }
-
-    .service-actions .btn,
-    .service-actions .mini-link{
-      width:100%;
-      justify-content:center;
-    }
-
-    .service-admin-actions{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap:8px;
-      width:100%;
-    }
-
-    .service-card.inactive{
-      opacity:.58;
-      filter:saturate(.8);
-    }
-
-    .service-state{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:800;
-      margin-inline-start:8px;
-      vertical-align:middle;
-    }
-
-    .service-state.active{
-      background: rgba(52,211,153,.14);
-      color:#86efac;
-      border:1px solid rgba(52,211,153,.28);
-    }
-
-    .service-state.inactive{
-      background: rgba(248,113,113,.14);
-      color:#fda4af;
-      border:1px solid rgba(248,113,113,.28);
-    }
-
-    .loading-overlay{
-      position:fixed;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: linear-gradient(135deg, #0f172a, #1e3a8a);
-      z-index:999;
-      padding:16px;
-    }
-
-    .loading-box{
-      width:min(460px, 100%);
-      padding:22px;
-      text-align:center;
-    }
-
-    .spinner{
-      width:46px;
-      height:46px;
-      margin:0 auto 14px;
-      border-radius:50%;
-      border:4px solid rgba(255,255,255,.18);
-      border-top-color: var(--accent);
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin{ to{ transform: rotate(360deg); } }
-
-    .modal-overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.74);
-      z-index:1000;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-    }
-
-    .modal-overlay.show{ display:flex; }
-
-    .modal-box{
-      width:min(980px, 100%);
-      max-height:90vh;
-      overflow:auto;
-      padding:18px;
-      position:relative;
-      background:rgba(15,23,42,.96);
-    }
-
-    .modal-close{
-      position:absolute;
-      top:14px;
-      left:14px;
-      width:38px;
-      height:38px;
       border:none;
       border-radius:12px;
       cursor:pointer;
-      background:rgba(248,113,113,.95);
-      color:#fff;
-      font-size:18px;
+      font-size:16px;
       font-weight:800;
+      background: linear-gradient(45deg, var(--accent), #6ee7ff);
+      color:#07111f;
+      transition:.25s;
+      margin-top:6px;
     }
 
-    .modal-grid{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:16px;
-      align-items:start;
-      margin-top:10px;
-    }
-
-    .modal-main-img{
-      width:100%;
-      aspect-ratio: 16/10;
-      border-radius:18px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06);
-    }
-
-    .modal-main-img img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .modal-thumbs{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap:10px;
-      margin-top:12px;
-    }
-
-    .modal-thumbs img{
-      width:100%;
-      aspect-ratio: 1/1;
-      object-fit:cover;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      cursor:pointer;
-      opacity:.86;
-      transition:.2s ease;
-    }
-
-    .modal-thumbs img:hover{
-      opacity:1;
+    .btn:hover{
       transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.22);
+      background: linear-gradient(45deg, #45dbff, #8cefff);
     }
 
-    .modal-title{
-      margin:0 0 8px;
-      font-size:24px;
-      font-weight:800;
+    .btn.secondary{
+      background: rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.2);
     }
 
-    .modal-price{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      background:rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:999px;
-      padding:8px 12px;
-      font-weight:800;
-      margin-bottom:10px;
+    .btn.secondary:hover{
+      background: rgba(255,255,255,.2);
     }
 
-    .modal-desc{
-      margin:0;
-      color:rgba(255,255,255,.8);
-      line-height:2;
-      font-size:15px;
-      white-space:pre-wrap;
+    .btn.danger{
+      background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+      color:#fff;
     }
 
-    .admin-users{
+    .btn.success{
+      background: linear-gradient(45deg, #2ecc71, #66e6a2);
+      color:#05210f;
+    }
+
+    .btn.warn{
+      background: linear-gradient(45deg, #fbbf24, #fde68a);
+      color:#1f2937;
+    }
+
+    .row{
       display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns:1fr 1fr;
       gap:12px;
-      margin-top:12px;
     }
 
-    .admin-user-card{
-      padding:12px;
+    .switch-link{
+      text-align:center;
+      margin-top:18px;
+      color:#fff;
+      font-size:14px;
+      line-height:1.8;
     }
 
-    .admin-user-card .uid{
-      direction:ltr;
-      unicode-bidi:plaintext;
-      word-break:break-all;
+    .switch-link span, .link{
+      color:var(--accent);
+      cursor:pointer;
       font-weight:800;
+      text-decoration:underline;
+    }
+
+    .meta{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .meta .item{
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      padding:14px;
+    }
+
+    .label{
+      color:rgba(255,255,255,.7);
       font-size:13px;
       margin-bottom:6px;
     }
 
-    .admin-user-card .email{
-      color:var(--muted);
-      font-size:13px;
-      word-break:break-all;
-      line-height:1.8;
-    }
-
-    .admin-user-card .mini-btn{
-      margin-top:8px;
-      width:100%;
-      border:none;
-      border-radius:12px;
-      padding:10px;
-      cursor:pointer;
-      background: rgba(255,255,255,.12);
-      color:#fff;
+    .value{
+      font-size:18px;
       font-weight:800;
-      font-size:13px;
-      font-family:'Tajawal',sans-serif;
-      transition:.2s ease;
+      word-break:break-word;
     }
 
-    .admin-user-card .mini-btn:hover{
-      background: rgba(255,255,255,.2);
-    }
-
-    .admin-user-card .mini-btn.ban-btn{
-      background: rgba(248,113,113,.22);
-      color:#fda4af;
-    }
-
-    .admin-user-card .mini-btn.ban-btn:hover{
-      background: rgba(248,113,113,.35);
-    }
-
-    .admin-user-card .mini-btn.unban-btn{
-      background: rgba(52,211,153,.18);
-      color:#86efac;
-    }
-
-    .admin-user-card .mini-btn.unban-btn:hover{
-      background: rgba(52,211,153,.3);
-    }
-
-    .admin-user-card .mini-btn.reset-btn{
-      background: rgba(251,191,36,.18);
-      color:#fde68a;
-    }
-
-    .admin-user-card .mini-btn.reset-btn:hover{
-      background: rgba(251,191,36,.3);
-    }
-
-    .ban-badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:4px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:800;
-      background: rgba(248,113,113,.18);
-      color:#fda4af;
-      border:1px solid rgba(248,113,113,.3);
-      margin-top:6px;
-    }
-
-    /* ========== TERMS SECTION ========== */
-    .terms-section{
-      margin-top:32px;
-      padding:28px;
-      background: var(--card);
-      border:1px solid var(--line);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: var(--shadow);
-      border-radius:22px;
-    }
-
-    .terms-section .terms-header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:18px;
-      flex-wrap:wrap;
-    }
-
-    .terms-section .terms-header h2{
-      margin:0;
-      font-size:22px;
-      font-weight:800;
-    }
-
-    .terms-icon{
-      width:44px;
-      height:44px;
+    .notice{
+      border-right:4px solid var(--accent);
+      background: rgba(255,255,255,.09);
       border-radius:14px;
-      background: linear-gradient(135deg, rgba(251,191,36,.25), rgba(251,191,36,.08));
-      border:1px solid rgba(251,191,36,.3);
+      padding:12px 14px;
+      margin-bottom:14px;
+      line-height:1.8;
+      color:rgba(255,255,255,.95);
+      font-size:14px;
+    }
+
+    .status{
+      min-height:44px;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:12px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      color:#fff;
+      line-height:1.8;
+      display:none;
+      white-space:pre-wrap;
+    }
+
+    .status.show{ display:block; }
+    .status.error{ border-color: rgba(255,107,107,.45); background: rgba(255,107,107,.12); }
+    .status.success{ border-color: rgba(46,204,113,.45); background: rgba(46,204,113,.12); }
+    .status.warn{ border-color: rgba(251,191,36,.45); background: rgba(251,191,36,.12); }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .toolbar .btn{
+      width:auto;
+      flex:1;
+      min-width:160px;
+      margin-top:0;
+    }
+
+    .hidden{ display:none !important; }
+
+    .log-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      max-height:320px;
+      overflow:auto;
+      padding-right:2px;
+    }
+
+    .log-item{
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      padding:12px;
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    .log-head{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:6px;
+      font-weight:800;
+    }
+
+    .tiny{
+      font-size:12px;
+      color:rgba(255,255,255,.72);
+      word-break:break-word;
+    }
+
+    .blocked-screen{
+      width:min(560px, 100%);
+      margin:auto;
+      padding:28px;
+      display:none;
+      text-align:center;
+      border-color: rgba(255,107,107,.45);
+      background: linear-gradient(180deg, rgba(255,107,107,.24), rgba(255,255,255,.10));
+    }
+    .blocked-screen.show{ display:block; }
+
+    .blocked-badge{
+      width:80px;
+      height:80px;
+      border-radius:50%;
+      margin:0 auto 16px auto;
       display:grid;
       place-items:center;
-      font-size:20px;
-      flex:0 0 auto;
+      background: rgba(255,107,107,.16);
+      border:1px solid rgba(255,107,107,.35);
+      font-size:34px;
     }
 
-    .terms-title-row{
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-
-    .terms-body{
-      color:rgba(255,255,255,.85);
-      font-size:15px;
-      line-height:2.1;
-      white-space:pre-wrap;
-      padding:18px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:16px;
-      min-height:80px;
-    }
-
-    .terms-empty{
-      color:var(--muted);
-      font-size:14px;
-      font-style:italic;
-    }
-
-    .terms-toggle-btn{
-      border:none;
-      background:rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.16);
-      color:#fff;
-      border-radius:999px;
-      padding:8px 16px;
-      font-size:14px;
+    .blocked-title{
+      font-size:30px;
       font-weight:800;
-      font-family:'Tajawal',sans-serif;
-      cursor:pointer;
-      transition:.2s ease;
-      display:flex;
-      align-items:center;
-      gap:8px;
+      color:#fff;
+      margin-bottom:10px;
     }
 
-    .terms-toggle-btn:hover{
-      background:rgba(255,255,255,.18);
+    .blocked-text{
+      color:rgba(255,255,255,.92);
+      line-height:1.9;
+      font-size:15px;
+      margin-bottom:18px;
     }
 
-    .terms-collapsed .terms-body{
-      display:none;
+    .blocked-box{
+      padding:14px;
+      border-radius:16px;
+      background: rgba(255,107,107,.16);
+      border:1px solid rgba(255,107,107,.35);
+      margin-bottom:16px;
+      line-height:1.9;
+      color:#fff;
     }
 
-    .terms-collapsed .terms-toggle-btn .arrow{
-      transform:rotate(180deg);
-    }
-
-    .terms-toggle-btn .arrow{
-      display:inline-block;
-      transition:transform .3s ease;
-    }
-
-    /* Admin terms editor */
-    .terms-admin-section{
-      margin-top:22px;
-      border-top:1px solid rgba(255,255,255,.10);
-      padding-top:18px;
-    }
-
-    @media (max-width: 1100px){
-      .services-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-
-    @media (max-width: 960px){
-      .layout{ grid-template-columns:1fr; }
-      .panel{
-        position:relative;
-        top:auto;
-      }
-      .grid{
-        grid-template-columns:1fr;
-      }
-      .modal-grid{
-        grid-template-columns:1fr;
-      }
-      .services-grid{
-        grid-template-columns:1fr;
-      }
-    }
-
-    @media (max-width: 640px){
-      .wrap{
-        padding-top:176px;
-      }
-
-      .topbar{
-        flex-direction:column;
-        align-items:stretch;
-      }
-      .top-actions{
-        justify-content:stretch;
-      }
-      .top-actions .btn, .top-actions .pill{
-        width:100%;
-        justify-content:center;
-      }
-      .brand{
-        justify-content:center;
-        text-align:center;
-      }
-      .brand p{ text-align:center; }
-      .modal-thumbs{
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      .admin-users{
-        grid-template-columns:1fr;
-      }
+    @media (max-width: 760px){
+      .container{ padding:22px; }
+      .row{ grid-template-columns:1fr; }
+      .toolbar .btn{ min-width:100%; }
+      .blocked-title{ font-size:24px; }
     }
   </style>
 </head>
 <body>
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-box">
-      <div class="spinner"></div>
-      <h2 style="margin:0 0 8px;">جاري التحقق من الحساب</h2>
-      <div style="color:rgba(255,255,255,.75); line-height:1.9;">
-        إذا لم يكن هناك تسجيل دخول، سيتم تحويلك إلى صفحة التسجيل.
+  <div class="circle circle1"></div>
+  <div class="circle circle2"></div>
+
+  <div class="shell">
+    <div class="container" id="auth-shell">
+      <div id="login-form" class="form-box visible">
+        <h2>تسجيل الدخول</h2>
+        <div class="sub">ادخل بحسابك أو اطلب إعادة تعيين كلمة المرور من نفس البريد.</div>
+
+        <div class="input-box">
+          <input type="email" id="login-email" placeholder="البريد الإلكتروني" required>
+        </div>
+
+        <div class="input-box">
+          <input type="password" id="login-password" placeholder="كلمة المرور" required>
+        </div>
+
+        <button class="btn" id="btn-login">دخول</button>
+        <button class="btn secondary" id="btn-forgot">نسيت كلمة المرور</button>
+
+        <div class="switch-link">
+          ليس لديك حساب؟ <span onclick="switchForm('signup-form')">إنشاء حساب جديد</span>
+        </div>
+      </div>
+
+      <div id="signup-form" class="form-box hidden">
+        <h2>إنشاء حساب</h2>
+        <div class="sub">تأكد من عنوان البريد الإلكتروني حتى تستطيع استعادة كلمة المرور في حال فقدانها.</div>
+
+        <div class="input-box">
+          <input type="text" id="signup-name" placeholder="الاسم كامل" required>
+        </div>
+
+        <div class="input-box">
+          <input type="email" id="signup-email" placeholder="البريد الإلكتروني" required>
+        </div>
+
+        <div class="input-box">
+          <input type="tel" id="signup-phone" placeholder="رقم الهاتف" required>
+        </div>
+
+        <div class="input-box">
+          <input type="password" id="signup-password" placeholder="كلمة المرور" required>
+        </div>
+
+        <div class="input-box">
+          <input type="number" id="signup-age" placeholder="العمر" required>
+        </div>
+
+        <div class="input-box">
+          <select id="signup-source">
+            <option value="youtube">جئت من: يوتيوب</option>
+            <option value="facebook">جئت من: فيسبوك</option>
+            <option value="other">جئت من: مكان آخر</option>
+          </select>
+        </div>
+
+        <button class="btn" id="btn-signup">تسجيل الآن</button>
+
+        <div class="switch-link">
+          لديك حساب بالفعل؟ <span onclick="switchForm('login-form')">تسجيل الدخول</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="modal-overlay" id="detailsModal">
-    <div class="modal-box">
-      <button class="modal-close" id="closeModalBtn">×</button>
-      <div class="modal-grid">
-        <div>
-          <div class="modal-main-img">
-            <img id="modalMainImage" src="" alt="تفاصيل المنتج">
-          </div>
-          <div class="modal-thumbs" id="modalThumbs"></div>
+    <div class="blocked-screen" id="blocked-screen">
+      <div class="blocked-badge">⛔</div>
+      <div class="blocked-title">تم حظر هذا الحساب</div>
+      <div class="blocked-text" id="blocked-reason-text">
+        لا يمكنك الوصول إلى لوحة تسجيل الدخول الآن.
+      </div>
+      <div class="blocked-box">
+        إذا كنت تعتقد أن هذا الحظر بالخطأ، تواصل مع الدعم عبر واتساب.
+      </div>
+      <button class="btn danger" id="btn-support-whatsapp">التواصل مع الدعم</button>
+    </div>
+
+    <div class="panel" id="dashboard-panel">
+      <div class="toolbar">
+        <button class="btn secondary" id="btn-logout">تسجيل الخروج</button>
+      </div>
+
+      <div class="notice" id="user-notice">
+        تم التسجيل...
+      </div>
+
+      <div class="meta">
+        <div class="item">
+          <div class="label">الاسم</div>
+          <div class="value" id="profile-name">-</div>
         </div>
-        <div>
-          <h2 class="modal-title" id="modalTitle"></h2>
-          <div class="modal-price" id="modalPrice"></div>
-          <p class="modal-desc" id="modalDesc"></p>
+        <div class="item">
+          <div class="label">البريد الإلكتروني</div>
+          <div class="value" id="profile-email">-</div>
+        </div>
+        <div class="item">
+          <div class="label">رقم الهاتف</div>
+          <div class="value" id="profile-phone">-</div>
+        </div>
+        <div class="item">
+          <div class="label">المعرّف</div>
+          <div class="value" id="profile-id">-</div>
+        </div>
+        <div class="item">
+          <div class="label">الرصيد</div>
+          <div class="value" id="profile-coins">0</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>تغيير كلمة المرور للحساب الحالي</h3>
+          <div class="input-box">
+            <input type="password" id="current-new-password" placeholder="كلمة مرور جديدة لحسابك">
+          </div>
+          <button class="btn success" id="btn-change-own-password">تغيير كلمة المرور</button>
+          <div class="status" id="user-status"></div>
+        </div>
+
+        <div class="card">
+          <h3>إرسال طلب استعادة كلمة المرور</h3>
+          <div class="input-box">
+            <input type="email" id="reset-email-self" placeholder="اكتب بريدك الإلكتروني">
+          </div>
+          <button class="btn secondary" id="btn-send-reset-self">إرسال رابط الاستعادة</button>
+          <div class="status" id="reset-status"></div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="modal-overlay" id="noticeModal">
-    <div class="modal-box" style="max-width:680px;">
-      <button class="modal-close" id="closeNoticeBtn">×</button>
-      <h2 class="modal-title" id="noticeViewTitle"></h2>
-      <div class="modal-price" id="noticeViewId"></div>
-      <p class="modal-desc" id="noticeViewBody"></p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
-        <button class="btn danger" id="btnSkipNotice">تخطي</button>
+    <div class="panel" id="admin-panel">
+      <div class="toolbar">
+        <button class="btn secondary" id="btn-admin-logout">تسجيل الخروج</button>
+      </div>
+
+      <div class="notice">
+        لوحة الإدارة مفعلة فقط للحساب <strong>1@gmail.com</strong>.
+        هنا يمكنك البحث بالبريد أو بالمعرّف، ومراجعة السجل، وإرسال رابط استعادة كلمة المرور للمستخدم، وحظر الحساب أو فك الحظر.
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>البحث عن مستخدم بالبريد</h3>
+          <div class="input-box">
+            <input type="email" id="search-email" placeholder="اكتب البريد الإلكتروني">
+          </div>
+          <button class="btn secondary" id="btn-search-email">بحث</button>
+          <div class="status" id="email-search-status"></div>
+        </div>
+
+        <div class="card">
+          <h3>البحث عن مستخدم بالـ ID</h3>
+          <div class="input-box">
+            <input type="text" id="search-userid" placeholder="أدخل المعرّف المكوّن من 5 أرقام">
+          </div>
+          <button class="btn secondary" id="btn-search-user">بحث</button>
+          <div class="status" id="search-status"></div>
+        </div>
+
+        <div class="card">
+          <h3>إضافة / سحب كوينز</h3>
+          <div class="input-box">
+            <input type="text" id="admin-userid" placeholder="معرّف المستخدم">
+          </div>
+          <div class="row">
+            <div class="input-box">
+              <input type="number" id="admin-amount" placeholder="الكمية">
+            </div>
+            <div class="input-box">
+              <select id="admin-action">
+                <option value="add">إضافة</option>
+                <option value="subtract">سحب</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn success" id="btn-admin-coins">تنفيذ</button>
+          <div class="status" id="coins-status"></div>
+        </div>
+
+        <div class="card">
+          <h3>حظر / فك حظر الحساب</h3>
+          <div class="input-box">
+            <input type="text" id="admin-block-userid" placeholder="معرّف المستخدم">
+          </div>
+          <div class="input-box">
+            <input type="text" id="admin-block-reason" placeholder="سبب الحظر (اختياري)">
+          </div>
+          <div class="row">
+            <button class="btn danger" id="btn-block-user">حظر الحساب</button>
+            <button class="btn success" id="btn-unblock-user">فك الحظر</button>
+          </div>
+          <div class="status" id="block-status"></div>
+        </div>
+
+        <div class="card">
+          <h3>إرسال رابط استعادة كلمة المرور</h3>
+          <div class="input-box">
+            <input type="text" id="admin-reset-userid" placeholder="معرّف المستخدم">
+          </div>
+          <button class="btn secondary" id="btn-admin-reset">إرسال الرابط</button>
+          <div class="status" id="admin-reset-status"></div>
+        </div>
+
+        <div class="card">
+          <h3>سجل العمليات</h3>
+          <button class="btn warn" id="btn-refresh-logs">تحديث السجل</button>
+          <div class="status" id="logs-status"></div>
+          <div class="log-list" id="logs-list" style="margin-top:12px;"></div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="wrap hidden" id="app">
-    <div class="topbar" id="topbar">
-      <div class="brand">
-        <div class="logo">
-          <img src="/logo2.png" alt="Codenest Logo">
-        </div>
-        <div>
-          <h1>Codenest Gold</h1>
-          <p>متجر الكوينز والملفات داخل المنصة</p>
-        </div>
-      </div>
-
-      <div class="top-actions">
-        <div class="pill">الكوينز: <strong id="topCoins">0</strong></div>
-        <div class="pill">ID: <strong id="topUserId">-----</strong></div>
-        <button class="btn secondary" id="btnSupportTop">تواصل مع الدعم</button>
-        <button class="btn secondary" id="btnToggleSettings">الإعدادات</button>
-        <button class="btn secondary" id="btnWhatsApp">شحن كوينز</button>
-        <button class="btn danger" id="btnLogout">خروج</button>
-      </div>
-    </div>
-
-    <div class="top-note">
-      اضغط على شحن كوينز لمعرفة أسعار الكوينز، وللتواصل السريع مع الدعم.  
-      يجب أن تمتلك حساب واتساب للمتابعة مع الدعم: <strong>codenestgold</strong>.
-    </div>
-
-    <div class="layout">
-      <main>
-        <div class="section-title">
-          <h2>الملفات المتاحة للشراء</h2>
-          <div class="small">اضغط على الصورة أو عرض المزيد لفتح التفاصيل</div>
-        </div>
-
-        <div class="grid" id="catalogGrid"></div>
-        <div class="status" id="catalogStatus"></div>
-      </main>
-
-      <aside class="panel" id="settingsPanel">
-        
-        <!-- قسم تفعيل رقم الهاتف الجديد -->
-        <div class="section-title" style="margin-top:0;">
-          <h2 style="font-size:18px;">تفعيل رقم الهاتف</h2>
-        </div>
-        <div class="form-grid" id="verificationArea" style="margin-bottom: 20px;">
-          <!-- سيتم تعبئته برمجياً حسب الحالة -->
-        </div>
-        
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-
-        <h2>البيانات الشخصية</h2>
-        <div class="muted">يمكنك تعديل الاسم والعمر ومصدر التسجيل. البريد الإلكتروني والـ ID للعرض فقط.</div>
-
-        <div class="form-grid">
-          <div class="input-box">
-            <label>الاسم</label>
-            <input type="text" id="profileName" placeholder="اسمك">
-          </div>
-
-          <div class="input-box">
-            <label>البريد الإلكتروني</label>
-            <input type="email" id="profileEmail" disabled>
-          </div>
-
-          <div class="input-box">
-            <label>المعرّف</label>
-            <input type="text" id="profileUserId" disabled>
-          </div>
-
-          <div class="input-box">
-            <label>العمر</label>
-            <input type="number" id="profileAge" placeholder="العمر">
-          </div>
-
-          <div class="input-box">
-            <label>مصدر التسجيل</label>
-            <select id="profileSource">
-              <option value="youtube">يوتيوب</option>
-              <option value="facebook">فيسبوك</option>
-              <option value="other">مكان آخر</option>
-            </select>
-          </div>
-
-          <div class="input-box">
-            <label>الرصيد الحالي</label>
-            <input type="text" id="profileCoins" disabled>
-          </div>
-
-          <button class="btn success block" id="btnSaveProfile">حفظ التعديلات</button>
-        </div>
-
-        <div class="section-title" style="margin-top:16px;">
-          <h2 style="font-size:18px;">مشترياتي</h2>
-          <div class="small" id="purchasesCount">0 ملف</div>
-        </div>
-
-        <div class="purchase-list" id="purchasesList">
-          <div class="muted-box">لا توجد مشتريات بعد.</div>
-        </div>
-
-        <div class="status" id="profileStatus"></div>
-      </aside>
-    </div>
-
-    <section id="servicesSection">
-      <div class="section-title">
-        <h2>الخدمات الإضافية</h2>
-        <div class="small">سيتم خصم الكوينز الخاص بالخدمة بمجرد تنفيذها لك، شكرًا لتفهمكم</div>
-      </div>
-
-      <div class="service-admin" id="serviceAdminWrap">
-        <!-- ====== قسم إدارة الخدمات ====== -->
-        <div class="section-title" style="margin-top:0;">
-          <h2 style="font-size:18px;" id="serviceFormTitle">إضافة خدمة جديدة</h2>
-          <div class="small">مسموح فقط للحساب: 2@gmail.com</div>
-        </div>
-
-        <div class="muted-box" id="serviceEditHint" style="display:none; margin-bottom:12px;">
-          أنت الآن في وضع تعديل خدمة موجودة. يمكنك الحفظ كتعديل أو إلغاء التعديل.
-        </div>
-
-        <div class="form-grid">
-          <div class="input-box">
-            <label>اسم الخدمة</label>
-            <input type="text" id="serviceName" placeholder="مثال: تعديل واجهة موقع">
-          </div>
-
-          <div class="input-box">
-            <label>سعر الخدمة</label>
-            <input type="number" id="servicePrice" placeholder="مثال: 120">
-          </div>
-
-          <div class="input-box">
-            <label>وصف الخدمة</label>
-            <textarea id="serviceDesc" placeholder="اكتب وصفًا واضحًا ومختصرًا عن الخدمة"></textarea>
-          </div>
-
-          <div class="input-box">
-            <label>اللينكات (كل رابط في سطر أو مفصول بفاصلة)</label>
-            <textarea id="serviceLinks" placeholder="https://youtube.com/watch?v=...&#10;https://example.com/page"></textarea>
-          </div>
-
-          <button class="btn success block" id="btnAddService">إضافة الخدمة</button>
-          <button class="btn secondary block hidden" id="btnCancelServiceEdit" type="button">إلغاء التعديل</button>
-        </div>
-
-        <div class="status" id="serviceAdminStatus"></div>
-
-        <!-- ====== قسم التنبيهات ====== -->
-        <div class="section-title" style="margin-top:18px;">
-          <h2 style="font-size:18px;">رسائل التنبيه بالـ ID</h2>
-          <div class="small">تظهر في منتصف الشاشة ويمكن تخطيها مرة واحدة</div>
-        </div>
-
-        <div class="form-grid">
-          <div class="input-box">
-            <label>الـ ID المستهدف</label>
-            <input type="text" id="noticeTargetId" placeholder="UID المستخدم أو ID البروفايل">
-          </div>
-
-          <div class="input-box">
-            <label>عنوان التنبيه</label>
-            <input type="text" id="noticeTitleInput" placeholder="مثال: تنبيه مهم">
-          </div>
-
-          <div class="input-box">
-            <label>نص التنبيه</label>
-            <textarea id="noticeBodyInput" placeholder="اكتب الرسالة هنا"></textarea>
-          </div>
-
-          <button class="btn success block" id="btnSaveNotice">إضافة التنبيه</button>
-          <button class="btn secondary block hidden" id="btnCancelNoticeEdit" type="button">إلغاء التعديل</button>
-        </div>
-
-        <div class="status" id="noticeAdminStatus"></div>
-
-        <!-- ====== قسم الشروط والأحكام (للأدمن) ====== -->
-        <div class="section-title" style="margin-top:18px;">
-          <h2 style="font-size:18px;">📄 تعديل الشروط والأحكام</h2>
-          <div class="small">ستظهر في أسفل الصفحة لجميع المستخدمين</div>
-        </div>
-
-        <div class="form-grid">
-          <div class="input-box">
-            <label>عنوان الشروط والأحكام</label>
-            <input type="text" id="termsAdminTitle" placeholder="مثال: الشروط والأحكام — Codenest Gold">
-          </div>
-          <div class="input-box">
-            <label>نص الشروط والأحكام</label>
-            <textarea id="termsAdminBody" style="min-height:160px;" placeholder="اكتب الشروط والأحكام هنا... كل فقرة في سطر جديد."></textarea>
-          </div>
-          <button class="btn success block" id="btnSaveTerms">💾 حفظ الشروط والأحكام</button>
-        </div>
-
-        <div class="status" id="termsAdminStatus"></div>
-
-        <!-- ====== قسم الحسابات ====== -->
-        <div class="section-title" style="margin-top:18px;">
-          <h2 style="font-size:18px;">IDs الحسابات</h2>
-          <div class="small" id="adminUserCount">0 حساب</div>
-        </div>
-
-        <div class="admin-users" id="adminUsersWrap"></div>
-
-        <!-- ====== التنبيهات الحالية ====== -->
-        <div class="section-title" style="margin-top:18px;">
-          <h2 style="font-size:18px;">التنبيهات الحالية</h2>
-          <div class="small" id="noticeCount">0 تنبيه</div>
-        </div>
-
-        <div class="admin-users" id="noticesGrid"></div>
-      </div>
-
-      <div class="services-grid" id="servicesGrid"></div>
-      <div class="status" id="servicesStatus"></div>
-    </section>
-
-    <!-- ====== قسم الشروط والأحكام (للمستخدمين) ====== -->
-    <section class="terms-section" id="termsSection" style="display:none;">
-      <div class="terms-header">
-        <div class="terms-title-row">
-          <div class="terms-icon">📄</div>
-          <h2 id="termsSectionTitle">الشروط والأحكام</h2>
-        </div>
-        <button class="terms-toggle-btn" id="termsToggleBtn">
-          <span>طيّ القسم</span>
-          <span class="arrow">▲</span>
-        </button>
-      </div>
-      <div class="terms-body" id="termsSectionBody">
-        <span class="terms-empty">لم يتم تحديد شروط وأحكام بعد.</span>
-      </div>
-    </section>
-
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import {
       getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      updatePassword,
       onAuthStateChanged,
-      signOut,
-      sendPasswordResetEmail
+      signOut
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
     import {
       getFirestore,
       doc,
-      getDoc,
       setDoc,
-      onSnapshot,
-      updateDoc,
-      deleteDoc,
+      getDoc,
+      getDocs,
       runTransaction,
       serverTimestamp,
-      getDocs,
-      collection,
       addDoc,
-      arrayUnion
+      collection,
+      query,
+      where,
+      orderBy,
+      limit
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -1327,1140 +633,639 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const INDEX_PAGE = "index.html";
-    const SUPPORT_NUMBER = "201124680211";
-    const ADMIN_EMAIL = "2@gmail.com";
+    const ADMIN_EMAIL = "1@gmail.com";
+    const USER_PAGE = "p1.html";
+    const WHATSAPP_NUMBER = "201124680211";
 
-    const $ = (id) => document.getElementById(id);
+    const el = (id) => document.getElementById(id);
 
-    const loadingOverlay    = $("loadingOverlay");
-    const appRoot           = $("app");
-    const topbar            = $("topbar");
-    const topCoins          = $("topCoins");
-    const topUserId         = $("topUserId");
-    const settingsPanel     = $("settingsPanel");
-    const profileName       = $("profileName");
-    const profileEmail      = $("profileEmail");
-    const profileUserId     = $("profileUserId");
-    const profileAge        = $("profileAge");
-    const profileSource     = $("profileSource");
-    const profileCoins      = $("profileCoins");
-    const profileStatus     = $("profileStatus");
-    const catalogStatus     = $("catalogStatus");
-    const catalogGrid       = $("catalogGrid");
-    const purchasesList     = $("purchasesList");
-    const purchasesCount    = $("purchasesCount");
-    const btnToggleSettings = $("btnToggleSettings");
-    const btnWhatsApp       = $("btnWhatsApp");
-    const btnSupportTop     = $("btnSupportTop"); // زر الدعم الجديد
-    const btnLogout         = $("btnLogout");
-    const btnSaveProfile    = $("btnSaveProfile");
-    const detailsModal      = $("detailsModal");
-    const closeModalBtn     = $("closeModalBtn");
-    const modalMainImage    = $("modalMainImage");
-    const modalThumbs       = $("modalThumbs");
-    const modalTitle        = $("modalTitle");
-    const modalPrice        = $("modalPrice");
-    const modalDesc         = $("modalDesc");
-    const servicesGrid      = $("servicesGrid");
-    const servicesStatus    = $("servicesStatus");
-    const serviceAdminWrap  = $("serviceAdminWrap");
-    const serviceAdminStatus= $("serviceAdminStatus");
-    const serviceFormTitle  = $("serviceFormTitle");
-    const serviceEditHint   = $("serviceEditHint");
-    const serviceName       = $("serviceName");
-    const servicePrice      = $("servicePrice");
-    const serviceDesc       = $("serviceDesc");
-    const serviceLinks      = $("serviceLinks");
-    const btnAddService     = $("btnAddService");
-    const btnCancelServiceEdit = $("btnCancelServiceEdit");
-    const noticeModal       = $("noticeModal");
-    const closeNoticeBtn    = $("closeNoticeBtn");
-    const btnSkipNotice     = $("btnSkipNotice");
-    const noticeViewTitle   = $("noticeViewTitle");
-    const noticeViewId      = $("noticeViewId");
-    const noticeViewBody    = $("noticeViewBody");
-    const noticeTargetId    = $("noticeTargetId");
-    const noticeTitleInput  = $("noticeTitleInput");
-    const noticeBodyInput   = $("noticeBodyInput");
-    const btnSaveNotice     = $("btnSaveNotice");
-    const btnCancelNoticeEdit = $("btnCancelNoticeEdit");
-    const noticeAdminStatus = $("noticeAdminStatus");
-    const adminUsersWrap    = $("adminUsersWrap");
-    const adminUserCount    = $("adminUserCount");
-    const noticesGrid       = $("noticesGrid");
-    const noticeCount       = $("noticeCount");
-    const verificationArea  = $("verificationArea"); // منطقة تفعيل الهاتف
+    const loginForm = el('login-form');
+    const signupForm = el('signup-form');
+    const dashboardPanel = el('dashboard-panel');
+    const adminPanel = el('admin-panel');
+    const blockedScreen = el('blocked-screen');
+    const logsList = el('logs-list');
 
-    // Terms elements
-    const termsSection      = $("termsSection");
-    const termsSectionTitle = $("termsSectionTitle");
-    const termsSectionBody  = $("termsSectionBody");
-    const termsToggleBtn    = $("termsToggleBtn");
-    const termsAdminTitle   = $("termsAdminTitle");
-    const termsAdminBody    = $("termsAdminBody");
-    const btnSaveTerms      = $("btnSaveTerms");
-    const termsAdminStatus  = $("termsAdminStatus");
-
-    let currentUser         = null;
-    let currentProfile      = null;
-    let currentModalProduct = null;
-    let cachedServices      = [];
-    let cachedUsers         = [];
-    let cachedNotices       = [];
-    let editingServiceId    = null;
-    let editingNoticeId     = null;
-    let currentNotice       = null;
-
-    let usersUnsub    = null;
-    let noticesUnsub  = null;
-    let profileUnsub  = null;
-    let termsUnsub    = null;
-
-    // ──────────────────────────────────────
-    // Products catalogue
-    // ──────────────────────────────────────
-    const products = [
-      {
-        id: "28",
-        name: "لوحه تسجيل دخول موقع ويب قابله للتعديل",
-        price: 50,
-        description: `هذا الكود يمثل صفحة تسجيل دخول وإنشاء حساب (Login/Register) تفاعلية قابله للتعديل (Neumorphism / Glowing Neon) وواجهة عربية كاملة تدعم اتجاه اليمين إلى اليسار (RTL).
-أبرز مميزات التصميم والبرمجة:
-تأثيرات بصرية ثلاثية الأبعاد (3D & Perspective):
-تستخدم الصفحة خاصية perspective مع تأثير دوران rotateY للبطاقة عند التبديل بين نموذج تسجيل الدخول والنموذج الجديد.
-الخلفية التفاعلية:
-تتميز بخلفية داكنة مع دوائر متوهجة (أزرق وأرجواني) تتحرك بشكل مستمر (animation: float) وتستخدم تأثير backdrop-filter لإعطاء مظهر زجاجي شفاف.
-واجهة مزدوجة (Card Flipping):
-الوجه الأمامي: مخصص لتسجيل الدخول ويحتوي على حقول البريد الإلكتروني وكلمة المرور وتأثير متوهج باللون الأزرق السماوي #00f3ff.
-الوجه الخلفي: مخصص لإنشاء حساب جديد، ويحتوي على حقول متعددة (الاسم، السن، الجنس، الدولة، الهاتف، البريد، وكلمة المرور) مع شريط تمرير مخصص وتوهج باللون الوردي #ff00a0.
-التفاعل البرمجي (JavaScript):
-يسمح بالتبديل بين الواجهتين بسلاسة عبر النقر على أزرار "حساب جديد" و"رجوع لتسجيل الدخول".
-عند إرسال النموذج (Submit)، يتم توجيه المستخدم إلى صفحة part2.html..`,
-        images: ["login281.png","login282.png","login283.png"],
-        downloadUrl: "https://www.mediafire.com/file/87vnzfsvum7z827/لوحه+تسجيل+الدخول+(id-28).zip/file"
-      }
-    ];
-
-    // ──────────────────────────────────────
-    // Helpers
-    // ──────────────────────────────────────
-    function showStatus(node, message, type = "success") {
+    function showStatus(node, message, type = 'success') {
       node.textContent = message;
       node.className = `status show ${type}`;
     }
 
     function clearStatus(node) {
-      node.textContent = "";
-      node.className = "status";
+      node.textContent = '';
+      node.className = 'status';
     }
 
-    function money(n) {
-      return new Intl.NumberFormat("ar-EG").format(Number(n || 0));
+    function resetPanels() {
+      dashboardPanel.classList.remove('show');
+      adminPanel.classList.remove('show');
+      blockedScreen.classList.remove('show');
+      document.getElementById('auth-shell').style.display = 'block';
     }
 
-    function truncateText(value, limit = 120) {
-      const str = String(value || "").trim();
-      if (str.length <= limit) return { text: str, more: false };
-      return { text: str.slice(0, limit).trimEnd() + "...", more: true };
-    }
+    function switchView(view) {
+      resetPanels();
 
-    function redirectToIndex() {
-      window.location.replace(INDEX_PAGE);
-    }
-
-    function escapeHtml(str) {
-      return String(str ?? "")
-        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
-    }
-
-    function escapeXml(str) {
-      return String(str)
-        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;").replace(/'/g,"&apos;");
-    }
-
-    function placeholderImage(title, priceText) {
-      const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
-          <defs>
-            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stop-color="#fbbf24"/>
-              <stop offset="100%" stop-color="#1e3a8a"/>
-            </linearGradient>
-          </defs>
-          <rect width="1200" height="750" fill="url(#g)"/>
-          <circle cx="980" cy="160" r="210" fill="rgba(255,255,255,.14)"/>
-          <circle cx="220" cy="610" r="250" fill="rgba(255,255,255,.10)"/>
-          <rect x="75" y="85" width="1050" height="580" rx="42" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
-          <text x="600" y="310" text-anchor="middle" font-size="72" font-family="Tajawal, Arial" fill="#ffffff" font-weight="800">${escapeXml(title)}</text>
-          <text x="600" y="400" text-anchor="middle" font-size="42" font-family="Tajawal, Arial" fill="#ffffff" font-weight="700">${escapeXml(priceText)}</text>
-          <text x="600" y="500" text-anchor="middle" font-size="30" font-family="Tajawal, Arial" fill="rgba(255,255,255,.92)">Codenest Gold</text>
-        </svg>`.trim();
-      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
-    }
-
-    function productMainImage(item) {
-      if (item.imageUrl) return item.imageUrl;
-      return placeholderImage(item.name, `${item.price} كوينز`);
-    }
-
-    function productGallery(item) {
-      const list = Array.isArray(item.images) && item.images.length ? item.images.slice() : [];
-      while (list.length < 3) {
-        list.push(placeholderImage(`${item.name} ${list.length + 1}`, `${item.price} كوينز`));
-      }
-      return list.slice(0, 6);
-    }
-
-    // ──────────────────────────────────────
-    // Modal
-    // ──────────────────────────────────────
-    function openDetails(item) {
-      currentModalProduct = item;
-      modalTitle.textContent = item.name;
-      modalPrice.textContent = `السعر: ${money(item.price)} كوينز`;
-      modalDesc.textContent = item.description || "";
-      const images = productGallery(item);
-      modalMainImage.src = images[0];
-      modalMainImage.alt = item.name;
-      modalThumbs.innerHTML = "";
-      images.forEach((src, index) => {
-        const img = document.createElement("img");
-        img.src = src;
-        img.alt = `${item.name} ${index + 1}`;
-        img.addEventListener("click", () => { modalMainImage.src = src; });
-        modalThumbs.appendChild(img);
-      });
-      detailsModal.classList.add("show");
-    }
-
-    function closeDetails() {
-      detailsModal.classList.remove("show");
-      currentModalProduct = null;
-    }
-
-    // ──────────────────────────────────────
-    // Catalog
-    // ──────────────────────────────────────
-    function getPurchasedMap(profile) {
-      const map = new Map();
-      const arr = Array.isArray(profile?.purchases) ? profile.purchases : [];
-      for (const item of arr) { if (item?.id) map.set(item.id, item); }
-      return map;
-    }
-
-    function renderCatalog(profile) {
-      const purchasedMap = getPurchasedMap(profile);
-      catalogGrid.innerHTML = "";
-      for (const item of products) {
-        const purchased = purchasedMap.get(item.id);
-        const enough = Number(profile?.coins || 0) >= item.price;
-        const card = document.createElement("article");
-        card.className = "catalog-card";
-        const short = truncateText(item.description, 120);
-        card.innerHTML = `
-          <div class="thumb">
-            <img src="${escapeHtml(productMainImage(item))}" alt="${escapeHtml(item.name)}">
-            <div class="badge">${purchased ? "تم الشراء" : `${money(item.price)} كوينز`}</div>
-          </div>
-          <div class="content">
-            <h3 class="title">${escapeHtml(item.name)}</h3>
-            <div class="desc-row">
-              <p class="desc-short">${escapeHtml(short.text)}</p>
-              ${short.more ? '<button class="more-link" type="button">عرض المزيد</button>' : ''}
-            </div>
-            <div class="meta-line">
-              <div class="price">السعر: <span>${money(item.price)}</span> كوينز</div>
-              <div style="color:rgba(255,255,255,.75);font-size:13px;">الرصيد: ${money(profile?.coins || 0)}</div>
-            </div>
-            <div class="actions"></div>
-          </div>`;
-
-        card.querySelector(".thumb img").addEventListener("click", () => openDetails(item));
-        const moreBtn = card.querySelector(".more-link");
-        if (moreBtn) moreBtn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openDetails(item); });
-
-        const actions = card.querySelector(".actions");
-        
-        // التحقق من تفعيل رقم الهاتف أولاً
-        if (!profile?.phoneVerified) {
-          const btn = document.createElement("button");
-          btn.className = "btn warn block";
-          btn.textContent = "يجب تفعيل رقم الهاتف أولاً";
-          btn.addEventListener("click", () => {
-             settingsPanel.classList.add("show");
-             window.scrollTo(0, 0);
-             alert("يرجى إكمال تفعيل رقم الهاتف من الإعدادات للتمكن من الشراء.");
-          });
-          actions.appendChild(btn);
-        } else if (purchased) {
-          const link = document.createElement("a");
-          link.className = "download-link";
-          link.href = purchased.downloadUrl || item.downloadUrl || "https://example.com";
-          link.target = "_blank"; link.rel = "noopener noreferrer";
-          link.textContent = "فتح رابط تحميل الكود";
-          actions.appendChild(link);
-        } else if (enough) {
-          const btn = document.createElement("button");
-          btn.className = "btn success block";
-          btn.textContent = "شراء الآن";
-          btn.addEventListener("click", () => purchaseItem(item, btn));
-          actions.appendChild(btn);
-        } else {
-          const btn = document.createElement("button");
-          btn.className = "btn secondary block";
-          btn.disabled = true;
-          btn.textContent = `تحتاج ${money(item.price - (profile?.coins || 0))} كوينز`;
-          actions.appendChild(btn);
-        }
-        catalogGrid.appendChild(card);
+      if (view === 'login') {
+        loginForm.classList.remove('hidden');
+        loginForm.classList.add('visible');
+        signupForm.classList.add('hidden');
+        signupForm.classList.remove('visible');
+      } else if (view === 'signup') {
+        loginForm.classList.add('hidden');
+        loginForm.classList.remove('visible');
+        signupForm.classList.remove('hidden');
+        signupForm.classList.add('visible');
+      } else if (view === 'dashboard') {
+        document.getElementById('auth-shell').style.display = 'none';
+        dashboardPanel.classList.add('show');
+      } else if (view === 'admin') {
+        document.getElementById('auth-shell').style.display = 'none';
+        dashboardPanel.classList.add('show');
+        adminPanel.classList.add('show');
+      } else if (view === 'blocked') {
+        document.getElementById('auth-shell').style.display = 'none';
+        blockedScreen.classList.add('show');
       }
     }
 
-    function renderPurchases(profile) {
-      const purchases = Array.isArray(profile?.purchases) ? profile.purchases : [];
-      purchasesCount.textContent = `${purchases.length} ملف${purchases.length === 1 ? "" : "ات"}`;
-      if (!purchases.length) {
-        purchasesList.innerHTML = `<div class="muted-box">لا توجد مشتريات بعد.</div>`;
-        return;
-      }
-      purchasesList.innerHTML = "";
-      for (const item of purchases) {
-        const row = document.createElement("div");
-        row.className = "purchase-item";
-        row.innerHTML = `
-          <div class="left">
-            <div class="name">${escapeHtml(item.name || item.id)}</div>
-            <div class="info">تم الشراء مقابل ${money(item.price)} كوينز${item.purchasedAt ? "<br>تمت الإضافة إلى الحساب" : ""}</div>
-          </div>`;
-        const a = document.createElement("a");
-        a.className = "mini-link";
-        a.href = item.downloadUrl || "https://example.com";
-        a.target = "_blank"; a.rel = "noopener noreferrer";
-        a.textContent = "فتح الرابط";
-        row.appendChild(a);
-        purchasesList.appendChild(row);
-      }
+    window.switchForm = function(formId) {
+      switchView(formId === 'signup-form' ? 'signup' : 'login');
+    };
+
+    function random5Digit() {
+      return String(Math.floor(10000 + Math.random() * 90000));
     }
 
-    function fillProfileForm(profile) {
-      profileName.value    = profile?.name   || "";
-      profileEmail.value   = profile?.email  || "";
-      profileUserId.value  = profile?.userId || "";
-      profileAge.value     = profile?.age    || "";
-      profileSource.value  = profile?.source || "other";
-      profileCoins.value   = money(profile?.coins || 0);
-      topCoins.textContent = money(profile?.coins || 0);
-      topUserId.textContent= profile?.userId || profile?.uid || "-----";
-      
-      renderVerificationArea(profile); // عرض قسم تفعيل الهاتف
+    function openWhatsAppSupport(message) {
+      const msg = encodeURIComponent(message || 'مرحبًا، أحتاج إلى الدعم بخصوص الحساب.');
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
 
-    // ──────────────────────────────────────
-    // Phone Verification Logic
-    // ──────────────────────────────────────
-    function renderVerificationArea(profile) {
-      verificationArea.innerHTML = "";
-      if (profile?.phoneVerified) {
-        verificationArea.innerHTML = `<div class="status success show">✅ رقم الهاتف مفعل: ${escapeHtml(profile.phoneNumber || "")}</div>`;
-        return;
-      }
-
-      if (profile?.verificationRequested && profile?.verificationCode) {
-        verificationArea.innerHTML = `
-          <div class="muted-box">تم طلب التفعيل للرقم: ${escapeHtml(profile.phoneNumber)}.<br>سيتم ارسال كود التحقق لرقمك عبر وتساب خلال 24 ساعه.</div>
-          <div class="input-box">
-              <label>أدخل كود التحقق</label>
-              <input type="text" id="verifyCodeInput" placeholder="اكتب كود التحقق هنا">
-          </div>
-          <button class="btn success block" id="btnConfirmCode">تأكيد الكود</button>
-          <button class="btn secondary block" id="btnResendCode" style="margin-top:8px;">تغيير الرقم أو إعادة الطلب</button>
-        `;
-        $("btnConfirmCode").addEventListener("click", confirmVerificationCode);
-        $("btnResendCode").addEventListener("click", resetVerification);
-      } else {
-        verificationArea.innerHTML = `
-          <div class="muted-box" style="color:var(--danger); border-color:var(--danger);">يجب تفعيل رقم الهاتف لتتمكن من الشراء داخل المنصة.</div>
-          <div class="input-box">
-              <label>رقم الهاتف (واتساب)</label>
-              <input type="text" id="verifyPhoneInput" placeholder="اكتب رقم هاتفك المربوط بواتساب" value="${profile?.phoneNumber || ''}">
-          </div>
-          <button class="btn success block" id="btnRequestCode">طلب كود التفعيل</button>
-        `;
-        $("btnRequestCode").addEventListener("click", requestVerificationCode);
-      }
-    }
-
-    async function requestVerificationCode() {
-      const phone = $("verifyPhoneInput").value.trim();
-      if (!phone) { alert("رجاءً إدخال رقم الهاتف"); return; }
-      
-      // إنشاء كود مكون من 6 أرقام
-      const code = Math.floor(100000 + Math.random() * 900000).toString(); 
-      
+    async function logEvent(type, details = {}, actor = null) {
       try {
-        const btn = $("btnRequestCode");
-        btn.disabled = true;
-        btn.textContent = "جاري الطلب...";
-        
-        await updateDoc(doc(db, "users", currentUser.uid), {
-            phoneNumber: phone,
-            verificationRequested: true,
-            verificationCode: code,
-            updatedAt: serverTimestamp()
+        await addDoc(collection(db, 'logs'), {
+          type,
+          details,
+          actor: actor || null,
+          createdAt: serverTimestamp()
         });
-        
-        // إظهار الكود للأدمن في الكونسول كما طلبت
-        console.log(`%c[Admin Alert] تم إنشاء كود تفعيل للمستخدم ${currentUser.email}: ${code}`, "color: red; font-size: 16px; font-weight: bold;");
-        
-        alert("سيتم ارسال كود التحقق لرقمك عبر وتساب خلال 24ساعه");
-      } catch (err) {
-        alert("خطأ: " + err.message);
+      } catch (e) {
+        console.warn('Log write failed:', e);
       }
     }
 
-    async function confirmVerificationCode() {
-      const codeInput = $("verifyCodeInput").value.trim();
-      if (!codeInput) { alert("يرجى إدخال الكود أولاً."); return; }
-      
-      if (codeInput === currentProfile.verificationCode) {
+    async function generateUniqueUserId(uid, email, name) {
+      for (let attempt = 0; attempt < 30; attempt++) {
+        const candidate = random5Digit();
+        const idRef = doc(db, 'publicIds', candidate);
+
         try {
-            const btn = $("btnConfirmCode");
-            btn.disabled = true;
-            btn.textContent = "جاري التأكيد...";
-            
-            await updateDoc(doc(db, "users", currentUser.uid), {
-                phoneVerified: true,
-                updatedAt: serverTimestamp()
+          await runTransaction(db, async (tx) => {
+            const snap = await tx.get(idRef);
+            if (snap.exists()) {
+              throw new Error('ID_TAKEN');
+            }
+            tx.set(idRef, {
+              uid,
+              email,
+              name,
+              createdAt: serverTimestamp()
             });
-            alert("تم تفعيل رقم الهاتف بنجاح! يمكنك الآن إتمام عمليات الشراء.");
-        } catch (err) {
-            alert("خطأ: " + err.message);
-        }
-      } else {
-        alert("الكود غير صحيح، يرجى المحاولة مرة أخرى.");
-      }
-    }
-
-    async function resetVerification() {
-      try {
-        await updateDoc(doc(db, "users", currentUser.uid), {
-            verificationRequested: false,
-            verificationCode: null,
-            updatedAt: serverTimestamp()
-        });
-      } catch (err) {
-        alert("خطأ: " + err.message);
-      }
-    }
-
-
-    function isAdminProfile(profile) {
-      return (profile?.email || "").toLowerCase() === ADMIN_EMAIL.toLowerCase();
-    }
-
-    function setAdminVisibility(profile) {
-      const isAdmin = isAdminProfile(profile);
-      serviceAdminWrap.classList.toggle("show", isAdmin);
-      if (!isAdmin) {
-        clearStatus(serviceAdminStatus);
-        clearStatus(noticeAdminStatus);
-        resetServiceForm();
-        resetNoticeForm();
-      }
-    }
-
-    // ──────────────────────────────────────
-    // Services
-    // ──────────────────────────────────────
-    function resetServiceForm() {
-      editingServiceId = null;
-      serviceFormTitle.textContent = "إضافة خدمة جديدة";
-      serviceEditHint.style.display = "none";
-      serviceName.value = ""; servicePrice.value = "";
-      serviceDesc.value = ""; serviceLinks.value = "";
-      btnAddService.textContent = "إضافة الخدمة";
-      btnCancelServiceEdit.classList.add("hidden");
-    }
-
-    function startServiceEdit(service) {
-      editingServiceId = service.id;
-      serviceFormTitle.textContent = "تعديل خدمة";
-      serviceEditHint.style.display = "block";
-      serviceName.value  = service.name  || "";
-      servicePrice.value = service.price ?? "";
-      serviceDesc.value  = service.description || "";
-      serviceLinks.value = Array.isArray(service.links) ? service.links.join("\n") : "";
-      btnAddService.textContent = "حفظ التعديلات";
-      btnCancelServiceEdit.classList.remove("hidden");
-      window.location.hash = "#servicesSection";
-    }
-
-    function cancelServiceEdit() { resetServiceForm(); }
-
-    function serviceSupportText(service) {
-      return `مرحبًا، أريد استفسارًا أكثر عن خدمة:\nالعنوان: ${service.name}\nالوصف: ${service.description || "لا يوجد وصف"}\n\nأرغب في معرفة المزيد من التفاصيل قبل الطلب.`;
-    }
-
-    function openSupportForService(service) {
-      const msg = encodeURIComponent(serviceSupportText(service));
-      window.open(`https://wa.me/${SUPPORT_NUMBER}?text=${msg}`, "_blank", "noopener,noreferrer");
-    }
-
-    async function deleteService(service) {
-      if (!confirm(`هل تريد حذف الخدمة: ${service.name} ؟`)) return;
-      clearStatus(serviceAdminStatus);
-      try {
-        await deleteDoc(doc(db, "services", service.id));
-        if (editingServiceId === service.id) cancelServiceEdit();
-        await loadServices();
-        showStatus(serviceAdminStatus, "تم حذف الخدمة بنجاح.", "success");
-      } catch (err) {
-        showStatus(serviceAdminStatus, err?.message || "تعذر حذف الخدمة.", "error");
-      }
-    }
-
-    async function toggleServiceActive(service) {
-      clearStatus(serviceAdminStatus);
-      try {
-        await updateDoc(doc(db, "services", service.id), { active: !service.active, updatedAt: serverTimestamp() });
-        await loadServices();
-        showStatus(serviceAdminStatus, service.active ? "تم تعطيل الخدمة." : "تم تشغيل الخدمة.", "success");
-      } catch (err) {
-        showStatus(serviceAdminStatus, err?.message || "تعذر تغيير حالة الخدمة.", "error");
-      }
-    }
-
-    function normalizeLinkInput(raw) {
-      return String(raw || "").split(/[\n,]+/g).map(s => s.trim()).filter(Boolean)
-        .map(url => /^https?:\/\//i.test(url) ? url : `https://${url}`);
-    }
-
-    function hostLabel(url) {
-      try {
-        const u = new URL(url);
-        const host = u.hostname.replace(/^www\./, "");
-        if (host.includes("youtube.com") || host.includes("youtu.be")) return "يوتيوب";
-        return host.split(".")[0] || "رابط";
-      } catch (_) { return "رابط"; }
-    }
-
-    function renderServices(services) {
-      servicesGrid.innerHTML = "";
-      if (!services.length) {
-        servicesGrid.innerHTML = `<div class="muted-box" style="grid-column:1/-1;">لا توجد خدمات مضافة بعد.</div>`;
-        return;
-      }
-      const isAdmin = isAdminProfile(currentProfile) || isAdminProfile(currentUser);
-      services.forEach((service) => {
-        const links  = Array.isArray(service.links) ? service.links.filter(Boolean) : [];
-        const active = service.active !== false;
-        const card   = document.createElement("article");
-        card.className = `service-card${active ? "" : " inactive"}`;
-        const linkChips = links.slice(0, 6).map((link, i) =>
-          `<a class="link-chip" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">رابط ${i+1}: ${escapeHtml(hostLabel(link))}</a>`).join("");
-        const stateLabel = active
-          ? '<span class="service-state active">مفعلة</span>'
-          : '<span class="service-state inactive">متوقفة</span>';
-        card.innerHTML = `
-          <div class="service-body" style="padding-top:18px;">
-            <div class="service-head">
-              <h3 class="service-name">${escapeHtml(service.name)} ${stateLabel}</h3>
-              <div class="service-price">${money(service.price)} كوينز</div>
-            </div>
-            <p class="service-desc">${escapeHtml(service.description || "لا يوجد وصف للخدمة.")}</p>
-            ${linkChips ? `<div class="link-list">${linkChips}</div>` : `<div class="muted-box">لا توجد روابط مرفقة لهذه الخدمة.</div>`}
-            <div class="service-actions">
-              <button class="btn secondary block btn-support" type="button" ${active ? "" : "disabled"}>تواصل مع دعم كودنيست</button>
-              ${isAdmin ? `
-                <div class="service-admin-actions">
-                  <button class="btn secondary btn-edit" type="button">تعديل</button>
-                  <button class="btn secondary btn-toggle" type="button">${active ? "تعطيل" : "تشغيل"}</button>
-                  <button class="btn danger btn-delete" type="button" style="grid-column:1/-1;">مسح</button>
-                </div>` : ""}
-            </div>
-          </div>`;
-        card.querySelector(".btn-support").addEventListener("click", () => openSupportForService(service));
-        if (isAdmin) {
-          card.querySelector(".btn-edit").addEventListener("click", () => startServiceEdit(service));
-          card.querySelector(".btn-toggle").addEventListener("click", () => toggleServiceActive(service));
-          card.querySelector(".btn-delete").addEventListener("click", () => deleteService(service));
-        }
-        servicesGrid.appendChild(card);
-      });
-    }
-
-    async function loadServices() {
-      const snap = await getDocs(collection(db, "services"));
-      const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-      list.sort((a, b) => (b?.createdAt?.seconds || 0) - (a?.createdAt?.seconds || 0));
-      cachedServices = list;
-      renderServices(list);
-    }
-
-    // ──────────────────────────────────────
-    // Admin: Users (with Ban & Password Reset)
-    // ──────────────────────────────────────
-    function renderAdminUsers(users) {
-      if (!adminUsersWrap) return;
-      adminUsersWrap.innerHTML = "";
-      adminUserCount.textContent = `${users.length} حساب`;
-      if (!users.length) {
-        adminUsersWrap.innerHTML = `<div class="muted-box" style="grid-column:1/-1;">لا توجد حسابات.</div>`;
-        return;
-      }
-      for (const u of users) {
-        const isBanned = u.banned === true;
-        
-        // عرض حالة التفعيل ورقم الهاتف وكود التفعيل للأدمن
-        const verificationInfo = u.phoneVerified 
-          ? `<div class="email" style="color:#86efac; font-weight:bold;">✅ الهاتف مفعل: ${escapeHtml(u.phoneNumber || '')}</div>`
-          : (u.verificationRequested && u.verificationCode
-             ? `<div class="email" style="color:#fde68a; font-weight:bold;">⚠️ يطلب تفعيل: ${escapeHtml(u.phoneNumber || '')} <br> كود التفعيل: <span style="color:#fff;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:4px;">${u.verificationCode}</span></div>`
-             : `<div class="email" style="color:#fda4af;">❌ الهاتف غير مفعل</div>`);
-
-        const card = document.createElement("div");
-        card.className = "admin-user-card";
-        card.innerHTML = `
-          <div class="uid">ID: ${escapeHtml(u.id)}</div>
-          <div class="email">الإيميل: ${escapeHtml(u.email || "بدون")}</div>
-          <div class="email">الاسم: ${escapeHtml(u.name || "بدون")}</div>
-          ${verificationInfo}
-          ${isBanned ? '<div class="ban-badge">🚫 محظور</div>' : ""}
-        `;
-
-        // نسخ الـ ID
-        const copyBtn = document.createElement("button");
-        copyBtn.className = "mini-btn";
-        copyBtn.type = "button";
-        copyBtn.textContent = "📋 نسخ الـ ID";
-        copyBtn.addEventListener("click", async () => {
-          try { await navigator.clipboard.writeText(u.id); copyBtn.textContent = "✅ تم النسخ"; setTimeout(() => copyBtn.textContent = "📋 نسخ الـ ID", 1500); }
-          catch (_) {}
-        });
-
-        // حظر / رفع الحظر
-        const banBtn = document.createElement("button");
-        banBtn.className = `mini-btn ${isBanned ? "unban-btn" : "ban-btn"}`;
-        banBtn.type = "button";
-        banBtn.textContent = isBanned ? "✅ رفع الحظر" : "🚫 حظر الحساب";
-        banBtn.addEventListener("click", () => toggleBanUser(u, banBtn));
-
-        // إرسال رابط إعادة تعيين كلمة المرور
-        const resetBtn = document.createElement("button");
-        resetBtn.className = "mini-btn reset-btn";
-        resetBtn.type = "button";
-        resetBtn.textContent = "🔑 إرسال رابط كلمة المرور";
-        resetBtn.addEventListener("click", () => sendResetPassword(u, resetBtn));
-
-        card.appendChild(copyBtn);
-        card.appendChild(banBtn);
-        if (u.email) card.appendChild(resetBtn);
-        adminUsersWrap.appendChild(card);
-      }
-    }
-
-    async function toggleBanUser(u, btn) {
-      const isBanned = u.banned === true;
-      const action   = isBanned ? "رفع الحظر عن" : "حظر";
-      if (!confirm(`هل تريد ${action} حساب ${u.email || u.id} ؟`)) return;
-
-      try {
-        btn.disabled = true;
-        btn.textContent = "جارٍ التنفيذ...";
-        await updateDoc(doc(db, "users", u.id), {
-          banned: !isBanned,
-          updatedAt: serverTimestamp()
-        });
-        // سيُحدَّث عبر الـ listener التلقائي
-      } catch (err) {
-        alert("تعذر تنفيذ العملية: " + (err?.message || "خطأ غير معروف"));
-        btn.disabled = false;
-        btn.textContent = isBanned ? "✅ رفع الحظر" : "🚫 حظر الحساب";
-      }
-    }
-
-    async function sendResetPassword(u, btn) {
-      if (!u.email) { alert("لا يوجد بريد إلكتروني لهذا الحساب."); return; }
-      if (!confirm(`إرسال رابط إعادة تعيين كلمة المرور إلى:\n${u.email} ؟`)) return;
-      try {
-        btn.disabled = true;
-        btn.textContent = "جارٍ الإرسال...";
-        await sendPasswordResetEmail(auth, u.email);
-        btn.textContent = "✅ تم الإرسال";
-        setTimeout(() => { btn.disabled = false; btn.textContent = "🔑 إرسال رابط كلمة المرور"; }, 3000);
-      } catch (err) {
-        alert("تعذر إرسال الرابط: " + (err?.message || "خطأ غير معروف"));
-        btn.disabled = false;
-        btn.textContent = "🔑 إرسال رابط كلمة المرور";
-      }
-    }
-
-    async function loadAllUsers() {
-      const snap = await getDocs(collection(db, "users"));
-      cachedUsers = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-      cachedUsers.sort((a, b) => String(a.email || "").localeCompare(String(b.email || "")));
-      renderAdminUsers(cachedUsers);
-    }
-
-    // ──────────────────────────────────────
-    // Notices
-    // ──────────────────────────────────────
-    function resetNoticeForm() {
-      editingNoticeId = null;
-      noticeTargetId.value = ""; noticeTitleInput.value = ""; noticeBodyInput.value = "";
-      btnSaveNotice.textContent = "إضافة التنبيه";
-      btnCancelNoticeEdit.classList.add("hidden");
-    }
-
-    function startNoticeEdit(notice) {
-      editingNoticeId = notice.id;
-      noticeTargetId.value   = notice.targetUserId || "";
-      noticeTitleInput.value = notice.title || "";
-      noticeBodyInput.value  = notice.body  || "";
-      btnSaveNotice.textContent = "حفظ التعديل";
-      btnCancelNoticeEdit.classList.remove("hidden");
-      window.location.hash = "#servicesSection";
-    }
-
-    function cancelNoticeEdit() { resetNoticeForm(); }
-
-    function renderNotices(notices) {
-      noticesGrid.innerHTML = "";
-      noticeCount.textContent = `${notices.length} تنبيه`;
-      if (!notices.length) {
-        noticesGrid.innerHTML = `<div class="muted-box" style="grid-column:1/-1;">لا توجد تنبيهات بعد.</div>`;
-        return;
-      }
-      for (const n of notices) {
-        const active = n.active !== false;
-        const card = document.createElement("div");
-        card.className = "admin-user-card";
-        card.innerHTML = `
-          <div class="uid">${escapeHtml(n.title || "بدون عنوان")}</div>
-          <div class="email">ID المستهدف: ${escapeHtml(n.targetUserId || "")}</div>
-          <div class="email">الحالة: ${active ? "مفعل" : "متوقف"}</div>
-          <div class="email" style="margin-top:6px;">${escapeHtml((n.body || "").slice(0, 120))}${(n.body || "").length > 120 ? "..." : ""}</div>`;
-
-        const editBtn   = document.createElement("button"); editBtn.className = "mini-btn"; editBtn.type = "button"; editBtn.textContent = "تعديل"; editBtn.addEventListener("click", () => startNoticeEdit(n));
-        const toggleBtn = document.createElement("button"); toggleBtn.className = "mini-btn"; toggleBtn.type = "button"; toggleBtn.textContent = active ? "تعطيل" : "تشغيل"; toggleBtn.addEventListener("click", () => toggleNoticeActive(n));
-        const delBtn    = document.createElement("button"); delBtn.className = "mini-btn"; delBtn.type = "button"; delBtn.textContent = "حذف"; delBtn.addEventListener("click", () => deleteNotice(n));
-
-        card.appendChild(editBtn); card.appendChild(toggleBtn); card.appendChild(delBtn);
-        noticesGrid.appendChild(card);
-      }
-    }
-
-    function getUserIdentifiers(profile, user) {
-      const ids = [];
-      if (user?.uid)        ids.push(String(user.uid).trim());
-      if (profile?.userId)  ids.push(String(profile.userId).trim());
-      if (profile?.email)   ids.push(String(profile.email).trim().toLowerCase());
-      return ids.filter(Boolean);
-    }
-
-    function noticeMatchesCurrentUser(notice, profile, user) {
-      const target = String(notice?.targetUserId || "").trim().toLowerCase();
-      if (!target) return false;
-      const ids = getUserIdentifiers(profile, user).map(v => String(v).trim().toLowerCase());
-      return ids.includes(target);
-    }
-
-    function getDismissedNotices(profile) {
-      return new Set(Array.isArray(profile?.dismissedNotices) ? profile.dismissedNotices : []);
-    }
-
-    function getNextNoticeForCurrentUser() {
-      if (!currentUser || !currentProfile) return null;
-      const dismissed = getDismissedNotices(currentProfile);
-      return cachedNotices.find((n) =>
-        n.active !== false &&
-        noticeMatchesCurrentUser(n, currentProfile, currentUser) &&
-        !dismissed.has(n.id)
-      ) || null;
-    }
-
-    function showNoticeModal(notice) {
-      currentNotice = notice;
-      noticeViewTitle.textContent = notice.title || "تنبيه";
-      noticeViewId.textContent    = `موجه إلى ID: ${notice.targetUserId || "-"}`;
-      noticeViewBody.textContent  = notice.body || "";
-      noticeModal.classList.add("show");
-    }
-
-    function hideNoticeModal() { noticeModal.classList.remove("show"); }
-
-    async function dismissCurrentNotice() {
-      if (!currentUser || !currentNotice) { hideNoticeModal(); return; }
-      try {
-        await updateDoc(doc(db, "users", currentUser.uid), { dismissedNotices: arrayUnion(currentNotice.id), updatedAt: serverTimestamp() });
-      } catch (err) { console.log("تعذر حفظ تخطي التنبيه:", err); }
-      hideNoticeModal();
-      try { currentProfile = await loadProfile(currentUser.uid); fillProfileForm(currentProfile); } catch (_) {}
-      currentNotice = null;
-    }
-
-    async function toggleNoticeActive(notice) {
-      clearStatus(noticeAdminStatus);
-      try {
-        await updateDoc(doc(db, "notices", notice.id), { active: !notice.active, updatedAt: serverTimestamp() });
-        showStatus(noticeAdminStatus, notice.active ? "تم تعطيل التنبيه." : "تم تشغيل التنبيه.", "success");
-      } catch (err) { showStatus(noticeAdminStatus, err?.message || "تعذر تغيير حالة التنبيه.", "error"); }
-    }
-
-    async function deleteNotice(notice) {
-      if (!confirm(`هل تريد حذف التنبيه: ${notice.title || notice.id} ؟`)) return;
-      clearStatus(noticeAdminStatus);
-      try {
-        await deleteDoc(doc(db, "notices", notice.id));
-        if (editingNoticeId === notice.id) cancelNoticeEdit();
-        showStatus(noticeAdminStatus, "تم حذف التنبيه بنجاح.", "success");
-      } catch (err) { showStatus(noticeAdminStatus, err?.message || "تعذر حذف التنبيه.", "error"); }
-    }
-
-    async function addNotice() {
-      clearStatus(noticeAdminStatus);
-      if (!isAdminProfile(currentProfile) && !isAdminProfile(currentUser)) {
-        showStatus(noticeAdminStatus, "هذه الميزة مخصصة للأدمن فقط.", "error"); return;
-      }
-      const targetUserId = noticeTargetId.value.trim();
-      const title        = noticeTitleInput.value.trim();
-      const body         = noticeBodyInput.value.trim();
-      if (!targetUserId || !title || !body) {
-        showStatus(noticeAdminStatus, "املأ الـ ID والعنوان والنص أولًا.", "error"); return;
-      }
-      try {
-        btnSaveNotice.disabled = true;
-        btnSaveNotice.textContent = editingNoticeId ? "جارٍ حفظ التعديل..." : "جارٍ الإضافة...";
-        if (editingNoticeId) {
-          await updateDoc(doc(db, "notices", editingNoticeId), { targetUserId, title, body, updatedAt: serverTimestamp() });
-          showStatus(noticeAdminStatus, "تم تعديل التنبيه بنجاح.", "success");
-          cancelNoticeEdit();
-        } else {
-          await addDoc(collection(db, "notices"), {
-            targetUserId, title, body, active: true,
-            createdAt: serverTimestamp(), updatedAt: serverTimestamp(),
-            createdBy: currentUser.uid, createdByEmail: currentUser.email || currentProfile?.email || ""
           });
-          showStatus(noticeAdminStatus, "تمت إضافة التنبيه بنجاح.", "success");
-          resetNoticeForm();
+          return candidate;
+        } catch (err) {
+          if (String(err.message || err).includes('ID_TAKEN')) {
+            continue;
+          }
+          throw err;
         }
-      } catch (err) { showStatus(noticeAdminStatus, err?.message || "تعذر حفظ التنبيه.", "error"); }
-      finally { btnSaveNotice.disabled = false; btnSaveNotice.textContent = editingNoticeId ? "حفظ التعديل" : "إضافة التنبيه"; }
-    }
-
-    function maybeShowNextNotice() {
-      const nextNotice = getNextNoticeForCurrentUser();
-      if (!nextNotice) return;
-      if (currentNotice && currentNotice.id === nextNotice.id && noticeModal.classList.contains("show")) return;
-      showNoticeModal(nextNotice);
-    }
-
-    // ──────────────────────────────────────
-    // Terms & Conditions
-    // ──────────────────────────────────────
-    function renderTerms(data) {
-      if (!data || (!data.title && !data.body)) {
-        termsSection.style.display = "none";
-        return;
       }
-      termsSection.style.display = "block";
-      termsSectionTitle.textContent = data.title || "الشروط والأحكام";
-      termsSectionBody.textContent  = data.body  || "";
-
-      // Fill admin form if admin
-      if (isAdminProfile(currentProfile)) {
-        termsAdminTitle.value = data.title || "";
-        termsAdminBody.value  = data.body  || "";
-      }
+      throw new Error('تعذر توليد معرّف فريد، حاول مرة أخرى.');
     }
 
-    async function loadTerms() {
-      try {
-        const snap = await getDoc(doc(db, "settings", "terms"));
-        if (snap.exists()) renderTerms(snap.data());
-      } catch (_) {}
-    }
+    async function createProfile({ uid, email, name, phone, age, source }) {
+      const userId = await generateUniqueUserId(uid, email, name);
 
-    function attachLiveTermsListener() {
-      if (termsUnsub) termsUnsub();
-      termsUnsub = onSnapshot(doc(db, "settings", "terms"), (snap) => {
-        if (snap.exists()) renderTerms(snap.data());
-        else termsSection.style.display = "none";
-      }, () => {});
-    }
+      await setDoc(doc(db, 'users', uid), {
+        uid,
+        userId,
+        name,
+        email,
+        phone,
+        age: Number(age),
+        source,
+        coins: 100,
+        blocked: false,
+        blockReason: '',
+        blockedAt: null,
+        blockedBy: '',
+        purchases: [],
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
 
-    async function saveTerms() {
-      clearStatus(termsAdminStatus);
-      if (!isAdminProfile(currentProfile) && !isAdminProfile(currentUser)) {
-        showStatus(termsAdminStatus, "هذه الميزة مخصصة للأدمن فقط.", "error"); return;
-      }
-      const title = termsAdminTitle.value.trim();
-      const body  = termsAdminBody.value.trim();
-      if (!title || !body) {
-        showStatus(termsAdminStatus, "اكتب العنوان والنص أولًا.", "error"); return;
-      }
-      try {
-        btnSaveTerms.disabled = true;
-        btnSaveTerms.textContent = "جارٍ الحفظ...";
-        await setDoc(doc(db, "settings", "terms"), {
-          title, body, updatedAt: serverTimestamp(), updatedBy: currentUser.uid
-        });
-        showStatus(termsAdminStatus, "تم حفظ الشروط والأحكام بنجاح. ✅", "success");
-      } catch (err) { showStatus(termsAdminStatus, err?.message || "تعذر الحفظ.", "error"); }
-      finally { btnSaveTerms.disabled = false; btnSaveTerms.textContent = "💾 حفظ الشروط والأحكام"; }
-    }
-
-    // Terms collapse/expand toggle
-    let termsCollapsed = false;
-    termsToggleBtn.addEventListener("click", () => {
-      termsCollapsed = !termsCollapsed;
-      termsSection.classList.toggle("terms-collapsed", termsCollapsed);
-      const span = termsToggleBtn.querySelector("span:first-child");
-      if (span) span.textContent = termsCollapsed ? "عرض القسم" : "طيّ القسم";
-    });
-
-    // ──────────────────────────────────────
-    // Profile & Purchase
-    // ──────────────────────────────────────
-    function setLoading(isLoading) {
-      loadingOverlay.style.display = isLoading ? "flex" : "none";
-      appRoot.classList.toggle("hidden", isLoading);
+      await logEvent('signup', { uid, email, phone, userId, name, age, source }, email);
+      return userId;
     }
 
     async function loadProfile(uid) {
-      const snap = await getDoc(doc(db, "users", uid));
-      return snap.exists() ? snap.data() : null;
+      const snap = await getDoc(doc(db, 'users', uid));
+      if (!snap.exists()) throw new Error('هذا الحساب غير متوفر.');
+      return snap.data();
     }
 
-    async function purchaseItem(item, buttonEl) {
-      clearStatus(catalogStatus);
-      if (!currentUser || !currentProfile) { showStatus(catalogStatus, "جلسة الدخول غير صالحة.", "error"); return; }
-      
-      // تأكيد إضافي لمنع الشراء
-      if (!currentProfile.phoneVerified) {
-         showStatus(catalogStatus, "يجب تفعيل رقم الهاتف أولاً من الإعدادات للتمكن من الشراء.", "error"); 
-         return;
-      }
-      
-      try {
-        if (buttonEl) { buttonEl.disabled = true; buttonEl.textContent = "جاري الشراء..."; }
-        const userRef  = doc(db, "users", currentUser.uid);
-        const boughtAt = new Date().toISOString();
-        await runTransaction(db, async (tx) => {
-          const snap = await tx.get(userRef);
-          if (!snap.exists()) throw new Error("الملف الشخصي غير موجود.");
-          const data      = snap.data();
-          const purchases = Array.isArray(data.purchases) ? data.purchases : [];
-          if (purchases.some(p => p.id === item.id)) throw new Error("هذا الملف موجود بالفعل ضمن مشترياتك.");
-          const coins = Number(data.coins || 0);
-          if (coins < item.price) throw new Error("رصيدك غير كافٍ.");
-          tx.update(userRef, {
-            coins: coins - item.price,
-            purchases: [...purchases, { id: item.id, name: item.name, price: item.price, downloadUrl: item.downloadUrl || "https://example.com", purchasedAt: boughtAt }],
-            updatedAt: serverTimestamp()
-          });
+    async function findUserById(userId) {
+      const idSnap = await getDoc(doc(db, 'publicIds', userId));
+      if (!idSnap.exists()) return null;
+
+      const { uid } = idSnap.data();
+      const userSnap = await getDoc(doc(db, 'users', uid));
+      if (!userSnap.exists()) return null;
+
+      return { uid, ...userSnap.data() };
+    }
+
+    async function findUserByEmail(email) {
+      const q = query(collection(db, 'users'), where('email', '==', email), limit(1));
+      const snap = await getDocs(q);
+      if (snap.empty) return null;
+      const data = snap.docs[0].data();
+      return { uid: snap.docs[0].id, ...data };
+    }
+
+    async function changeCoinsByUserId(userId, amount, mode = 'add') {
+      const user = await findUserById(userId);
+      if (!user) throw new Error('المستخدم غير موجود.');
+
+      const delta = Number(amount);
+      if (!Number.isFinite(delta) || delta <= 0) throw new Error('اكتب كمية صحيحة أكبر من صفر.');
+
+      const userRef = doc(db, 'users', user.uid);
+
+      await runTransaction(db, async (tx) => {
+        const snap = await tx.get(userRef);
+        if (!snap.exists()) throw new Error('المستخدم غير موجود.');
+
+        const currentCoins = Number(snap.data().coins || 0);
+        const newCoins = mode === 'add' ? currentCoins + delta : currentCoins - delta;
+
+        if (newCoins < 0) {
+          throw new Error('الرصيد لا يمكن أن يصبح أقل من صفر.');
+        }
+
+        tx.update(userRef, {
+          coins: newCoins,
+          updatedAt: serverTimestamp()
         });
-        currentProfile = await loadProfile(currentUser.uid);
-        fillProfileForm(currentProfile);
-        setAdminVisibility(currentProfile);
-        renderCatalog(currentProfile);
-        renderPurchases(currentProfile);
-        showStatus(catalogStatus, `تم شراء "${item.name}" بنجاح وتم خصم ${money(item.price)} كوينز.`, "success");
-      } catch (err) { showStatus(catalogStatus, err?.message || "حدث خطأ أثناء الشراء.", "error"); }
-      finally { if (buttonEl && document.body.contains(buttonEl)) { buttonEl.disabled = false; buttonEl.textContent = "شراء الآن"; } }
+      });
+
+      const updated = await getDoc(userRef);
+      await logEvent('coins_change', { userId, amount: delta, mode, newCoins: updated.data()?.coins ?? 0 }, auth.currentUser?.email || null);
+      return updated.data()?.coins ?? 0;
     }
 
-    async function saveProfile() {
-      clearStatus(profileStatus);
-      if (!currentUser) return;
-      const name   = profileName.value.trim();
-      const age    = profileAge.value.trim();
-      const source = profileSource.value;
-      if (!name || !age) { showStatus(profileStatus, "اكتب الاسم والعمر أولًا.", "error"); return; }
-      try {
-        await updateDoc(doc(db, "users", currentUser.uid), { name, age: Number(age), source, updatedAt: serverTimestamp() });
-        currentProfile = await loadProfile(currentUser.uid);
-        fillProfileForm(currentProfile);
-        setAdminVisibility(currentProfile);
-        renderCatalog(currentProfile);
-        renderPurchases(currentProfile);
-        showStatus(profileStatus, "تم حفظ التعديلات بنجاح.", "success");
-      } catch (err) { showStatus(profileStatus, "تعذر حفظ البيانات. تأكد من اتصال الإنترنت.", "error"); }
+    async function setUserBlockedByUserId(userId, blocked, reason = '') {
+      const user = await findUserById(userId);
+      if (!user) throw new Error('المستخدم غير موجود.');
+
+      const userRef = doc(db, 'users', user.uid);
+      await runTransaction(db, async (tx) => {
+        const snap = await tx.get(userRef);
+        if (!snap.exists()) throw new Error('المستخدم غير موجود.');
+
+        tx.update(userRef, {
+          blocked: !!blocked,
+          blockReason: blocked ? String(reason || 'تم حظر الحساب بواسطة الإدارة') : '',
+          blockedAt: blocked ? serverTimestamp() : null,
+          blockedBy: blocked ? (auth.currentUser?.email || 'admin') : '',
+          updatedAt: serverTimestamp()
+        });
+      });
+
+      await logEvent(blocked ? 'block_user' : 'unblock_user', {
+        userId,
+        reason: blocked ? String(reason || '') : '',
+        targetEmail: user.email || null
+      }, auth.currentUser?.email || null);
+
+      return await loadProfile(user.uid);
     }
 
-    async function addService() {
-      clearStatus(serviceAdminStatus);
-      if (!isAdminProfile(currentProfile) && !isAdminProfile(currentUser)) {
-        showStatus(serviceAdminStatus, "هذه الميزة مخصصة للحساب الإداري فقط.", "error"); return;
+    async function sendPasswordResetByUserId(userId) {
+      const user = await findUserById(userId);
+      if (!user) throw new Error('المستخدم غير موجود.');
+      await sendPasswordResetEmail(auth, user.email, {
+        url: window.location.origin + "/" + USER_PAGE
+      });
+      await logEvent('reset_password_request', { userId, email: user.email }, auth.currentUser?.email || null);
+      return user.email;
+    }
+
+    function openForgotWhatsApp() {
+      const msg = encodeURIComponent('لقد نسيت كلمة المرور');
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+      logEvent('forgot_password_whatsapp', { to: WHATSAPP_NUMBER, text: 'لقد نسيت كلمة المرور' }, auth.currentUser?.email || null);
+    }
+
+    async function goToUserPage() {
+      window.location.href = USER_PAGE;
+    }
+
+    function showBlocked(profile, userEmail) {
+      const reason = profile?.blockReason ? `سبب الحظر: ${profile.blockReason}` : 'تم حظر هذا الحساب من قبل الإدارة.';
+      el('blocked-reason-text').innerHTML = `
+        <strong>الحساب:</strong> ${profile?.name || '-'}<br>
+        <strong>البريد:</strong> ${profile?.email || userEmail || '-'}<br>
+        <strong>المعرّف:</strong> ${profile?.userId || '-'}<br><br>
+        ${reason}
+      `;
+      switchView('blocked');
+    }
+
+    async function refreshLoggedInUI(user) {
+      const profile = await loadProfile(user.uid);
+
+      if (profile.blocked) {
+        await logEvent('blocked_login_attempt', { uid: user.uid, email: user.email, userId: profile.userId || null }, user.email);
+        await signOut(auth);
+        showBlocked(profile, user.email);
+        return;
       }
-      const name        = serviceName.value.trim();
-      const price       = Number(servicePrice.value);
-      const description = serviceDesc.value.trim();
-      const links       = normalizeLinkInput(serviceLinks.value);
-      if (!name || !price || !description) {
-        showStatus(serviceAdminStatus, "املأ اسم الخدمة والسعر والوصف أولًا.", "error"); return;
+
+      el('profile-name').textContent = profile.name || '-';
+      el('profile-email').textContent = profile.email || user.email || '-';
+      el('profile-phone').textContent = profile.phone || '-';
+      el('profile-id').textContent = profile.userId || '-';
+      el('profile-coins').textContent = String(profile.coins ?? 0);
+
+      el('reset-email-self').value = profile.email || user.email || '';
+      el('user-notice').innerHTML = `تم التسجيل... رقم الهاتف: <strong>${profile.phone || '-'}</strong>`;
+
+      if (user.email === ADMIN_EMAIL) {
+        switchView('admin');
+        el('admin-userid').value = profile.userId || '';
+        el('search-userid').value = profile.userId || '';
+        el('admin-block-userid').value = profile.userId || '';
+        el('admin-reset-userid').value = profile.userId || '';
+        el('search-email').value = profile.email || '';
+        await loadLogs();
+        return;
       }
-      try {
-        btnAddService.disabled = true;
-        btnAddService.textContent = editingServiceId ? "جارٍ حفظ التعديل..." : "جارٍ الإضافة...";
-        if (editingServiceId) {
-          await updateDoc(doc(db, "services", editingServiceId), { name, price, description, links, updatedAt: serverTimestamp() });
-          showStatus(serviceAdminStatus, "تم تعديل الخدمة بنجاح.", "success");
-          cancelServiceEdit();
-        } else {
-          await addDoc(collection(db, "services"), {
-            name, price, description, links, active: true,
-            createdAt: serverTimestamp(), updatedAt: serverTimestamp(),
-            createdBy: currentUser.uid, createdByEmail: currentUser.email || currentProfile?.email || ""
-          });
-          showStatus(serviceAdminStatus, "تمت إضافة الخدمة بنجاح.", "success");
-          serviceName.value = ""; servicePrice.value = ""; serviceDesc.value = ""; serviceLinks.value = "";
-        }
-        await loadServices();
-      } catch (err) { showStatus(serviceAdminStatus, err?.message || "تعذر حفظ الخدمة.", "error"); }
-      finally { btnAddService.disabled = false; btnAddService.textContent = editingServiceId ? "حفظ التعديلات" : "إضافة الخدمة"; }
+
+      switchView('dashboard');
+      await logEvent('login_redirect', { uid: user.uid, email: user.email }, user.email);
+      await goToUserPage();
     }
 
-    // ──────────────────────────────────────
-    // Live Listeners
-    // ──────────────────────────────────────
-    function attachLiveProfileListener(uid) {
-      if (profileUnsub) profileUnsub();
-      profileUnsub = onSnapshot(doc(db, "users", uid), async (snap) => {
-        if (!snap.exists()) return;
-        currentProfile = snap.data();
+    async function loadLogs() {
+      const box = el('logs-status');
+      clearStatus(box);
+      logsList.innerHTML = '';
 
-        // تحقق من الحظر
-        if (currentProfile.banned === true) {
-          await signOut(auth);
-          alert("تم تعليق حسابك. يرجى التواصل مع الدعم.");
-          redirectToIndex();
+      try {
+        const q = query(collection(db, 'logs'), orderBy('createdAt', 'desc'), limit(20));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          logsList.innerHTML = '<div class="log-item">لا توجد سجلات حتى الآن.</div>';
+          showStatus(box, 'تم تحميل السجل، ولا توجد بيانات.', 'warn');
           return;
         }
 
-        fillProfileForm(currentProfile);
-        setAdminVisibility(currentProfile);
-        renderCatalog(currentProfile);
-        renderPurchases(currentProfile);
-        maybeShowNextNotice();
-      }, () => {});
+        snap.forEach((docSnap) => {
+          const d = docSnap.data() || {};
+          const when = d.createdAt?.toDate ? d.createdAt.toDate().toLocaleString('ar-EG') : '...';
+          const details = JSON.stringify(d.details || {}, null, 2);
+
+          const item = document.createElement('div');
+          item.className = 'log-item';
+          item.innerHTML = `
+            <div class="log-head">
+              <span>${d.type || 'event'}</span>
+              <span class="tiny">${when}</span>
+            </div>
+            <div class="tiny">المنفذ: ${d.actor || '-'}</div>
+            <div class="tiny" style="white-space:pre-wrap; margin-top:6px;">${details}</div>
+          `;
+          logsList.appendChild(item);
+        });
+
+        showStatus(box, 'تم تحديث سجل العمليات.', 'success');
+      } catch (e) {
+        logsList.innerHTML = '<div class="log-item">فشل تحميل السجل.</div>';
+        showStatus(box, 'فشل تحميل سجل العمليات. تأكد من فهرسة Firestore وقواعد القراءة.', 'error');
+      }
     }
 
-    function attachLiveNoticesListener() {
-      if (noticesUnsub) noticesUnsub();
-      noticesUnsub = onSnapshot(collection(db, "notices"), (snap) => {
-        cachedNotices = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        cachedNotices.sort((a, b) => (b?.createdAt?.seconds || 0) - (a?.createdAt?.seconds || 0));
-        if (isAdminProfile(currentProfile) || isAdminProfile(currentUser)) renderNotices(cachedNotices);
-        maybeShowNextNotice();
-      }, () => {});
-    }
-
-    function attachLiveUsersListener() {
-      if (usersUnsub) usersUnsub();
-      usersUnsub = onSnapshot(collection(db, "users"), (snap) => {
-        cachedUsers = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        cachedUsers.sort((a, b) => String(a.email || "").localeCompare(String(b.email || "")));
-        if (isAdminProfile(currentProfile) || isAdminProfile(currentUser)) renderAdminUsers(cachedUsers);
-      }, () => {});
-    }
-
-    // ──────────────────────────────────────
-    // Scroll
-    // ──────────────────────────────────────
-    let lastScrollY = window.scrollY || 0;
-    window.addEventListener("scroll", () => {
-      const y = window.scrollY || 0;
-      if (y > 120 && y > lastScrollY) topbar.classList.add("scroll-hide");
-      else topbar.classList.remove("scroll-hide");
-      lastScrollY = y;
-    }, { passive: true });
-
-    // ──────────────────────────────────────
-    // Event Listeners
-    // ──────────────────────────────────────
-    btnToggleSettings.addEventListener("click", () => settingsPanel.classList.toggle("show"));
-
-    btnWhatsApp.addEventListener("click", () => {
-      const msg = encodeURIComponent("أريد شراء كوينز من Codenest Gold");
-      window.open(`https://wa.me/${SUPPORT_NUMBER}?text=${msg}`, "_blank", "noopener,noreferrer");
-    });
-
-    // زر الدعم الإضافي في الشريط العلوي
-    btnSupportTop.addEventListener("click", () => {
-      const msg = encodeURIComponent("مرحباً، أحتاج إلى المساعدة في موقع Codenest Gold");
-      window.open(`https://wa.me/${SUPPORT_NUMBER}?text=${msg}`, "_blank", "noopener,noreferrer");
-    });
-
-    btnLogout.addEventListener("click", async () => { await signOut(auth); redirectToIndex(); });
-    btnSaveProfile.addEventListener("click", saveProfile);
-    btnAddService.addEventListener("click", addService);
-    btnCancelServiceEdit.addEventListener("click", cancelServiceEdit);
-    btnSaveNotice.addEventListener("click", addNotice);
-    btnCancelNoticeEdit.addEventListener("click", cancelNoticeEdit);
-    btnSaveTerms.addEventListener("click", saveTerms);
-
-    closeModalBtn.addEventListener("click", closeDetails);
-    detailsModal.addEventListener("click", (e) => { if (e.target === detailsModal) closeDetails(); });
-
-    closeNoticeBtn.addEventListener("click", dismissCurrentNotice);
-    btnSkipNotice.addEventListener("click", dismissCurrentNotice);
-    noticeModal.addEventListener("click", (e) => { if (e.target === noticeModal) dismissCurrentNotice(); });
-
-    // ──────────────────────────────────────
-    // Auth Entry Point
-    // ──────────────────────────────────────
     onAuthStateChanged(auth, async (user) => {
-      setLoading(true);
+      clearStatus(el('user-status'));
+      clearStatus(el('reset-status'));
+      clearStatus(el('search-status'));
+      clearStatus(el('email-search-status'));
+      clearStatus(el('coins-status'));
+      clearStatus(el('admin-reset-status'));
+      clearStatus(el('logs-status'));
+      clearStatus(el('block-status'));
+
+      if (!user) {
+        resetPanels();
+        switchView('login');
+        return;
+      }
+
       try {
-        if (!user) { redirectToIndex(); return; }
+        await refreshLoggedInUI(user);
+      } catch (err) {
+        console.error(err);
+        switchView('login');
+      }
+    });
 
-        currentUser = user;
-        const profile = await loadProfile(user.uid);
-        if (!profile) { redirectToIndex(); return; }
+    el('btn-signup').addEventListener('click', async () => {
+      const name = el('signup-name').value.trim();
+      const email = el('signup-email').value.trim();
+      const phone = el('signup-phone').value.trim();
+      const password = el('signup-password').value;
+      const age = el('signup-age').value;
+      const source = el('signup-source').value;
+      const btn = el('btn-signup');
 
-        // فحص الحظر عند أول تحميل
-        if (profile.banned === true) {
+      if (!name || !email || !phone || !password || !age) {
+        alert('رجاءً إكمال جميع البيانات!');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'جاري التسجيل...';
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        const userId = await createProfile({
+          uid: user.uid,
+          email,
+          name,
+          phone,
+          age,
+          source
+        });
+
+        alert(`تم إنشاء الحساب بنجاح.\nالمعرّف الخاص بك: ${userId}`);
+        await logEvent('signup_success', { uid: user.uid, email, phone, userId }, email);
+
+        if (email === ADMIN_EMAIL) {
+          switchView('admin');
+          await loadLogs();
+        } else {
+          await goToUserPage();
+        }
+      } catch (error) {
+        alert('خطأ: ' + (error?.message || 'حدث خطأ غير معروف'));
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'تسجيل الآن';
+      }
+    });
+
+    el('btn-login').addEventListener('click', async () => {
+      const email = el('login-email').value.trim();
+      const password = el('login-password').value;
+      const btn = el('btn-login');
+
+      if (!email || !password) {
+        alert('أدخل الإيميل وكلمة المرور!');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'جاري الدخول...';
+
+      try {
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const profile = await loadProfile(cred.user.uid);
+
+        if (profile.blocked) {
+          await logEvent('blocked_login_attempt', { uid: cred.user.uid, email, userId: profile.userId || null }, email);
           await signOut(auth);
-          alert("تم تعليق حسابك. يرجى التواصل مع الدعم.");
-          redirectToIndex();
+          showBlocked(profile, email);
           return;
         }
 
-        currentProfile = profile;
-        fillProfileForm(profile);
-        setAdminVisibility(profile);
-        renderCatalog(profile);
-        renderPurchases(profile);
+        await logEvent('login_success', { uid: cred.user.uid, email }, email);
 
-        // تحميل الخدمات والمستخدمين والتنبيهات
-        await loadServices();
-        const usersSnap = await getDocs(collection(db, "users"));
-        cachedUsers = usersSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        cachedUsers.sort((a, b) => String(a.email || "").localeCompare(String(b.email || "")));
-
-        if (isAdminProfile(profile)) {
-          renderAdminUsers(cachedUsers);
+        if (email !== ADMIN_EMAIL) {
+          await goToUserPage();
         }
-
-        // تحميل الشروط والأحكام
-        await loadTerms();
-
-        // الـ listeners الحية
-        attachLiveProfileListener(user.uid);
-        attachLiveNoticesListener();
-        attachLiveUsersListener();
-        attachLiveTermsListener();
-
-        maybeShowNextNotice();
-        setLoading(false);
-      } catch (err) {
-        redirectToIndex();
+      } catch (error) {
+        await logEvent('login_failed', { email }, email);
+        alert('بيانات الدخول غير صحيحة!');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'دخول';
       }
     });
+
+    el('btn-forgot').addEventListener('click', async () => {
+      openForgotWhatsApp();
+    });
+
+    el('btn-support-whatsapp').addEventListener('click', () => {
+      openWhatsAppSupport('مرحبًا، حسابي محظور وأحتاج مراجعة من الدعم.');
+    });
+
+    el('btn-logout').addEventListener('click', async () => {
+      await logEvent('logout', { email: auth.currentUser?.email || null }, auth.currentUser?.email || null);
+      await signOut(auth);
+      window.location.href = 'index.html';
+    });
+
+    el('btn-admin-logout').addEventListener('click', async () => {
+      await logEvent('logout_admin', { email: auth.currentUser?.email || null }, auth.currentUser?.email || null);
+      await signOut(auth);
+      window.location.href = 'index.html';
+    });
+
+    el('btn-send-reset-self').addEventListener('click', async () => {
+      const email = el('reset-email-self').value.trim();
+      const box = el('reset-status');
+
+      if (!email) {
+        showStatus(box, 'اكتب البريد أولًا.', 'error');
+        return;
+      }
+
+      clearStatus(box);
+      try {
+        await sendPasswordResetEmail(auth, email, {
+          url: window.location.origin + "/" + USER_PAGE
+        });
+        await logEvent('reset_password_self', { email }, auth.currentUser?.email || null);
+        showStatus(box, 'تم إرسال رابط الاستعادة إلى البريد.', 'success');
+      } catch (error) {
+        showStatus(box, 'فشل إرسال الرابط. راجع البريد أو إعدادات Auth.', 'error');
+      }
+    });
+
+    el('btn-change-own-password').addEventListener('click', async () => {
+      const newPassword = el('current-new-password').value;
+      const box = el('user-status');
+
+      if (!newPassword || newPassword.length < 6) {
+        showStatus(box, 'اكتب كلمة مرور جديدة لا تقل عن 6 أحرف.', 'error');
+        return;
+      }
+
+      try {
+        if (!auth.currentUser) throw new Error('لا يوجد مستخدم حالي.');
+        await updatePassword(auth.currentUser, newPassword);
+        await logEvent('change_own_password', { uid: auth.currentUser.uid, email: auth.currentUser.email }, auth.currentUser.email);
+        showStatus(box, 'تم تغيير كلمة المرور للحساب الحالي بنجاح.', 'success');
+        el('current-new-password').value = '';
+      } catch (error) {
+        showStatus(box, 'تعذر تغيير كلمة المرور. قد تحتاج لإعادة تسجيل الدخول أولًا.', 'error');
+      }
+    });
+
+    el('btn-search-user').addEventListener('click', async () => {
+      const userId = el('search-userid').value.trim();
+      const box = el('search-status');
+      clearStatus(box);
+
+      if (!userId) {
+        showStatus(box, 'اكتب المعرّف أولًا.', 'error');
+        return;
+      }
+
+      try {
+        const user = await findUserById(userId);
+        if (!user) {
+          showStatus(box, 'لم يتم العثور على المستخدم.', 'error');
+          return;
+        }
+        showStatus(box,
+          `تم العثور على المستخدم:\nالاسم: ${user.name || '-'}\nالبريد: ${user.email || '-'}\nرقم الهاتف: ${user.phone || '-'}\nID: ${user.userId || '-'}\nCoins: ${user.coins ?? 0}\nالحالة: ${user.blocked ? 'محظور' : 'نشط'}`,
+          'success'
+        );
+      } catch (error) {
+        showStatus(box, 'حدث خطأ أثناء البحث.', 'error');
+      }
+    });
+
+    el('btn-search-email').addEventListener('click', async () => {
+      const email = el('search-email').value.trim();
+      const box = el('email-search-status');
+      clearStatus(box);
+
+      if (!email) {
+        showStatus(box, 'اكتب البريد أولًا.', 'error');
+        return;
+      }
+
+      try {
+        const user = await findUserByEmail(email);
+        if (!user) {
+          showStatus(box, 'لم يتم العثور على مستخدم بهذا البريد.', 'error');
+          return;
+        }
+        showStatus(box,
+          `تم العثور على المستخدم:\nالاسم: ${user.name || '-'}\nالبريد: ${user.email || '-'}\nرقم الهاتف: ${user.phone || '-'}\nID: ${user.userId || '-'}\nCoins: ${user.coins ?? 0}\nالحالة: ${user.blocked ? 'محظور' : 'نشط'}`,
+          'success'
+        );
+        el('admin-userid').value = user.userId || '';
+        el('admin-reset-userid').value = user.userId || '';
+        el('admin-block-userid').value = user.userId || '';
+        await logEvent('admin_search_email', { email, found: true, userId: user.userId || null }, auth.currentUser?.email || null);
+      } catch (error) {
+        showStatus(box, 'حدث خطأ أثناء البحث بالبريد.', 'error');
+      }
+    });
+
+    el('btn-admin-coins').addEventListener('click', async () => {
+      const userId = el('admin-userid').value.trim();
+      const amount = Number(el('admin-amount').value);
+      const action = el('admin-action').value;
+      const box = el('coins-status');
+
+      clearStatus(box);
+
+      if (!userId || !amount) {
+        showStatus(box, 'أدخل المعرّف والكمية.', 'error');
+        return;
+      }
+
+      try {
+        const newCoins = await changeCoinsByUserId(userId, amount, action);
+        showStatus(box, `تم ${action === 'add' ? 'إضافة' : 'سحب'} الكمية بنجاح.\nالرصيد الجديد: ${newCoins}`, 'success');
+      } catch (error) {
+        showStatus(box, error?.message || 'فشل تنفيذ العملية.', 'error');
+      }
+    });
+
+    el('btn-block-user').addEventListener('click', async () => {
+      const userId = el('admin-block-userid').value.trim();
+      const reason = el('admin-block-reason').value.trim();
+      const box = el('block-status');
+
+      clearStatus(box);
+
+      if (!userId) {
+        showStatus(box, 'أدخل معرّف المستخدم أولًا.', 'error');
+        return;
+      }
+
+      try {
+        const updated = await setUserBlockedByUserId(userId, true, reason);
+        showStatus(box, `تم حظر الحساب بنجاح.\nالاسم: ${updated.name || '-'}\nالبريد: ${updated.email || '-'}\nالحالة: محظور`, 'success');
+      } catch (error) {
+        showStatus(box, error?.message || 'فشل حظر الحساب.', 'error');
+      }
+    });
+
+    el('btn-unblock-user').addEventListener('click', async () => {
+      const userId = el('admin-block-userid').value.trim();
+      const box = el('block-status');
+
+      clearStatus(box);
+
+      if (!userId) {
+        showStatus(box, 'أدخل معرّف المستخدم أولًا.', 'error');
+        return;
+      }
+
+      try {
+        const updated = await setUserBlockedByUserId(userId, false, '');
+        showStatus(box, `تم فك الحظر بنجاح.\nالاسم: ${updated.name || '-'}\nالبريد: ${updated.email || '-'}\nالحالة: نشط`, 'success');
+      } catch (error) {
+        showStatus(box, error?.message || 'فشل فك الحظر.', 'error');
+      }
+    });
+
+    el('btn-admin-reset').addEventListener('click', async () => {
+      const userId = el('admin-reset-userid').value.trim();
+      const box = el('admin-reset-status');
+
+      clearStatus(box);
+
+      if (!userId) {
+        showStatus(box, 'أدخل المعرّف أولًا.', 'error');
+        return;
+      }
+
+      try {
+        const email = await sendPasswordResetByUserId(userId);
+        showStatus(box, `تم إرسال رابط استعادة كلمة المرور إلى:\n${email}`, 'success');
+      } catch (error) {
+        showStatus(box, error?.message || 'فشل إرسال الرابط.', 'error');
+      }
+    });
+
+    el('btn-refresh-logs').addEventListener('click', loadLogs);
+
+    switchView('login');
   </script>
 </body>
 </html>
