@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <meta name="google-site-verification" content="p5CADMhqEvvefMIBUlloGW_58Bu_6NVAoa28rrbz7R8" />
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> coding - اكواد </title>
+  <meta name="google-site-verification" content="p5CADMhqEvvefMIBUlloGW_58Bu_6NVAoa28rrbz7R8" />
+  <meta name="theme-color" content="#1e3c72" />
+  <meta name="description" content="Coding - أكواد وخدمات برمجة وحسابات مستخدمين ولوحة إدارة" />
+  <meta name="keywords" content="coding, اكواد, برمجة, Firebase, حسابات, لوحة إدارة" />
+  <meta name="author" content="Codenest" />
+  <title>coding - اكواد</title>
+  <link rel="icon" href="/logo2.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/logo2.png" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
 
@@ -34,6 +40,7 @@
       background: linear-gradient(45deg, var(--bg1), var(--bg2));
       overflow-x:hidden;
       color:var(--text);
+      padding:12px;
     }
 
     .circle{
@@ -55,7 +62,7 @@
       align-items:start;
     }
 
-    .container, .panel{
+    .container, .panel, .blocked-screen{
       background: var(--card);
       border:1px solid var(--line);
       backdrop-filter: blur(12px);
@@ -315,14 +322,61 @@
       word-break:break-word;
     }
 
+    .blocked-screen{
+      width:min(560px, 100%);
+      margin:auto;
+      padding:28px;
+      display:none;
+      text-align:center;
+      border-color: rgba(255,107,107,.45);
+      background: linear-gradient(180deg, rgba(255,107,107,.24), rgba(255,255,255,.10));
+    }
+    .blocked-screen.show{ display:block; }
+
+    .blocked-badge{
+      width:80px;
+      height:80px;
+      border-radius:50%;
+      margin:0 auto 16px auto;
+      display:grid;
+      place-items:center;
+      background: rgba(255,107,107,.16);
+      border:1px solid rgba(255,107,107,.35);
+      font-size:34px;
+    }
+
+    .blocked-title{
+      font-size:30px;
+      font-weight:800;
+      color:#fff;
+      margin-bottom:10px;
+    }
+
+    .blocked-text{
+      color:rgba(255,255,255,.92);
+      line-height:1.9;
+      font-size:15px;
+      margin-bottom:18px;
+    }
+
+    .blocked-box{
+      padding:14px;
+      border-radius:16px;
+      background: rgba(255,107,107,.16);
+      border:1px solid rgba(255,107,107,.35);
+      margin-bottom:16px;
+      line-height:1.9;
+      color:#fff;
+    }
+
     @media (max-width: 760px){
       .container{ padding:22px; }
       .row{ grid-template-columns:1fr; }
       .toolbar .btn{ min-width:100%; }
+      .blocked-title{ font-size:24px; }
     }
   </style>
 </head>
-  <script src="/global.js"></script>
 <body>
   <div class="circle circle1"></div>
   <div class="circle circle2"></div>
@@ -351,7 +405,7 @@
 
       <div id="signup-form" class="form-box hidden">
         <h2>إنشاء حساب</h2>
-        <div class="sub">تأكد من عنوان البريد الالكتروني حتي تستطيع استعاده كلمه المرور في حال فقدانها .</div>
+        <div class="sub">تأكد من عنوان البريد الإلكتروني حتى تستطيع استعادة كلمة المرور في حال فقدانها.</div>
 
         <div class="input-box">
           <input type="text" id="signup-name" placeholder="الاسم كامل" required>
@@ -359,6 +413,10 @@
 
         <div class="input-box">
           <input type="email" id="signup-email" placeholder="البريد الإلكتروني" required>
+        </div>
+
+        <div class="input-box">
+          <input type="tel" id="signup-phone" placeholder="رقم الهاتف" required>
         </div>
 
         <div class="input-box">
@@ -385,12 +443,24 @@
       </div>
     </div>
 
+    <div class="blocked-screen" id="blocked-screen">
+      <div class="blocked-badge">⛔</div>
+      <div class="blocked-title">تم حظر هذا الحساب</div>
+      <div class="blocked-text" id="blocked-reason-text">
+        لا يمكنك الوصول إلى لوحة تسجيل الدخول الآن.
+      </div>
+      <div class="blocked-box">
+        إذا كنت تعتقد أن هذا الحظر بالخطأ، تواصل مع الدعم عبر واتساب.
+      </div>
+      <button class="btn danger" id="btn-support-whatsapp">التواصل مع الدعم</button>
+    </div>
+
     <div class="panel" id="dashboard-panel">
       <div class="toolbar">
         <button class="btn secondary" id="btn-logout">تسجيل الخروج</button>
       </div>
 
-      <div class="notice">
+      <div class="notice" id="user-notice">
         تم التسجيل...
       </div>
 
@@ -402,6 +472,10 @@
         <div class="item">
           <div class="label">البريد الإلكتروني</div>
           <div class="value" id="profile-email">-</div>
+        </div>
+        <div class="item">
+          <div class="label">رقم الهاتف</div>
+          <div class="value" id="profile-phone">-</div>
         </div>
         <div class="item">
           <div class="label">المعرّف</div>
@@ -440,8 +514,8 @@
       </div>
 
       <div class="notice">
-        لوحة الإدارة مفعلة فقط للحساب <strong>1@gmail.com</strong>.  
-        هنا يمكنك البحث بالبريد أو بالمعرّف، ومراجعة السجل، وإرسال رابط استعادة كلمة المرور للمستخدم.
+        لوحة الإدارة مفعلة فقط للحساب <strong>1@gmail.com</strong>.
+        هنا يمكنك البحث بالبريد أو بالمعرّف، ومراجعة السجل، وإرسال رابط استعادة كلمة المرور للمستخدم، وحظر الحساب أو فك الحظر.
       </div>
 
       <div class="grid">
@@ -481,6 +555,21 @@
           </div>
           <button class="btn success" id="btn-admin-coins">تنفيذ</button>
           <div class="status" id="coins-status"></div>
+        </div>
+
+        <div class="card">
+          <h3>حظر / فك حظر الحساب</h3>
+          <div class="input-box">
+            <input type="text" id="admin-block-userid" placeholder="معرّف المستخدم">
+          </div>
+          <div class="input-box">
+            <input type="text" id="admin-block-reason" placeholder="سبب الحظر (اختياري)">
+          </div>
+          <div class="row">
+            <button class="btn danger" id="btn-block-user">حظر الحساب</button>
+            <button class="btn success" id="btn-unblock-user">فك الحظر</button>
+          </div>
+          <div class="status" id="block-status"></div>
         </div>
 
         <div class="card">
@@ -554,6 +643,7 @@
     const signupForm = el('signup-form');
     const dashboardPanel = el('dashboard-panel');
     const adminPanel = el('admin-panel');
+    const blockedScreen = el('blocked-screen');
     const logsList = el('logs-list');
 
     function showStatus(node, message, type = 'success') {
@@ -566,10 +656,15 @@
       node.className = 'status';
     }
 
-    function switchView(view) {
+    function resetPanels() {
       dashboardPanel.classList.remove('show');
       adminPanel.classList.remove('show');
+      blockedScreen.classList.remove('show');
       document.getElementById('auth-shell').style.display = 'block';
+    }
+
+    function switchView(view) {
+      resetPanels();
 
       if (view === 'login') {
         loginForm.classList.remove('hidden');
@@ -588,6 +683,9 @@
         document.getElementById('auth-shell').style.display = 'none';
         dashboardPanel.classList.add('show');
         adminPanel.classList.add('show');
+      } else if (view === 'blocked') {
+        document.getElementById('auth-shell').style.display = 'none';
+        blockedScreen.classList.add('show');
       }
     }
 
@@ -597,6 +695,12 @@
 
     function random5Digit() {
       return String(Math.floor(10000 + Math.random() * 90000));
+    }
+
+    function openWhatsAppSupport(message) {
+      const msg = encodeURIComponent(message || 'مرحبًا، أحتاج إلى الدعم بخصوص الحساب.');
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
 
     async function logEvent(type, details = {}, actor = null) {
@@ -641,7 +745,7 @@
       throw new Error('تعذر توليد معرّف فريد، حاول مرة أخرى.');
     }
 
-    async function createProfile({ uid, email, name, age, source }) {
+    async function createProfile({ uid, email, name, phone, age, source }) {
       const userId = await generateUniqueUserId(uid, email, name);
 
       await setDoc(doc(db, 'users', uid), {
@@ -649,15 +753,20 @@
         userId,
         name,
         email,
+        phone,
         age: Number(age),
         source,
         coins: 100,
+        blocked: false,
+        blockReason: '',
+        blockedAt: null,
+        blockedBy: '',
         purchases: [],
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       });
 
-      await logEvent('signup', { uid, email, userId, name, age, source }, email);
+      await logEvent('signup', { uid, email, phone, userId, name, age, source }, email);
       return userId;
     }
 
@@ -717,6 +826,33 @@
       return updated.data()?.coins ?? 0;
     }
 
+    async function setUserBlockedByUserId(userId, blocked, reason = '') {
+      const user = await findUserById(userId);
+      if (!user) throw new Error('المستخدم غير موجود.');
+
+      const userRef = doc(db, 'users', user.uid);
+      await runTransaction(db, async (tx) => {
+        const snap = await tx.get(userRef);
+        if (!snap.exists()) throw new Error('المستخدم غير موجود.');
+
+        tx.update(userRef, {
+          blocked: !!blocked,
+          blockReason: blocked ? String(reason || 'تم حظر الحساب بواسطة الإدارة') : '',
+          blockedAt: blocked ? serverTimestamp() : null,
+          blockedBy: blocked ? (auth.currentUser?.email || 'admin') : '',
+          updatedAt: serverTimestamp()
+        });
+      });
+
+      await logEvent(blocked ? 'block_user' : 'unblock_user', {
+        userId,
+        reason: blocked ? String(reason || '') : '',
+        targetEmail: user.email || null
+      }, auth.currentUser?.email || null);
+
+      return await loadProfile(user.uid);
+    }
+
     async function sendPasswordResetByUserId(userId) {
       const user = await findUserById(userId);
       if (!user) throw new Error('المستخدم غير موجود.');
@@ -738,18 +874,41 @@
       window.location.href = USER_PAGE;
     }
 
+    function showBlocked(profile, userEmail) {
+      const reason = profile?.blockReason ? `سبب الحظر: ${profile.blockReason}` : 'تم حظر هذا الحساب من قبل الإدارة.';
+      el('blocked-reason-text').innerHTML = `
+        <strong>الحساب:</strong> ${profile?.name || '-'}<br>
+        <strong>البريد:</strong> ${profile?.email || userEmail || '-'}<br>
+        <strong>المعرّف:</strong> ${profile?.userId || '-'}<br><br>
+        ${reason}
+      `;
+      switchView('blocked');
+    }
+
     async function refreshLoggedInUI(user) {
       const profile = await loadProfile(user.uid);
 
+      if (profile.blocked) {
+        await logEvent('blocked_login_attempt', { uid: user.uid, email: user.email, userId: profile.userId || null }, user.email);
+        await signOut(auth);
+        showBlocked(profile, user.email);
+        return;
+      }
+
       el('profile-name').textContent = profile.name || '-';
       el('profile-email').textContent = profile.email || user.email || '-';
+      el('profile-phone').textContent = profile.phone || '-';
       el('profile-id').textContent = profile.userId || '-';
       el('profile-coins').textContent = String(profile.coins ?? 0);
+
+      el('reset-email-self').value = profile.email || user.email || '';
+      el('user-notice').innerHTML = `تم التسجيل... رقم الهاتف: <strong>${profile.phone || '-'}</strong>`;
 
       if (user.email === ADMIN_EMAIL) {
         switchView('admin');
         el('admin-userid').value = profile.userId || '';
         el('search-userid').value = profile.userId || '';
+        el('admin-block-userid').value = profile.userId || '';
         el('admin-reset-userid').value = profile.userId || '';
         el('search-email').value = profile.email || '';
         await loadLogs();
@@ -809,11 +968,10 @@
       clearStatus(el('coins-status'));
       clearStatus(el('admin-reset-status'));
       clearStatus(el('logs-status'));
+      clearStatus(el('block-status'));
 
       if (!user) {
-        document.getElementById('auth-shell').style.display = 'block';
-        dashboardPanel.classList.remove('show');
-        adminPanel.classList.remove('show');
+        resetPanels();
         switchView('login');
         return;
       }
@@ -829,12 +987,13 @@
     el('btn-signup').addEventListener('click', async () => {
       const name = el('signup-name').value.trim();
       const email = el('signup-email').value.trim();
+      const phone = el('signup-phone').value.trim();
       const password = el('signup-password').value;
       const age = el('signup-age').value;
       const source = el('signup-source').value;
       const btn = el('btn-signup');
 
-      if (!name || !email || !password || !age) {
+      if (!name || !email || !phone || !password || !age) {
         alert('رجاءً إكمال جميع البيانات!');
         return;
       }
@@ -850,12 +1009,13 @@
           uid: user.uid,
           email,
           name,
+          phone,
           age,
           source
         });
 
         alert(`تم إنشاء الحساب بنجاح.\nالمعرّف الخاص بك: ${userId}`);
-        await logEvent('signup_success', { uid: user.uid, email, userId }, email);
+        await logEvent('signup_success', { uid: user.uid, email, phone, userId }, email);
 
         if (email === ADMIN_EMAIL) {
           switchView('admin');
@@ -886,6 +1046,15 @@
 
       try {
         const cred = await signInWithEmailAndPassword(auth, email, password);
+        const profile = await loadProfile(cred.user.uid);
+
+        if (profile.blocked) {
+          await logEvent('blocked_login_attempt', { uid: cred.user.uid, email, userId: profile.userId || null }, email);
+          await signOut(auth);
+          showBlocked(profile, email);
+          return;
+        }
+
         await logEvent('login_success', { uid: cred.user.uid, email }, email);
 
         if (email !== ADMIN_EMAIL) {
@@ -902,6 +1071,10 @@
 
     el('btn-forgot').addEventListener('click', async () => {
       openForgotWhatsApp();
+    });
+
+    el('btn-support-whatsapp').addEventListener('click', () => {
+      openWhatsAppSupport('مرحبًا، حسابي محظور وأحتاج مراجعة من الدعم.');
     });
 
     el('btn-logout').addEventListener('click', async () => {
@@ -974,7 +1147,7 @@
           return;
         }
         showStatus(box,
-          `تم العثور على المستخدم:\nالاسم: ${user.name || '-'}\nالبريد: ${user.email || '-'}\nID: ${user.userId || '-'}\nCoins: ${user.coins ?? 0}`,
+          `تم العثور على المستخدم:\nالاسم: ${user.name || '-'}\nالبريد: ${user.email || '-'}\nرقم الهاتف: ${user.phone || '-'}\nID: ${user.userId || '-'}\nCoins: ${user.coins ?? 0}\nالحالة: ${user.blocked ? 'محظور' : 'نشط'}`,
           'success'
         );
       } catch (error) {
@@ -999,11 +1172,12 @@
           return;
         }
         showStatus(box,
-          `تم العثور على المستخدم:\nالاسم: ${user.name || '-'}\nالبريد: ${user.email || '-'}\nID: ${user.userId || '-'}\nCoins: ${user.coins ?? 0}`,
+          `تم العثور على المستخدم:\nالاسم: ${user.name || '-'}\nالبريد: ${user.email || '-'}\nرقم الهاتف: ${user.phone || '-'}\nID: ${user.userId || '-'}\nCoins: ${user.coins ?? 0}\nالحالة: ${user.blocked ? 'محظور' : 'نشط'}`,
           'success'
         );
         el('admin-userid').value = user.userId || '';
         el('admin-reset-userid').value = user.userId || '';
+        el('admin-block-userid').value = user.userId || '';
         await logEvent('admin_search_email', { email, found: true, userId: user.userId || null }, auth.currentUser?.email || null);
       } catch (error) {
         showStatus(box, 'حدث خطأ أثناء البحث بالبريد.', 'error');
@@ -1031,6 +1205,45 @@
       }
     });
 
+    el('btn-block-user').addEventListener('click', async () => {
+      const userId = el('admin-block-userid').value.trim();
+      const reason = el('admin-block-reason').value.trim();
+      const box = el('block-status');
+
+      clearStatus(box);
+
+      if (!userId) {
+        showStatus(box, 'أدخل معرّف المستخدم أولًا.', 'error');
+        return;
+      }
+
+      try {
+        const updated = await setUserBlockedByUserId(userId, true, reason);
+        showStatus(box, `تم حظر الحساب بنجاح.\nالاسم: ${updated.name || '-'}\nالبريد: ${updated.email || '-'}\nالحالة: محظور`, 'success');
+      } catch (error) {
+        showStatus(box, error?.message || 'فشل حظر الحساب.', 'error');
+      }
+    });
+
+    el('btn-unblock-user').addEventListener('click', async () => {
+      const userId = el('admin-block-userid').value.trim();
+      const box = el('block-status');
+
+      clearStatus(box);
+
+      if (!userId) {
+        showStatus(box, 'أدخل معرّف المستخدم أولًا.', 'error');
+        return;
+      }
+
+      try {
+        const updated = await setUserBlockedByUserId(userId, false, '');
+        showStatus(box, `تم فك الحظر بنجاح.\nالاسم: ${updated.name || '-'}\nالبريد: ${updated.email || '-'}\nالحالة: نشط`, 'success');
+      } catch (error) {
+        showStatus(box, error?.message || 'فشل فك الحظر.', 'error');
+      }
+    });
+
     el('btn-admin-reset').addEventListener('click', async () => {
       const userId = el('admin-reset-userid').value.trim();
       const box = el('admin-reset-status');
@@ -1055,4 +1268,4 @@
     switchView('login');
   </script>
 </body>
-  </html>
+</html>
