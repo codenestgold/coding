@@ -5,7 +5,7 @@
 // =======================
 
 // عنوان الموقع
-document.title = "Codenestall";
+document.title = "medowork";
 
 // لوجو الموقع
 const favicon = document.createElement("link");
@@ -17,8 +17,8 @@ document.head.appendChild(favicon);
 // تحسين للموبايل
 document.head.innerHTML += `
 <meta name="theme-color" content="#0f0f0f">
-<meta name="description" content="Codenestall - أكواد وبرمجة وتقنيات حديثة">
-<meta name="keywords" content="HTML,CSS,JavaScript,Codenestall">
+<meta name="description" content="medowork - أكواد وبرمجة وتقنيات حديثة">
+<meta name="keywords" content="HTML,CSS,JavaScript,medowork">
 <meta name="author" content="Ahmed Mostafa">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,11 +121,11 @@ document.head.appendChild(style);
 // =======================
 
 document.body.insertAdjacentHTML("afterbegin", `
-<header class="codenest-header">
+<header class="medowork-header">
     
     <div class="codenest-left">
         <img src="/logo2.png" class="codenest-logo">
-        <div class="codenest-title">Codenest Gold</div>
+        <div class="codenest-title"> medowork</div>
     </div>
 
 </header>
