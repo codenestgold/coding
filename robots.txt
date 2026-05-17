@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://codenestall.netlify.app/sitemap.xml
+Sitemap: https://medowork.netlify.app/sitemap.xml
